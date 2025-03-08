@@ -4,5 +4,6 @@ FRONTEND
   - generere bundle til backend --> npm run build 
 
 BACKEND
+  - cd i root i mappen
   - kompilere --> mvn clean package
   - start program --> mvn spring-boot:run  
