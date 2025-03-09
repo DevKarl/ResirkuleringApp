@@ -25,6 +25,7 @@ dist-ssr
 
 # Spring Boot files
 target/
+src/main/resources/static
 
 # Other common ignores (as before)
 .apt_generated
