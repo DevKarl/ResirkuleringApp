@@ -1,22 +1,35 @@
-import { useContext, useState, createContext } from "react";
-export const appContext = createContext({
+import { createContext, useContext, useState, ReactNode } from "react";
+
+interface AppContextType {
+  user: any;
+  publicTrashLocations: any[];
+  scanProductResult: any;
+  setScanProductResult: React.Dispatch<React.SetStateAction<any>>;
+}
+
+export const appContext = createContext<AppContextType>({
   user: null,
   publicTrashLocations: [],
-  something: () => {},
+  scanProductResult: null,
+  setScanProductResult: () => {},
 });
 
 export const useAppContext = () => useContext(appContext);
 
-export const AppProvider = ({ children }: any) => {
-  const [user, setUser] = useState(null);
-  const [publicTrashLocations, setPublicTrashLocations] = useState([]);
+interface AppProviderProps {
+  children: ReactNode;
+}
 
-  const something = () => {};
+export const AppProvider = ({ children }: AppProviderProps) => {
+  const [user, setUser] = useState<any>(null);
+  const [scanProductResult, setScanProductResult] = useState<any>(null);
+  const [publicTrashLocations, setPublicTrashLocations] = useState<any[]>([]);
 
   const contextValue = {
-    user: user,
-    publicTrashLocations: publicTrashLocations,
-    something: something,
+    user,
+    publicTrashLocations,
+    scanProductResult,
+    setScanProductResult,
   };
 
   return (

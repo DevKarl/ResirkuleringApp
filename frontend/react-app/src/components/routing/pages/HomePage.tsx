@@ -1,5 +1,8 @@
 import styled from "styled-components";
 import { Map } from "../../map/Map";
+import { BarcodeScannerModal } from "../../barcode-scanner/BarCodeScannerModal";
+import { useState } from "react";
+import { useAppContext } from "../../../context/ContextProvider";
 
 const HomePageContainer = styled.div`
   display: flex;
@@ -32,12 +35,55 @@ const Button = styled.button`
   }
 `;
 
+const ScanResultButton = styled.button`
+  margin-top: 20px;
+  width: 300px;
+  height: 60px;
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  background-color: #628867;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #46694a;
+  }
+`;
+
+const ResultText = styled.p`
+  font-size: 1.5rem;
+  color: #46694a;
+`;
+
 export const HomePage = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { scanProductResult } = useAppContext();
+
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
+  console.log(scanProductResult);
+
   return (
     <HomePageContainer>
       <Heading>Finn nærmeste avfallspunkt ♻️ </Heading>
       <Map />
-      <Button>Scan Avfall</Button>
+      {scanProductResult && (
+        <>
+          <ResultText>Fant avfalll med kode: {scanProductResult}</ResultText>
+          <ScanResultButton>Vis nærmeste avfallspunkt på kart</ScanResultButton>
+        </>
+      )}
+      <Button onClick={() => setIsModalOpen(true)}>Scann avfall</Button>
+      {isModalOpen && (
+        <BarcodeScannerModal
+          isModalOpen={isModalOpen}
+          toggleModal={toggleModal}
+        />
+      )}
     </HomePageContainer>
   );
 };
