@@ -5,16 +5,7 @@ export default defineConfig({
   plugins: [react()],
   build: {
     emptyOutDir: true,
-    outDir: "../../src/main/resources/static", // Path to your Spring Boot static directory
-    assetsDir: "", // Keeps everything flat, avoids unnecessary subfolders
-    rollupOptions: {
-      output: {
-        // Removes hashed file names
-        entryFileNames: "index.js",
-        chunkFileNames: "[name].js",
-        assetFileNames: "[name][extname]",
-      },
-    },
+    outDir: "../dist", // Directs build output here
   },
-  base: "./", // Adjust base URL if needed
+  base: "./",
 });
