@@ -19,7 +19,7 @@ const LoaderContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 400px; // Matches map's height
+  height: 350px; // Matches map's height
   width: 100%; // Matches map's width
   border-radius: 8px;
   background-color: #f9f9f9;

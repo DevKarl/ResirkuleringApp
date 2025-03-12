@@ -5,7 +5,8 @@ import { UserPage } from "./components/routing/pages/UserPage";
 import { Header } from "./components/routing/header/Header";
 
 const MainContent = styled.main`
-  margin-top: 0px;
+  background-color: #e2f0e5;
+  height: 100%;
 `;
 
 function App() {

@@ -8,7 +8,7 @@ const HomePageContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  top: 0;
+  background-color: #e2f0e5;
 `;
 
 const Heading = styled.h1`
@@ -64,8 +64,6 @@ export const HomePage = () => {
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
-
-  console.log(scanProductResult);
 
   return (
     <HomePageContainer>

@@ -12,7 +12,6 @@ const HeaderContainer = styled.header`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
 `;
 
 const Heading = styled.h1`
@@ -30,7 +29,7 @@ const Hamburger = styled.button`
   font-size: 50px;
   cursor: pointer;
   display: block;
-  margin-right: 40px;
+  padding: 0;
 
   &:hover {
     color: #46694a;
