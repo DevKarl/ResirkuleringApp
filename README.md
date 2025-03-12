@@ -1,3 +1,9 @@
+START:
+
+1. cd til frontend/react-app
+2. kjør "nvm use" (krever nvm og node) --> bør vise v18.20.7
+3. kjør npm install --> bør generere node modules + package-lock.json fil
+
 WORKFLOW:
 
 FRONTEND
