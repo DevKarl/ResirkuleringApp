@@ -20,4 +20,11 @@ public class AvfallController {
     return null;
   }
 
+
+
+  public Avfall leggTilVare(String strekkode, int i) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'leggTilVare'");
+  }
+
 }

@@ -17,6 +17,11 @@ public class AvfallService {
 
     return null;
   }
+
+  public Avfall leggTilVare(String strekkode, int avfallstypeId) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'leggTilVare'");
+  }
     
   
 }

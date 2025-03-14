@@ -1,6 +1,7 @@
 package com.example.demo.Controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -25,20 +26,44 @@ public class AvfallControllerTest {
   AvfallController avfallController;
 
   String strekkode;
+  AvfallsType at;
+  AvfallsType at2;
+  Avfall mockAvfall;
 
   @BeforeEach
   void setup(){
     MockitoAnnotations.openMocks(this);
     strekkode = "12345678";
+    at = new AvfallsType(1,"Glass");
+    at2 =  new AvfallsType(2,"Plast");
   }
 
   @Test
   void testScanAvfall(){
-    AvfallsType at = new AvfallsType();
-    Avfall mockAvfall = new Avfall(strekkode, at);
+    mockAvfall = new Avfall(strekkode, at);
     when(avfallService.scannAvfall(strekkode)).thenReturn(mockAvfall);
 
     Avfall avfall = avfallController.scanAvfall(strekkode);
+
+    assertNotNull(avfall);
     assertEquals(mockAvfall, avfall);
+    assertEquals("Glass", avfall.getAvfallsType().getType());
+    
   }
+
+  @Test
+  void testLeggTilVare(){
+    mockAvfall = new Avfall(strekkode, at2);
+    when(avfallService.leggTilVare(strekkode,2)).thenReturn(mockAvfall);
+
+    Avfall avfall = avfallController.leggTilVare(strekkode, 2);
+
+    assertNotNull(avfall);
+    assertEquals(mockAvfall, avfall);
+    assertEquals("Glass", avfall.getAvfallsType().getType());
+    
+  }
+
+
+
 }
