@@ -1,5 +1,6 @@
 package com.example.demo.Controllers;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.demo.Entities.TestTable;
 import com.example.demo.Repositories.TestTableRepository;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
+@RequestMapping("/api") // <-- må settes på alle controllers 
 public class Controller {
 
     @Autowired
