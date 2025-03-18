@@ -1,6 +1,7 @@
 package com.example.demo.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,9 +18,11 @@ public class AvfallController {
 
 
 
+  @GetMapping("/{strekkode}")
   public Avfall scanAvfall(String strekkode){
     
-    return null;
+    Avfall avfall = avfallService.scannAvfall(strekkode);
+    return avfall;
   }
 
 

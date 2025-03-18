@@ -7,5 +7,6 @@ import com.example.demo.Entities.Bruker;
 
 public interface BrukerRepo extends JpaRepository<Bruker, Integer> {
 
+  Bruker findByEpost(String Epost);
     
 } 

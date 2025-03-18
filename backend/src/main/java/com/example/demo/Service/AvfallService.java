@@ -14,8 +14,7 @@ public class AvfallService {
 
   public Avfall scannAvfall(String strekkode) {
     //returner avfall fra database som har strekkode.avfPunktController
-
-    return null;
+    return avfallRepo.findByStrekkode(strekkode);
   }
 
   public Avfall leggTilVare(String strekkode, int avfallstypeId) {

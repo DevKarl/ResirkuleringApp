@@ -30,6 +30,8 @@ public class Avfallspunkt {
     inverseJoinColumns = @JoinColumn(name = "avfallstype_id")
   )
   private Set<AvfallsType> avfallstyper;
+
+  
   
 
   

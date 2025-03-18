@@ -1,9 +1,6 @@
 package com.example.demo.Repositories;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +30,14 @@ public class BrukerRepoTest {
         Bruker lagretBruker = brukerRepo.save(bruker);
 
         // Hent bruker fra repository
-        Optional<Bruker> funnetBruker = brukerRepo.findById(lagretBruker.getId());
+        //Optional<Bruker> funnetBruker = brukerRepo.findById(lagretBruker.getId());
+        Bruker funnetBruker = brukerRepo.findByEpost("Donald.duck@epost.no");
 
         // Valider at bruker er korrekt lagret og hentet
-        assertTrue(funnetBruker.isPresent(), "Bruker skulle ha vært tilstede i databasen");
-        assertEquals(lagretBruker.getFornavn(), funnetBruker.get().getFornavn());
-        assertEquals(lagretBruker.getEtternavn(), funnetBruker.get().getEtternavn());
-        assertEquals(lagretBruker.getEpost(), funnetBruker.get().getEpost());
+        //assertTrue(funnetBruker.isPresent(), "Bruker skulle ha vært tilstede i databasen");
+        assertEquals(lagretBruker.getFornavn(), funnetBruker.getFornavn());
+        assertEquals(lagretBruker.getEtternavn(), funnetBruker.getEtternavn());
+        assertEquals(lagretBruker.getEpost(), funnetBruker.getEpost());
 
         Integer id = bruker.getId();
         brukerRepo.deleteById(id);
