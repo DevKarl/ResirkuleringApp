@@ -1,7 +1,10 @@
 package com.example.demo.Entities;
 
+import java.util.Set;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 
 @Entity
 public class AvfallsType {
@@ -9,6 +12,9 @@ public class AvfallsType {
   @Id
   private int id;
   private String type;
+
+  @ManyToMany (mappedBy = "avfallstype")
+  private Set<Avfallspunkt> avfallsPunkter;
   
 
   public AvfallsType(){
@@ -36,5 +42,15 @@ public class AvfallsType {
   public void setType(String type) {
     this.type = type;
   }
+
+
+  public Set<Avfallspunkt> getAvfallsPunkter() {
+    return this.avfallsPunkter;
+  }
+
+  public void setAvfallsPunkter(Set<Avfallspunkt> avfallsPunkter) {
+    this.avfallsPunkter = avfallsPunkter;
+  }
+
 
 }

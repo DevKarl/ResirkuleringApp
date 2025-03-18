@@ -64,6 +64,16 @@ public class AvfallControllerTest {
     
   }
 
+  @Test
+  void testSlettVare(){
+
+  }
+
+  @Test
+  void testEndreVareInfo(){
+    
+  }
+
 
 
 }
