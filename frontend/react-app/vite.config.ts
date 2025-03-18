@@ -5,7 +5,12 @@ export default defineConfig({
   plugins: [react()],
   build: {
     emptyOutDir: true,
-    outDir: "../dist", // Directs build output here
+    outDir: "../../backend/src/main/resources/static",
   },
   base: "./",
+  server: {
+    proxy: {
+      "/api": "http://localhost:8080",
+    },
+  },
 });

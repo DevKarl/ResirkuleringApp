@@ -14,6 +14,7 @@ import com.example.demo.Repositories.TestTableRepository;
 
 @RestController
 @RequestMapping("/api")
+
 public class Controller {
 
     @Autowired
