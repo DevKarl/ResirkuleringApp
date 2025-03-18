@@ -35,7 +35,7 @@ public class BrukerRepoTest {
 
         // Valider at bruker er korrekt lagret og hentet
         //assertTrue(funnetBruker.isPresent(), "Bruker skulle ha vært tilstede i databasen");
-        assertEquals(lagretBruker.getFornavn(), funnetBruker.getFornavn());
+        assertEquals(bruker.getFornavn(), funnetBruker.getFornavn());
         assertEquals(lagretBruker.getEtternavn(), funnetBruker.getEtternavn());
         assertEquals(lagretBruker.getEpost(), funnetBruker.getEpost());
 
