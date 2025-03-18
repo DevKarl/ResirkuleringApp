@@ -5,15 +5,17 @@ import java.util.Set;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(schema = "resirkulering")
 public class AvfallsType {
   
   @Id
-  private int id;
+  private Integer id;
   private String type;
 
-  @ManyToMany (mappedBy = "avfallstype")
+  @ManyToMany (mappedBy = "avfallstyper")
   private Set<Avfallspunkt> avfallsPunkter;
   
 

@@ -6,18 +6,21 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(schema = "resirkulering")
 public class Avfall {
   
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int id;
-  private String strekKode;
+  private Integer id;
+
+  private String strekkode;
   
   @ManyToOne
-  @JoinColumn(name = "avfallstype_id")
+  @JoinColumn(name = "avfallstype_id", nullable = false)
   private AvfallsType avfallsType;
 
   public Avfall(){
@@ -25,7 +28,7 @@ public class Avfall {
   }
 
   public Avfall(String strekkode, AvfallsType type){
-    this.strekKode = strekkode;
+    this.strekkode = strekkode;
     this.avfallsType = type;
   }
 
@@ -39,11 +42,11 @@ public class Avfall {
   }
 
   public String getStrekKode() {
-    return this.strekKode;
+    return this.strekkode;
   }
 
   public void setStrekKode(String strekKode) {
-    this.strekKode = strekKode;
+    this.strekkode = strekKode;
   }
 
   public AvfallsType getAvfallsType() {

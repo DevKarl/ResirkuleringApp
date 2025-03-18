@@ -8,3 +8,5 @@ public interface AvfallRepo extends JpaRepository<Avfall,Integer> {
   
   Avfall findByStrekkode(String strekkode);
 }
+
+

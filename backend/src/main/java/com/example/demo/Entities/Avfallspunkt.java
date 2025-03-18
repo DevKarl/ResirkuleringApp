@@ -9,8 +9,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(schema = "resirkulering")
 public class Avfallspunkt {
   
 
@@ -28,6 +30,7 @@ public class Avfallspunkt {
     inverseJoinColumns = @JoinColumn(name = "avfallstype_id")
   )
   private Set<AvfallsType> avfallstyper;
+  
 
   
 
