@@ -59,57 +59,16 @@ const ResultText = styled.p`
 
 export const HomePage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [data, setData] = useState(null);
-  const { scanProductResult } = useAppContext();
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
-  };
-//"9578545203541"
-  const fetchScanAvfall = async () => {
-    const strekkKode = "9578545203541";
-    try {
-      const response = await fetch(`/api/scanAvfall?strekkode=${strekkKode}`, { ///api/scanAvfall?strekkode=${strekkKode} ///api/getAvfallspunkterByAvfallstype?id=${id}
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-
-      setData(data);
-    } catch (error) {
-      console.error("Error fetching scan data:", error);
-      return null;
-    }
   };
 
   return (
     <HomePageContainer>
       <Heading>Finn nærmeste avfallspunkt ♻️ </Heading>
       <Map />
-      {scanProductResult && (
-        <>
-          <ResultText>Fant avfalll med kode: {scanProductResult}</ResultText>
-          <ScanResultButton>Vis nærmeste avfallspunkt på kart</ScanResultButton>
-        </>
-      )}
       <Button onClick={() => setIsModalOpen(true)}>Scann avfall</Button>
-      <Button onClick={fetchScanAvfall}>Test hent data</Button>
-      {data && (
-        <>
-          <ResultText>Fant avfalll med kode: {data.navn}</ResultText>
-          <ResultText>Fant avfalll med kode: {data.beskrivelse}</ResultText>
-          <ResultText>
-            Fant avfalll med kode: {data.avfallsType.type}
-          </ResultText>
-        </>
-      )}
       {isModalOpen && (
         <BarcodeScannerModal
           isModalOpen={isModalOpen}
