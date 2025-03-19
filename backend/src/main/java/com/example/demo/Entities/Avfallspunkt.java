@@ -1,5 +1,6 @@
 package com.example.demo.Entities;
 import java.util.Set;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,7 +18,7 @@ public class Avfallspunkt {
   private int id;
 
   private String longitude;
-  private String latidute;
+  private String latitude;
 
   @ManyToMany
   @JoinTable(
