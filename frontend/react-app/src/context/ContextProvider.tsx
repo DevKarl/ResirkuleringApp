@@ -1,18 +1,19 @@
 import { createContext, useContext, useState, ReactNode } from "react";
+import { ScanAvfallResponse } from "@types";
 
 interface AppContextType {
-  user: any;
-  publicTrashLocations: any[];
-  scanProductResult: any;
-  setScanProductResult: React.Dispatch<React.SetStateAction<any>>;
+  bruker: any;
+  scannedAvfallResult: ScanAvfallResponse;
+  setScannedAvfallResult: (response: ScanAvfallResponse) => void;
 }
 
-export const appContext = createContext<AppContextType>({
-  user: null,
-  publicTrashLocations: [],
-  scanProductResult: null,
-  setScanProductResult: () => {},
-});
+const defaultContextValue: AppContextType = {
+  bruker: null,
+  scannedAvfallResult: null,
+  setScannedAvfallResult: () => {},
+};
+
+export const appContext = createContext<AppContextType>(defaultContextValue);
 
 export const useAppContext = () => useContext(appContext);
 
@@ -21,15 +22,14 @@ interface AppProviderProps {
 }
 
 export const AppProvider = ({ children }: AppProviderProps) => {
-  const [user, setUser] = useState<any>(null);
-  const [scanProductResult, setScanProductResult] = useState<any>(null);
-  const [publicTrashLocations, setPublicTrashLocations] = useState<any[]>([]);
+  const [bruker, setUser] = useState<any>(null);
+  const [scannedAvfallResult, setScannedAvfallResult] =
+    useState<ScanAvfallResponse>(null);
 
   const contextValue = {
-    user,
-    publicTrashLocations,
-    scanProductResult,
-    setScanProductResult,
+    bruker,
+    scannedAvfallResult,
+    setScannedAvfallResult,
   };
 
   return (
