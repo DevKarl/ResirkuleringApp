@@ -1,31 +1,17 @@
 import { useState, useCallback } from "react";
-
-export type Avfall = {
-  id: number;
-  type: string;
-};
-
-export type Avfallspunkt = {
-  id: number;
-  name: string;
-  latitude: number;
-  longitude: number;
-};
-
-export type ScanAvfallResponse = {
-  avfall: Avfall;
-  avfallspunkter: Avfallspunkt[];
-};
+import { ScanAvfallResponse } from "@types";
+import { useAppContext } from "context/ContextProvider";
 
 export const useFetchCoordsByBarcode = () => {
   const [data, setData] = useState<ScanAvfallResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isSucess, setIsSuccess] = useState<boolean>(false);
+  const { setScannedAvfallResult } = useAppContext();
 
   const fetchCoordsByBarcode = useCallback(async (barcode: string) => {
     setIsLoading(true);
     setError(null);
-
     try {
       const response = await fetch(`/api/scanAvfall?strekkode=${barcode}`, {
         method: "GET",
@@ -33,11 +19,13 @@ export const useFetchCoordsByBarcode = () => {
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        setError(`HTTP error! Status: ${response.status}`);
+        return;
       }
 
       const data: ScanAvfallResponse = await response.json();
-      setData(data);
+      setScannedAvfallResult(data);
+      setIsSuccess(true);
     } catch (error) {
       setError(
         error instanceof Error ? error.message : "Unknown error occurred"
@@ -47,5 +35,5 @@ export const useFetchCoordsByBarcode = () => {
     }
   }, []);
 
-  return { data, isLoading, error, fetchCoordsByBarcode };
+  return { isLoading, error, isSucess, fetchCoordsByBarcode };
 };
