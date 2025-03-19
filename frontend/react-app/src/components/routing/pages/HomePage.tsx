@@ -1,8 +1,8 @@
-import styled from "styled-components";
-import { Map } from "../../map/Map";
-import { BarcodeScannerModal } from "../../barcode-scanner/BarCodeScannerModal";
 import { useState } from "react";
+import styled from "styled-components";
 import { useAppContext } from "../../../context/ContextProvider";
+import { BarcodeScannerModal } from "../../barcode-scanner/BarCodeScannerModal";
+import { Map } from "../../map/Map";
 
 const HomePageContainer = styled.div`
   display: flex;
@@ -65,11 +65,11 @@ export const HomePage = () => {
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
-
+//"9578545203541"
   const fetchScanAvfall = async () => {
     const strekkKode = "9578545203541";
     try {
-      const response = await fetch(`/api/scanAvfall?strekkode=${strekkKode}`, {
+      const response = await fetch(`/api/scanAvfall?strekkode=${strekkKode}`, { ///api/scanAvfall?strekkode=${strekkKode} ///api/getAvfallspunkterByAvfallstype?id=${id}
         method: "GET",
         headers: {
           Accept: "application/json",

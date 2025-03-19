@@ -21,6 +21,7 @@ public class Avfall {
   private String navn;
   private String beskrivelse;
   
+  
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "avfallstype_id", nullable = false)
   private AvfallsType avfallsType;

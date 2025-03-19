@@ -1,29 +1,91 @@
 package com.example.demo.Entities;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(schema = "resirkulering")
+@Table(name = "Avfallspunkt",schema = "resirkulering")
 public class Avfallspunkt {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
 
   private String longitude;
-  private String latidute;
+  private String latitude;
+  private String navn;
 
-  @ManyToMany
-  @JoinTable(
-    name = "Avfallspunkt_avfallstype",
-    joinColumns = @JoinColumn(name = "avfallspunkt_id"),
-    inverseJoinColumns = @JoinColumn(name = "avfallstype_id")
-  )
-  private Set<AvfallsType> avfallstyper;
+  @JsonIgnore
+  @OneToMany(mappedBy = "avfallspunkt", fetch = FetchType.EAGER)
+  private Set<AvfallspunktAvfallstype> avfallspunktAvfallstyper;
+
+
+
+
+  //@ManyToMany(fetch = FetchType.EAGER)
+  //@JoinTable(
+  //  name = "Avfallspunkt_avfallstype",
+  //  joinColumns = @JoinColumn(name = "avfallspunkt_id"),
+  //  inverseJoinColumns = @JoinColumn(name = "avfallstype_id")
+  //)
+  //private Set<AvfallsType> avfallstyper;
+
+
+  public Avfallspunkt(){
+
+  }
+
+
+  public int getId() {
+    return this.id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public String getLongitude() {
+    return this.longitude;
+  }
+
+  public void setLongitude(String longitude) {
+    this.longitude = longitude;
+  }
+
+  public String getLatitude() {
+    return this.latitude;
+  }
+
+  public void setLatitude(String latitude) {
+    this.latitude = latitude;
+  }
+
+  public String getNavn() {
+    return this.navn;
+  }
+
+  public void setNavn(String navn) {
+    this.navn = navn;
+  }
+
+
+  public Set<AvfallspunktAvfallstype> getAvfallspunktAvfallstyper() {
+    return this.avfallspunktAvfallstyper;
+  }
+
+  public void setAvfallspunktAvfallstyper(Set<AvfallspunktAvfallstype> avfallspunktAvfallstyper) {
+    this.avfallspunktAvfallstyper = avfallspunktAvfallstyper;
+  }
+ 
+
+
+
+
 }

@@ -2,9 +2,12 @@ package com.example.demo.Entities;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-// import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -15,8 +18,14 @@ public class AvfallsType {
   private Integer id;
   private String type;
 
-  // @ManyToMany (mappedBy = "avfallstyper")
-  // private Set<Avfallspunkt> avfallsPunkter;
+  @JsonIgnore
+  @OneToMany(mappedBy = "avfallstype", fetch = FetchType.EAGER)
+  private Set<AvfallspunktAvfallstype> avfallspunktAvfallstyper;
+
+
+  //@JsonIgnore
+  //@ManyToMany (mappedBy = "avfallstyper", fetch = FetchType.EAGER)
+  //private Set<Avfallspunkt> avfallsPunkter;
   
 
   public AvfallsType(){
@@ -46,13 +55,14 @@ public class AvfallsType {
   }
 
 
-  // public Set<Avfallspunkt> getAvfallsPunkter() {
-  //   return this.avfallsPunkter;
-  // }
+  public Set<AvfallspunktAvfallstype> getAvfallspunktAvfallstyper() {
+    return this.avfallspunktAvfallstyper;
+  }
 
-  // public void setAvfallsPunkter(Set<Avfallspunkt> avfallsPunkter) {
-  //   this.avfallsPunkter = avfallsPunkter;
-  // }
+  public void setAvfallspunktAvfallstyper(Set<AvfallspunktAvfallstype> avfallspunktAvfallstyper) {
+    this.avfallspunktAvfallstyper = avfallspunktAvfallstyper;
+  }
+
 
 
 }
