@@ -24,7 +24,7 @@ public class AvfallScannerController {
 
   @GetMapping("/scanAvfall")
   public ResponseEntity<ScanAvfallResponse> scanAvfall(@RequestParam String strekkode) {
-    Avfall avfall = avfallcontroller.scanAvfall(strekkode);
+    Avfall avfall = avfallcontroller.getAvfallByStrekkode(strekkode);
     List<Avfallspunkt> avfallspunkter = avfPunktController.getAvfallspunkterByAvfallstype_id(avfall.getId());
     return ResponseEntity.ok(new ScanAvfallResponse(avfall, avfallspunkter));
   }
