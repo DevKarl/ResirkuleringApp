@@ -4,19 +4,19 @@ import java.util.Set;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+// import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(schema = "resirkulering")
+@Table(name = "avfallstype", schema = "resirkulering")
 public class AvfallsType {
   
   @Id
   private Integer id;
   private String type;
 
-  @ManyToMany (mappedBy = "avfallstyper")
-  private Set<Avfallspunkt> avfallsPunkter;
+  // @ManyToMany (mappedBy = "avfallstyper")
+  // private Set<Avfallspunkt> avfallsPunkter;
   
 
   public AvfallsType(){
@@ -46,13 +46,13 @@ public class AvfallsType {
   }
 
 
-  public Set<Avfallspunkt> getAvfallsPunkter() {
-    return this.avfallsPunkter;
-  }
+  // public Set<Avfallspunkt> getAvfallsPunkter() {
+  //   return this.avfallsPunkter;
+  // }
 
-  public void setAvfallsPunkter(Set<Avfallspunkt> avfallsPunkter) {
-    this.avfallsPunkter = avfallsPunkter;
-  }
+  // public void setAvfallsPunkter(Set<Avfallspunkt> avfallsPunkter) {
+  //   this.avfallsPunkter = avfallsPunkter;
+  // }
 
 
 }
