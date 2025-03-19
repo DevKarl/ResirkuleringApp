@@ -14,7 +14,7 @@ FRONTEND
 BACKEND
 
 - cd i root i mappen
-- kompilere --> mvn clean package
+- kompilere --> mvn clean package (eller mvn clean package -DskipTests)
 - start program --> mvn spring-boot:run
 
 REACT BIBLIOTEKER:
