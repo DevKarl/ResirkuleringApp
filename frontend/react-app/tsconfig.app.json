@@ -20,7 +20,14 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+
+    // module aliases
+    "baseUrl": "src",
+    "paths": {
+      "@types": ["types/index.ts"]
+      // "@components/*": ["components/*"],
+    }
   },
   "include": ["src"]
 }
