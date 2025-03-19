@@ -1,7 +1,5 @@
 package com.example.demo.Entities;
-
 import java.util.Set;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,8 +12,6 @@ import jakarta.persistence.Table;
 @Entity
 @Table(schema = "resirkulering")
 public class Avfallspunkt {
-  
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
@@ -30,13 +26,4 @@ public class Avfallspunkt {
     inverseJoinColumns = @JoinColumn(name = "avfallstype_id")
   )
   private Set<AvfallsType> avfallstyper;
-
-  
-  
-
-  
-
-
-  
-
 }
