@@ -1,10 +1,7 @@
 package com.example.demo.Controllers;
+import com.example.demo.Controllers.Interfaces.ApiController;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-@RestController
-@RequestMapping("/api")
+@ApiController
 public class LoggController {
     
 }
