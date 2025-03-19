@@ -23,6 +23,6 @@ public class AvfPunktController {
   public List<Avfallspunkt> getAvfallspunkterByAvfallstype_id(@RequestParam int id) {
       return avfPunktService.getAvfallspunkterByAvfallstype_id(id);
   }
-  
+   
 
 }
