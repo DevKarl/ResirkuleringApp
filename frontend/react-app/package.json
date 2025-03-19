@@ -17,6 +17,7 @@
     "react-geolocated": "^4.3.0",
     "react-leaflet": "^5.0.0",
     "react-router-dom": "^7.3.0",
+    "resirkulering-app": "file:",
     "styled-components": "^6.1.15"
   },
   "devDependencies": {

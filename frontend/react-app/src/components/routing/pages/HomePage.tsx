@@ -59,10 +59,34 @@ const ResultText = styled.p`
 
 export const HomePage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [data, setData] = useState(null);
   const { scanProductResult } = useAppContext();
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
+  };
+
+  const fetchScanAvfall = async () => {
+    const strekkKode = "9578545203541";
+    try {
+      const response = await fetch(`/api/scanAvfall?strekkode=${strekkKode}`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      setData(data);
+    } catch (error) {
+      console.error("Error fetching scan data:", error);
+      return null;
+    }
   };
 
   return (
@@ -76,6 +100,16 @@ export const HomePage = () => {
         </>
       )}
       <Button onClick={() => setIsModalOpen(true)}>Scann avfall</Button>
+      <Button onClick={fetchScanAvfall}>Test hent data</Button>
+      {data && (
+        <>
+          <ResultText>Fant avfalll med kode: {data.navn}</ResultText>
+          <ResultText>Fant avfalll med kode: {data.beskrivelse}</ResultText>
+          <ResultText>
+            Fant avfalll med kode: {data.avfallsType.type}
+          </ResultText>
+        </>
+      )}
       {isModalOpen && (
         <BarcodeScannerModal
           isModalOpen={isModalOpen}
