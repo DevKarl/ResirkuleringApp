@@ -12,15 +12,7 @@ public class AvfallService {
   @Autowired
   AvfallRepo avfallRepo;
 
-  public Avfall scannAvfall(String strekkode) {
-    //returner avfall fra database som har strekkode.avfPunktController
+  public Avfall getAvfallByStrekkode(String strekkode) {
     return avfallRepo.findByStrekkode(strekkode);
-  }
-
-  public Avfall leggTilVare(String strekkode, int avfallstypeId) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'leggTilVare'");
-  }
-    
-  
+  }  
 }

@@ -13,11 +13,8 @@ import com.example.demo.Service.AvfPunktService;
 @ApiController
 public class AvfPunktController {
 
-    @Autowired
-    private AvfPunktService avfPunktService;
-
-
-    
+  @Autowired
+  private AvfPunktService avfPunktService;
 
   @GetMapping("/getAvfallspunkterByAvfallstype")
   public List<Avfallspunkt> getAvfallspunkterByAvfallstype_id(@RequestParam int id) {
