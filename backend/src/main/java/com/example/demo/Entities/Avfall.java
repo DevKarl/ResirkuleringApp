@@ -1,6 +1,7 @@
 package com.example.demo.Entities;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -9,17 +10,18 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(schema = "resirkulering")
+@Table(name = "avfall", schema = "resirkulering")
 public class Avfall {
   
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
   private String strekkode;
+  private String navn;
+  private String beskrivelse;
   
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "avfallstype_id", nullable = false)
   private AvfallsType avfallsType;
 
@@ -55,6 +57,22 @@ public class Avfall {
 
   public void setAvfallsType(AvfallsType avfallsType) {
     this.avfallsType = avfallsType;
+  }
+
+  public String getNavn() {
+    return this.navn;
+  }
+
+  public void setNavn(String navn) {
+    this.navn = navn;
+  }
+
+  public String getBeskrivelse() {
+    return this.beskrivelse;
+  }
+
+  public void setBeskrivelse(String beskrivelse) {
+    this.beskrivelse = beskrivelse;
   }
 
 
