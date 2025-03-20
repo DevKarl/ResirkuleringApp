@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import styled from "styled-components";
 import Scanner from "./Scanner";
 import { useAppContext } from "../../context/ContextProvider";
+import { useFetchCoordsByBarcode } from "./useFetchCoordsByBarcode";
+import { debounce } from "../../utils";
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -69,31 +71,27 @@ const Button = styled.button`
 `;
 
 export const BarcodeScannerModal = ({ isModalOpen, toggleModal }: any) => {
-  const [camera, setCamera] = useState(false);
-  const [result, setResult] = useState(null);
-  const { setScanProductResult, scanProductResult } = useAppContext();
+  const { error, isLoading, isSuccess, fetchCoordsByBarcode } =
+    useFetchCoordsByBarcode();
+  const barcodeScanned = useRef<string>(null);
 
-  const onDetected = (result: any) => {
-    setScanProductResult(result);
-  };
+  const onDetected = debounce((barcode: string) => {
+    if (barcode !== barcodeScanned.current) {
+      barcodeScanned.current = barcode;
+      fetchCoordsByBarcode(barcode);
+    }
+  }, 500);
 
   if (!isModalOpen) return null;
+  if (isSuccess) toggleModal();
 
   return (
     <ModalOverlay>
       <ModalContainer>
+        {isLoading && <ResultText>Henter produktdata...</ResultText>}
+        {error && <ResultText>{error}</ResultText>}
         <CloseButton onClick={toggleModal}>Lukk</CloseButton>
-        <ResultText>
-          {scanProductResult
-            ? "Fant barkode: " + scanProductResult
-            : camera
-            ? "Scanner..."
-            : ""}
-        </ResultText>
-        <Button onClick={() => setCamera(!camera)}>
-          {camera ? "Lukk Kamera ✋" : "Åpne Kamera 🤳🏼"}
-        </Button>
-        {camera && <Scanner onDetected={onDetected} />}
+        <Scanner onDetected={onDetected} />
       </ModalContainer>
     </ModalOverlay>
   );
