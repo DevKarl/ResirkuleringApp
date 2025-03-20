@@ -8,6 +8,8 @@ import com.example.demo.Controllers.Interfaces.ApiController;
 import com.example.demo.DTO.ScanAvfallResponse;
 import com.example.demo.Entities.Avfall;
 import com.example.demo.Entities.Avfallspunkt;
+import com.example.demo.Service.AvfPunktService;
+import com.example.demo.Service.AvfallService;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,16 +19,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class AvfallScannerController {
 
   @Autowired
-  AvfallController avfallcontroller;
+  AvfallService avfallService;
 
-  @Autowired
-  AvfPunktController avfPunktController;
+  @Autowired 
+  AvfPunktService avfPunktService;
 
   @GetMapping("/scanAvfall")
   public ResponseEntity<ScanAvfallResponse> scanAvfall(@RequestParam String strekkode) {
-    Avfall avfall = avfallcontroller.getAvfallByStrekkode(strekkode);
-    List<Avfallspunkt> avfallspunkter = avfPunktController.getAvfallspunkterByAvfallstype_id(avfall.getId());
+    Avfall avfall = avfallService.getAvfallByStrekkode(strekkode);
+    List<Avfallspunkt> avfallspunkter = avfPunktService.getAvfallspunkterByAvfallstype_id(avfall.getId());
     return ResponseEntity.ok(new ScanAvfallResponse(avfall, avfallspunkter));
   }
-
+  
 }
