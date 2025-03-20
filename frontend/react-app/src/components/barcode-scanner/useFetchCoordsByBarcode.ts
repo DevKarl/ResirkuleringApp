@@ -1,12 +1,12 @@
 import { useState, useCallback } from "react";
-import { ScanAvfallResponse } from "@types";
-import { useAppContext } from "context/ContextProvider";
+import { ScanAvfallResponse } from "../../types";
+import { useAppContext } from "../../context/ContextProvider";
 
 export const useFetchCoordsByBarcode = () => {
   const [data, setData] = useState<ScanAvfallResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [isSucess, setIsSuccess] = useState<boolean>(false);
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const { setScannedAvfallResult } = useAppContext();
 
   const fetchCoordsByBarcode = useCallback(async (barcode: string) => {
@@ -35,5 +35,5 @@ export const useFetchCoordsByBarcode = () => {
     }
   }, []);
 
-  return { isLoading, error, isSucess, fetchCoordsByBarcode };
+  return { isLoading, error, isSuccess, fetchCoordsByBarcode };
 };
