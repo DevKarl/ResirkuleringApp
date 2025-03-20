@@ -11,7 +11,6 @@ import com.example.demo.Service.AvfallService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
 @ApiController
 public class AvfallScannerController {
 
