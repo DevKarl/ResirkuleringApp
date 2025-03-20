@@ -85,8 +85,6 @@ const Scanner = (props: any) => {
   }, []);
 
   const detected = (result: any) => {
-    console.log(result);
-    console.log(result.codeResult.code);
     onDetected(result.codeResult.code);
   };
 

@@ -1,9 +1,18 @@
-import { MapContainer, TileLayer, Marker, Circle, Popup } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Circle,
+  Popup,
+  useMap,
+  Polyline,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-// import { useAppContext } from "../../context/ContextProvider";
+import { useAppContext } from "../../context/ContextProvider";
 import { useGeolocated } from "react-geolocated";
 import L from "leaflet";
 import MapLoader from "./MapLoader";
+import { useEffect, useMemo } from "react";
 
 const markerIcon = new L.Icon({
   iconUrl:
@@ -12,8 +21,66 @@ const markerIcon = new L.Icon({
   iconAnchor: [12, 41],
 });
 
+const FitBounds = ({ coords, scannedAvfallResult }: any) => {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!map || !coords) return;
+
+    const bounds = L.latLngBounds([
+      [coords.latitude, coords.longitude],
+      ...(scannedAvfallResult?.avfallspunkter?.map((p: any) => [
+        parseFloat(p.latitude),
+        parseFloat(p.longitude),
+      ]) || []),
+    ]);
+
+    map.flyToBounds(bounds, { padding: [50, 50], duration: 1.5 });
+  }, [map, coords, scannedAvfallResult]);
+
+  return null;
+};
+
+// haversine formel
+const getDistance = (
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number
+) => {
+  const toRad = (value: number) => (value * Math.PI) / 180;
+  const R = 6371; // Earth's radius in km
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(toRad(lat1)) *
+      Math.cos(toRad(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c; // i km
+};
+
+const findClosestPoint = (coords: any, avfallspunkter: any) => {
+  if (!coords || !avfallspunkter?.length) return null;
+
+  return avfallspunkter.reduce((closest: any, punkt: any) => {
+    const distance = getDistance(
+      coords.latitude,
+      coords.longitude,
+      parseFloat(punkt.latitude),
+      parseFloat(punkt.longitude)
+    );
+
+    return !closest || distance < closest.distance
+      ? { ...punkt, distance }
+      : closest;
+  }, null);
+};
+
 export const Map = () => {
-  // const { publicTrashLocations } = useAppContext();
+  const { scannedAvfallResult } = useAppContext();
   const defaultLocation = { lat: 61.458982498103865, lng: 5.888914753595201 }; // HVL Førde
 
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
@@ -23,6 +90,11 @@ export const Map = () => {
       },
       userDecisionTimeout: 5000,
     });
+
+  const closestPoint = useMemo(
+    () => findClosestPoint(coords, scannedAvfallResult?.avfallspunkter),
+    [coords, scannedAvfallResult]
+  );
 
   if (!isGeolocationAvailable)
     return <div>Enheten din støtter ikke geolokasjon 😢 </div>;
@@ -46,6 +118,7 @@ export const Map = () => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution="© OpenStreetMap contributors"
       />
+      <FitBounds coords={coords} scannedAvfallResult={scannedAvfallResult} />
       <Marker
         position={[coords?.latitude, coords?.longitude]}
         icon={markerIcon}
@@ -53,9 +126,27 @@ export const Map = () => {
         <Popup>Din posisjon</Popup>
       </Marker>
       <Circle center={[coords?.latitude, coords?.longitude]} radius={100} />
-      {/* {publicTrashLocations?.map((loc: any, index) => (
-        <Marker key={index} position={[loc.lat, loc.lng]} icon={markerIcon} />
-      ))} */}
+      {scannedAvfallResult?.avfallspunkter?.map((punkt) => (
+        <Marker
+          key={punkt.id}
+          position={[parseFloat(punkt.latitude), parseFloat(punkt.longitude)]}
+          icon={markerIcon}
+        >
+          <Popup>{punkt.navn}</Popup>
+        </Marker>
+      ))}
+      {closestPoint && (
+        <Polyline
+          positions={[
+            [coords.latitude, coords.longitude],
+            [
+              parseFloat(closestPoint.latitude),
+              parseFloat(closestPoint.longitude),
+            ],
+          ]}
+          pathOptions={{ color: "blue", dashArray: "5, 10" }}
+        />
+      )}
     </MapContainer>
   );
 };

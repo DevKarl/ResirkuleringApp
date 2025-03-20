@@ -14,15 +14,9 @@ public class AvfallController {
   @Autowired
   AvfallService avfallService;
 
-  @GetMapping("/scanAvfall")
-  public Avfall scanAvfall(@RequestParam String strekkode) {
-    
-    return avfallService.scannAvfall(strekkode);
-  
+  @GetMapping("/getAvfallByStrekkode")
+  public Avfall getAvfallByStrekkode(@RequestParam String strekkode) {    
+    return avfallService.getAvfallByStrekkode(strekkode);
   }
-
-  // public Avfall leggTilVare(String strekkode, int i) {
-  //   throw new UnsupportedOperationException("Unimplemented method 'leggTilVare'");
-  // }
 
 }
