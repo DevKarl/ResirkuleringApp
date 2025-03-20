@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, ReactNode } from "react";
-import { ScanAvfallResponse } from "@types";
+import { ScanAvfallResponse } from "../types";
 
 interface AppContextType {
   bruker: any;
