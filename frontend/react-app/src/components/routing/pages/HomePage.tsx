@@ -1,6 +1,5 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { useAppContext } from "../../../context/ContextProvider";
 import { BarcodeScannerModal } from "../../barcode-scanner/BarCodeScannerModal";
 import { Map } from "../../map/Map";
 
