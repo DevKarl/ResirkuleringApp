@@ -1,9 +1,17 @@
-import { MapContainer, TileLayer, Marker, Circle, Popup } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Circle,
+  Popup,
+  useMap,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useAppContext } from "../../context/ContextProvider";
 import { useGeolocated } from "react-geolocated";
 import L from "leaflet";
 import MapLoader from "./MapLoader";
+import { useEffect } from "react";
 
 const markerIcon = new L.Icon({
   iconUrl:
@@ -12,9 +20,28 @@ const markerIcon = new L.Icon({
   iconAnchor: [12, 41],
 });
 
+const FitBounds = ({ coords, scannedAvfallResult }: any) => {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!map || !coords) return;
+
+    const bounds = L.latLngBounds([
+      [coords.latitude, coords.longitude],
+      ...(scannedAvfallResult?.avfallspunkter?.map((p: any) => [
+        parseFloat(p.latitude),
+        parseFloat(p.longitude),
+      ]) || []),
+    ]);
+
+    map.flyToBounds(bounds, { padding: [50, 50], duration: 1.5 });
+  }, [map, coords, scannedAvfallResult]);
+
+  return null;
+};
+
 export const Map = () => {
   const { scannedAvfallResult } = useAppContext();
-  console.log({ scannedAvfallResult });
   const defaultLocation = { lat: 61.458982498103865, lng: 5.888914753595201 }; // HVL Førde
 
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
@@ -47,6 +74,7 @@ export const Map = () => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution="© OpenStreetMap contributors"
       />
+      <FitBounds coords={coords} scannedAvfallResult={scannedAvfallResult} />
       <Marker
         position={[coords?.latitude, coords?.longitude]}
         icon={markerIcon}
