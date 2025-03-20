@@ -1,6 +1,6 @@
 import { MapContainer, TileLayer, Marker, Circle, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-// import { useAppContext } from "../../context/ContextProvider";
+import { useAppContext } from "../../context/ContextProvider";
 import { useGeolocated } from "react-geolocated";
 import L from "leaflet";
 import MapLoader from "./MapLoader";
@@ -13,7 +13,8 @@ const markerIcon = new L.Icon({
 });
 
 export const Map = () => {
-  // const { publicTrashLocations } = useAppContext();
+  const { scannedAvfallResult } = useAppContext();
+  console.log({ scannedAvfallResult });
   const defaultLocation = { lat: 61.458982498103865, lng: 5.888914753595201 }; // HVL Førde
 
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
@@ -53,9 +54,15 @@ export const Map = () => {
         <Popup>Din posisjon</Popup>
       </Marker>
       <Circle center={[coords?.latitude, coords?.longitude]} radius={100} />
-      {/* {publicTrashLocations?.map((loc: any, index) => (
-        <Marker key={index} position={[loc.lat, loc.lng]} icon={markerIcon} />
-      ))} */}
+      {scannedAvfallResult?.avfallspunkter?.map((punkt) => (
+        <Marker
+          key={punkt.id}
+          position={[parseFloat(punkt.latitude), parseFloat(punkt.longitude)]}
+          icon={markerIcon}
+        >
+          <Popup>{punkt.navn}</Popup>
+        </Marker>
+      ))}
     </MapContainer>
   );
 };
