@@ -1,9 +1,9 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import styled from "styled-components";
 import Scanner from "./Scanner";
-import { useAppContext } from "../../context/ContextProvider";
 import { useFetchCoordsByBarcode } from "./useFetchCoordsByBarcode";
 import { debounce } from "../../utils";
+import { Loader } from "../Loader";
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -88,7 +88,11 @@ export const BarcodeScannerModal = ({ isModalOpen, toggleModal }: any) => {
   return (
     <ModalOverlay>
       <ModalContainer>
-        {isLoading && <ResultText>Henter produktdata...</ResultText>}
+        {isLoading && (
+          <>
+            <ResultText>Henter avfallsdata</ResultText> <Loader />
+          </>
+        )}
         {error && <ResultText>{error}</ResultText>}
         <CloseButton onClick={toggleModal}>Lukk</CloseButton>
         <Scanner onDetected={onDetected} />
