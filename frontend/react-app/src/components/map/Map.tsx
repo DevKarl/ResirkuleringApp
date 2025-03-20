@@ -5,13 +5,14 @@ import {
   Circle,
   Popup,
   useMap,
+  Polyline,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useAppContext } from "../../context/ContextProvider";
 import { useGeolocated } from "react-geolocated";
 import L from "leaflet";
 import MapLoader from "./MapLoader";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 const markerIcon = new L.Icon({
   iconUrl:
@@ -40,6 +41,44 @@ const FitBounds = ({ coords, scannedAvfallResult }: any) => {
   return null;
 };
 
+// haversine formel
+const getDistance = (
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number
+) => {
+  const toRad = (value: number) => (value * Math.PI) / 180;
+  const R = 6371; // Earth's radius in km
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(toRad(lat1)) *
+      Math.cos(toRad(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c; // i km
+};
+
+const findClosestPoint = (coords: any, avfallspunkter: any) => {
+  if (!coords || !avfallspunkter?.length) return null;
+
+  return avfallspunkter.reduce((closest: any, punkt: any) => {
+    const distance = getDistance(
+      coords.latitude,
+      coords.longitude,
+      parseFloat(punkt.latitude),
+      parseFloat(punkt.longitude)
+    );
+
+    return !closest || distance < closest.distance
+      ? { ...punkt, distance }
+      : closest;
+  }, null);
+};
+
 export const Map = () => {
   const { scannedAvfallResult } = useAppContext();
   const defaultLocation = { lat: 61.458982498103865, lng: 5.888914753595201 }; // HVL Førde
@@ -51,6 +90,11 @@ export const Map = () => {
       },
       userDecisionTimeout: 5000,
     });
+
+  const closestPoint = useMemo(
+    () => findClosestPoint(coords, scannedAvfallResult?.avfallspunkter),
+    [coords, scannedAvfallResult]
+  );
 
   if (!isGeolocationAvailable)
     return <div>Enheten din støtter ikke geolokasjon 😢 </div>;
@@ -91,6 +135,18 @@ export const Map = () => {
           <Popup>{punkt.navn}</Popup>
         </Marker>
       ))}
+      {closestPoint && (
+        <Polyline
+          positions={[
+            [coords.latitude, coords.longitude],
+            [
+              parseFloat(closestPoint.latitude),
+              parseFloat(closestPoint.longitude),
+            ],
+          ]}
+          pathOptions={{ color: "blue", dashArray: "5, 10" }}
+        />
+      )}
     </MapContainer>
   );
 };
