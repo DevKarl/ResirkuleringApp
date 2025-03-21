@@ -15,6 +15,6 @@ public class AvfTypeService {
   private AvfallsTypeRepo avfallsTypeRepo;
 
   public List<AvfallsType> getAvfTypeByAvfPunktID(int id){
-    return avfallsTypeRepo.findAvfallsTyperByAvfallsPunktId(id);
+    return avfallsTypeRepo.findByAvfallspunktAvfallstyper_Avfallspunkt_Id(id);
   }
 }
