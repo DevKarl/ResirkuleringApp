@@ -3,6 +3,7 @@ import useBreakpoints from "../../../hooks/useBreakpoints";
 import { useState } from "react";
 import { DesktopNav } from "./DesktopNav";
 import { MobileModalMenu } from "./MobileModalMenu";
+import { AppLogo } from "../../../Ikoner/AppLogo/AppLogo";
 
 const HeaderContainer = styled.header`
   background-color: #628867;
@@ -36,6 +37,14 @@ const Hamburger = styled.button`
   }
 `;
 
+const LogoWrapper = styled.div`
+  display: flex;
+  flexDirection: row;
+  gap: 15px;
+  align-items: center;
+`
+
+
 export const Header = () => {
   const screenSize = useBreakpoints();
   const [hamburgerModalOpen, setHamburgerModalOpen] = useState(false);
@@ -45,7 +54,10 @@ export const Header = () => {
 
   return (
     <HeaderContainer>
-      <Heading>ResirkulerApp</Heading>
+      <LogoWrapper>
+        <AppLogo />
+        <Heading>ResirkulerApp</Heading>
+      </LogoWrapper>
       {screenSize === "small" || screenSize === "medium" ? (
         <>
           <Hamburger onClick={toggleHamburgerModal}>&#9776;</Hamburger>
