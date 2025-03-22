@@ -15,5 +15,6 @@ public interface AvfallspunktRepo extends JpaRepository<Avfallspunkt, Integer>{
 
   @Query("SELECT ap FROM Avfallspunkt ap JOIN ap.avfallspunktAvfallstyper apas WHERE apas.avfallstype.id = :avfallstypeId")
     List<Avfallspunkt> findAvfallspunkterByAvfallstype_id(@Param("avfallstypeId") int avfallstypeId);
+
 }
 
