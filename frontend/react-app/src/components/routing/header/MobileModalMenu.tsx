@@ -1,42 +1,25 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { Modal } from "../../core/Modal";
 
-const Overlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* Dimming effect */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1200;
-`;
-
-const MobileNavContainer = styled.nav`
+const ButtonsWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: #628867;
-  padding: 20px;
-  border-radius: 15px;
-  z-index: 1000;
-  width: 200px;
-  gap: 15px;
+  gap: 20px;
 `;
 
 const HeaderButton = styled(Link)`
   font-size: 25px;
-  color: white;
+  color: ${({ theme }) => theme.colors.white};
   text-decoration: none;
-  background-color: #628867;
+  background-color: ${({ theme }) => theme.colors.green};
   height: 50px;
   border-radius: 5px;
-  border-bottom: 1px solid lightgrey;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
+  width: 100%;
+  text-align: center;
+  text-decoration: underline;
   &:hover {
-    background-color: #46694a;
+    background-color: ${({ theme }) => theme.colors.greenDark};
   }
 `;
 
@@ -51,22 +34,16 @@ export const MobileModalMenu = ({
 }: MobileNavProps) => {
   if (!hamburgerModalOpen) return null;
 
-  const handleOverlayClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      toggleHamburgerModal();
-    }
-  };
-
   return (
-    <Overlay onClick={handleOverlayClick}>
-      <MobileNavContainer>
+    <Modal onClose={toggleHamburgerModal} width="90%">
+      <ButtonsWrapper>
         <HeaderButton to="/" onClick={toggleHamburgerModal}>
           Hjem
         </HeaderButton>
         <HeaderButton to="/minside" onClick={toggleHamburgerModal}>
           Min Side
         </HeaderButton>
-      </MobileNavContainer>
-    </Overlay>
+      </ButtonsWrapper>
+    </Modal>
   );
 };
