@@ -1,29 +1,105 @@
 import { useState } from "react";
-import styled from "styled-components";
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Heading = styled.h1`
-  font-size: 2rem;
-  color: #333;
-  font-family: Arial, sans-serif;
-  text-align: center;
-`;
+import { CoreContainer } from "../../core/CoreContainer";
+import { CoreHeading } from "../../core/CoreHeading";
+import { FormContainer } from "../../core/Form";
+import InputField from "../../core/Input";
+import { Button } from "../../core/Button";
 
 export const Registrer = () => {
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
+  const [formData, setFormData] = useState({
+    fornavn: "",
+    etternavn: "",
+    brukernavn: "",
+    passord: "",
+  });
+  const [errors, setErrors] = useState({
+    fornavn: "",
+    etternavn: "",
+    brukernavn: "",
+    passord: "",
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (validate()) {
+      // TODO:  usePostRegister
+      console.log("Form data:", formData);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const validate = () => {
+    const newErrors: typeof errors = {
+      fornavn: "",
+      etternavn: "",
+      brukernavn: "",
+      passord: "",
+    };
+    if (formData.fornavn.length < 3) {
+      newErrors.brukernavn = "Brukernavn må være minst 6 tegn";
+    }
+    if (formData.etternavn.length < 3) {
+      newErrors.brukernavn = "Brukernavn må være minst 6 tegn";
+    }
+    if (formData.brukernavn.length < 3) {
+      newErrors.brukernavn = "Brukernavn må være minst 6 tegn";
+    }
+    if (formData.passord.length < 3) {
+      newErrors.passord = "Passord må være minst 3 tegn";
+    }
+    setErrors(newErrors);
+    return Object.values(newErrors).every((err) => err === "");
   };
 
   return (
-    <Container>
-      <Heading>Registrer</Heading>
-      <form onSubmit={handleSubmit}>Form</form>
-    </Container>
+    <CoreContainer>
+      <CoreHeading>Registrer</CoreHeading>
+      <FormContainer
+        onSubmit={handleSubmit}
+        title="Registrer en bruker hos oss"
+      >
+        <InputField
+          value={formData.fornavn}
+          onChange={handleChange}
+          label="Fornavn"
+          name="fornavn"
+          placeholder="Ditt fornavn"
+          required
+          error={errors.fornavn}
+        />
+        <InputField
+          value={formData.etternavn}
+          onChange={handleChange}
+          label="Etternavn"
+          name="etternavn"
+          placeholder="Ditt etternavn"
+          required
+          error={errors.etternavn}
+        />
+        <InputField
+          value={formData.brukernavn}
+          onChange={handleChange}
+          label="Brukernavn"
+          name="brukernavn"
+          placeholder="Ditt brukernavn"
+          required
+          error={errors.brukernavn}
+        />
+        <InputField
+          value={formData.passord}
+          onChange={handleChange}
+          label="Passord"
+          name="passord"
+          placeholder="Ditt passord"
+          required
+          error={errors.passord}
+        />
+        <Button>Registrer</Button>
+      </FormContainer>
+    </CoreContainer>
   );
 };

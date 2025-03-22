@@ -1,36 +1,22 @@
-import { useState } from "react";
-import styled from "styled-components";
+import { useEffect, useState } from "react";
 import InputField from "../../core/Input";
 import { Button } from "../../core/Button";
 import { FormContainer } from "../../core/Form";
-import { Link } from "react-router-dom";
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Heading = styled.h1`
-  font-size: 2rem;
-  color: ${({ theme }) => theme.colors.greenDark};
-  font-family: Arial, sans-serif;
-  text-align: center;
-`;
-
-const StyledLink = styled(Link)<{ color?: string }>`
-  text-decoration: underline;
-  color: ${({ theme, color }) => color || theme.colors.greenDark};
-  font-weight: 500;
-  transition: color 0.3s ease;
-
-  /* &:hover {
-    color: ${({ theme }) => theme.colors.darkGrey};
-  } */
-`;
+import { CoreContainer } from "../../core/CoreContainer";
+import { CoreHeading } from "../../core/CoreHeading";
+import { CoreLink } from "../../core/CoreLink";
+import { useAppContext } from "../../../context/ContextProvider";
+import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
+  const { isLoggedIn } = useAppContext();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/");
+    }
+  }, [isLoggedIn, navigate]);
+
   const [formData, setFormData] = useState({ brukernavn: "", passord: "" });
   const [errors, setErrors] = useState({
     brukernavn: "",
@@ -40,7 +26,7 @@ export const Login = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validate()) {
-      // alert('Form submitted!');
+      // TODO:  usePostLogin
       console.log("Form data:", formData);
     }
   };
@@ -51,6 +37,8 @@ export const Login = () => {
   };
 
   const validate = () => {
+    // SETT ERRORS I FØLGE BACKEND RESPONSE HER:
+
     const newErrors: typeof errors = { brukernavn: "", passord: "" };
     if (formData.brukernavn.length < 3) {
       newErrors.brukernavn = "Brukernavn må være minst 3 tegn";
@@ -63,8 +51,8 @@ export const Login = () => {
   };
 
   return (
-    <Container>
-      <Heading>Logg inn</Heading>
+    <CoreContainer>
+      <CoreHeading>Logg inn</CoreHeading>
       <FormContainer
         onSubmit={handleSubmit}
         title="Logg inn på brukerkontoen din"
@@ -88,10 +76,10 @@ export const Login = () => {
           error={errors.passord}
         />
         <Button>Logg inn</Button>
-        <StyledLink to="/registrer">
+        <CoreLink to="/registrer">
           Mangler du konto? Klikk her for å registrere
-        </StyledLink>
+        </CoreLink>
       </FormContainer>
-    </Container>
+    </CoreContainer>
   );
 };
