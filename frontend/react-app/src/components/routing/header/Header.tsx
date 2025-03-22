@@ -39,11 +39,10 @@ const Hamburger = styled.button`
 
 const LogoWrapper = styled.div`
   display: flex;
-  flexDirection: row;
+  flex-direction: row;
   gap: 15px;
   align-items: center;
-`
-
+`;
 
 export const Header = () => {
   const screenSize = useBreakpoints();
