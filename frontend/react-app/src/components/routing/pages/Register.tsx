@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { CoreContainer } from "../../core/CoreContainer";
 import { CoreHeading } from "../../core/CoreHeading";
-import { FormContainer } from "../../core/Form";
-import InputField from "../../core/Input";
-import { Button } from "../../core/Button";
+import { CoreForm } from "../../core/CoreForm";
+import { CoreInput } from "../../core/CoreInput";
+import { CoreButton } from "../../core/CoreButton";
 
 export const Registrer = () => {
   const [formData, setFormData] = useState({
@@ -58,11 +58,8 @@ export const Registrer = () => {
   return (
     <CoreContainer>
       <CoreHeading>Registrer</CoreHeading>
-      <FormContainer
-        onSubmit={handleSubmit}
-        title="Registrer en bruker hos oss"
-      >
-        <InputField
+      <CoreForm onSubmit={handleSubmit} title="Registrer en bruker hos oss">
+        <CoreInput
           value={formData.fornavn}
           onChange={handleChange}
           label="Fornavn"
@@ -71,7 +68,7 @@ export const Registrer = () => {
           required
           error={errors.fornavn}
         />
-        <InputField
+        <CoreInput
           value={formData.etternavn}
           onChange={handleChange}
           label="Etternavn"
@@ -80,7 +77,7 @@ export const Registrer = () => {
           required
           error={errors.etternavn}
         />
-        <InputField
+        <CoreInput
           value={formData.brukernavn}
           onChange={handleChange}
           label="Brukernavn"
@@ -89,7 +86,7 @@ export const Registrer = () => {
           required
           error={errors.brukernavn}
         />
-        <InputField
+        <CoreInput
           value={formData.passord}
           onChange={handleChange}
           label="Passord"
@@ -98,8 +95,8 @@ export const Registrer = () => {
           required
           error={errors.passord}
         />
-        <Button>Registrer</Button>
-      </FormContainer>
+        <CoreButton>Registrer</CoreButton>
+      </CoreForm>
     </CoreContainer>
   );
 };

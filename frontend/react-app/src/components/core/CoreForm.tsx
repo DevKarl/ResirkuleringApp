@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const Form = styled.form`
+const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -13,16 +13,16 @@ const Form = styled.form`
   padding: 20px;
 `;
 
-const FormTitle = styled.p`
+const StyledFormTitle = styled.p`
   font-size: 22px;
   color: ${({ theme }) => theme.colors.darkGrey};
 `;
 
-export const FormContainer = ({ onSubmit, children, title }: any) => {
+export const CoreForm = ({ onSubmit, children, title }: any) => {
   return (
-    <Form onSubmit={onSubmit}>
-      <FormTitle>{title}</FormTitle>
+    <StyledForm onSubmit={onSubmit}>
+      <StyledFormTitle>{title}</StyledFormTitle>
       {children}
-    </Form>
+    </StyledForm>
   );
 };

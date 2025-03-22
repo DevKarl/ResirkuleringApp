@@ -2,7 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { BarcodeScannerModal } from "../../barcode-scanner/BarCodeScannerModal";
 import { Map } from "../../map/Map";
-import { Button } from "../../core/Button";
+import { CoreButton } from "../../core/CoreButton";
 
 const HomePageContainer = styled.div`
   display: flex;
@@ -30,7 +30,7 @@ export const HomePage = () => {
     <HomePageContainer>
       <Heading>Finn nærmeste avfallspunkt ♻️ </Heading>
       <Map />
-      <Button onClick={() => setIsModalOpen(true)}>Scann avfall</Button>
+      <CoreButton onClick={() => setIsModalOpen(true)}>Scann avfall</CoreButton>
       {isModalOpen && (
         <BarcodeScannerModal
           isModalOpen={isModalOpen}

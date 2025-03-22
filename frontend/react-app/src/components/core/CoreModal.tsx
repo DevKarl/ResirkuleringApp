@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import styled from "styled-components";
 
-interface ModalProps {
+interface CoreModalProps {
   children: ReactNode;
   onClose: () => void;
   width?: string;
@@ -74,7 +74,12 @@ const CloseButton = styled.button`
   }
 `;
 
-export const Modal = ({ children, onClose, width, height }: ModalProps) => {
+export const CoreModal = ({
+  children,
+  onClose,
+  width,
+  height,
+}: CoreModalProps) => {
   return (
     <ModalOverlay onClick={onClose}>
       <ModalContainer

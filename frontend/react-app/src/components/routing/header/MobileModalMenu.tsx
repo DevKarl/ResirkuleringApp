@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
-import { Modal } from "../../core/Modal";
+import { CoreModal } from "../../core/CoreModal";
 import { useAppContext } from "../../../context/ContextProvider";
 
 const ButtonsWrapper = styled.div`
@@ -67,7 +67,7 @@ export const MobileModalMenu = ({
   };
 
   return (
-    <Modal onClose={toggleHamburgerModal} width="90%">
+    <CoreModal onClose={toggleHamburgerModal} width="90%">
       <ButtonsWrapper>
         <HeaderLink to="/" onClick={toggleHamburgerModal}>
           Hjem
@@ -83,6 +83,6 @@ export const MobileModalMenu = ({
           </HeaderLink>
         )}
       </ButtonsWrapper>
-    </Modal>
+    </CoreModal>
   );
 };

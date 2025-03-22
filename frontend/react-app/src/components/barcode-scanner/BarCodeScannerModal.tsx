@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import { Modal } from "../core/Modal";
+import { CoreModal } from "../core/CoreModal";
 import { CameraScanner } from "./CameraScanner";
 import { useFetchCoordsByBarcode } from "./useFetchCoordsByBarcode";
 import { useRef } from "react";
-import { Loader } from "../core/Loader";
+import { CoreLoader } from "../core/CoreLoader";
 
 const ResultText = styled.p`
   font-size: 1.5rem;
@@ -35,18 +35,18 @@ export const BarcodeScannerModal = ({ toggleModal }: any) => {
   // rendringen skal skje under knappene, så brukeren kan velge mellom kamera/inputfelt frem og tilbake
 
   return (
-    <Modal onClose={toggleModal}>
+    <CoreModal onClose={toggleModal}>
       {isLoading && (
         <>
-          <ResultText>Henter avfallsdata</ResultText> <Loader />
+          <ResultText>Henter avfallsdata</ResultText> <CoreLoader />
         </>
       )}
       {error && <ErrorText>{error}</ErrorText>}
-      {/* <CameraScanner
+      <CameraScanner
         toggleModal={toggleModal}
         barcodeScanned={barcodeScanned}
         fetchCoordsByBarcode={fetchCoordsByBarcode}
-      /> */}
-    </Modal>
+      />
+    </CoreModal>
   );
 };

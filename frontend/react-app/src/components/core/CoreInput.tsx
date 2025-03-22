@@ -49,7 +49,7 @@ const RequiredMark = styled.span`
   margin-left: 0.25rem;
 `;
 
-interface Props {
+interface CoreInputProps {
   label: string;
   name: string;
   type?: string;
@@ -60,7 +60,7 @@ interface Props {
   required?: boolean;
 }
 
-const InputField: React.FC<Props> = ({
+export const CoreInput = ({
   label,
   name,
   type = "text",
@@ -69,7 +69,7 @@ const InputField: React.FC<Props> = ({
   placeholder,
   error,
   required = false,
-}) => {
+}: CoreInputProps) => {
   const id = useId();
   const [touched, setTouched] = useState(false);
 
@@ -102,5 +102,3 @@ const InputField: React.FC<Props> = ({
     </FieldWrapper>
   );
 };
-
-export default InputField;

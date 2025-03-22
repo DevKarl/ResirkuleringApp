@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import InputField from "../../core/Input";
-import { Button } from "../../core/Button";
-import { FormContainer } from "../../core/Form";
+import { CoreInput } from "../../core/CoreInput";
+import { CoreButton } from "../../core/CoreButton";
+import { CoreForm } from "../../core/CoreForm";
 import { CoreContainer } from "../../core/CoreContainer";
 import { CoreHeading } from "../../core/CoreHeading";
 import { CoreLink } from "../../core/CoreLink";
@@ -53,11 +53,8 @@ export const Login = () => {
   return (
     <CoreContainer>
       <CoreHeading>Logg inn</CoreHeading>
-      <FormContainer
-        onSubmit={handleSubmit}
-        title="Logg inn på brukerkontoen din"
-      >
-        <InputField
+      <CoreForm onSubmit={handleSubmit} title="Logg inn på brukerkontoen din">
+        <CoreInput
           value={formData.brukernavn}
           onChange={handleChange}
           label="Brukernavn"
@@ -66,7 +63,7 @@ export const Login = () => {
           required
           error={errors.brukernavn}
         />
-        <InputField
+        <CoreInput
           value={formData.passord}
           onChange={handleChange}
           label="Passord"
@@ -75,11 +72,11 @@ export const Login = () => {
           required
           error={errors.passord}
         />
-        <Button>Logg inn</Button>
+        <CoreButton>Logg inn</CoreButton>
         <CoreLink to="/registrer">
           Mangler du konto? Klikk her for å registrere
         </CoreLink>
-      </FormContainer>
+      </CoreForm>
     </CoreContainer>
   );
 };

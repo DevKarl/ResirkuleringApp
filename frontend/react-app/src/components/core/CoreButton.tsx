@@ -31,7 +31,11 @@ interface ButtonProps {
   children?: ReactNode;
 }
 
-export const Button = ({ type = "green", onClick, children }: ButtonProps) => {
+export const CoreButton = ({
+  type = "green",
+  onClick,
+  children,
+}: ButtonProps) => {
   return (
     <StyledButton $type={type} onClick={onClick}>
       {children}
