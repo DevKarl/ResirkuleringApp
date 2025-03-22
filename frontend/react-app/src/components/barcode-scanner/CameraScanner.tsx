@@ -1,8 +1,5 @@
-import { useRef } from "react";
 import Scanner from "./Scanner";
-import { useFetchCoordsByBarcode } from "./useFetchCoordsByBarcode";
 import { debounce } from "../../utils";
-import { Loader } from "../core/Loader";
 import styled from "styled-components";
 
 const ResultText = styled.p`
@@ -10,11 +7,10 @@ const ResultText = styled.p`
   color: white;
 `;
 
-export const CameraScanner = ({ toggleModal }: any) => {
-  const { error, isLoading, isSuccess, fetchCoordsByBarcode } =
-    useFetchCoordsByBarcode();
-  const barcodeScanned = useRef<string>(null);
-
+export const CameraScanner = ({
+  fetchCoordsByBarcode,
+  barcodeScanned,
+}: any) => {
   const onDetected = debounce((barcode: string) => {
     if (barcode !== barcodeScanned.current) {
       barcodeScanned.current = barcode;
@@ -22,16 +18,8 @@ export const CameraScanner = ({ toggleModal }: any) => {
     }
   }, 500);
 
-  if (isSuccess) toggleModal();
-
   return (
     <>
-      {isLoading && (
-        <>
-          <ResultText>Henter avfallsdata</ResultText> <Loader />
-        </>
-      )}
-      {error && <ResultText>{error}</ResultText>}
       <Scanner onDetected={onDetected} />
     </>
   );
