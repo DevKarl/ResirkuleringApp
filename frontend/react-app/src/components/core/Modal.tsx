@@ -36,6 +36,7 @@ const ModalContainer = styled.div<{
   justify-content: center;
   position: relative;
   border-radius: 15px;
+  border: 1.5px solid ${({ theme }) => theme.colors.greenBright};
 `;
 
 const CloseIcon = () => (
