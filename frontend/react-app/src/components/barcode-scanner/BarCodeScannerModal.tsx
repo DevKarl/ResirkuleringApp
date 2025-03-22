@@ -23,12 +23,14 @@ export const BarcodeScannerModal = ({ toggleModal }: any) => {
 
   // TODO set state for "option"
 
-  // TODO: endre denne modalen
+  // TODO: endre innholdet i denne modalen
   // lag state for option ("manuell", "kamera")
+  // lag state for barcodeInput
   // vise to knapper:
   // [legg inn strekkkode manuelt] --> onclick --> rendrer kun inputfelt med knapp "Scan avfall"
-  // onChange på inputfelt skal endre barcodeScanned.current (ikke egen state for denne)
-  // ved klikk på Scan avfall: kall fetchCoordsByBarcode(barcodeScanned.current)
+  // onChange på inputfelt skal endre på barcodeInput
+  // ved klikk på Scan avfall: kall fetchCoordsByBarcode(barcodeInput)
+  // husk å bruke core komponenter
 
   // [bruk kamera] --> onclick --> render <CameraScanner>
 
