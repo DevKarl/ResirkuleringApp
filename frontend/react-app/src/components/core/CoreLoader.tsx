@@ -9,7 +9,7 @@ const rotate = keyframes`
   }
 `;
 
-export const Loader = styled.span`
+export const CoreLoader = styled.span`
   width: 55px;
   height: 55px;
   border: 5px solid #ffffff;

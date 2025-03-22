@@ -1,102 +1,52 @@
-import { useRef } from "react";
 import styled from "styled-components";
-import Scanner from "./Scanner";
+import { CoreModal } from "../core/CoreModal";
+import { CameraScanner } from "./CameraScanner";
 import { useFetchCoordsByBarcode } from "./useFetchCoordsByBarcode";
-import { debounce } from "../../utils";
-import { Loader } from "../Loader";
-
-const ModalOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7); /* Darker dimming effect for fullscreen */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1200;
-`;
-
-const ModalContainer = styled.div`
-  background-color: #628867;
-  width: 100%;
-  height: 100%;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-`;
-
-const CloseButton = styled.button`
-  position: absolute;
-  top: 60px;
-  right: 40px;
-  font-size: 1.2rem;
-  background-color: #a7baa9;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 15px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #628867;
-  }
-`;
+import { useRef } from "react";
+import { CoreLoader } from "../core/CoreLoader";
 
 const ResultText = styled.p`
   font-size: 1.5rem;
   color: white;
 `;
 
-const Button = styled.button`
-  margin-top: 20px;
-  margin-bottom: 20px;
-  width: 300px;
-  height: 50px;
-  padding: 10px 20px;
-  font-size: 1.2rem;
-  background-color: #a7baa9;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #46694a;
-  }
+const ErrorText = styled.p`
+  font-size: 1.5rem;
+  color: red;
 `;
 
-export const BarcodeScannerModal = ({ isModalOpen, toggleModal }: any) => {
+export const BarcodeScannerModal = ({ toggleModal }: any) => {
   const { error, isLoading, isSuccess, fetchCoordsByBarcode } =
     useFetchCoordsByBarcode();
   const barcodeScanned = useRef<string>(null);
-
-  const onDetected = debounce((barcode: string) => {
-    if (barcode !== barcodeScanned.current) {
-      barcodeScanned.current = barcode;
-      fetchCoordsByBarcode(barcode);
-    }
-  }, 500);
-
-  if (!isModalOpen) return null;
   if (isSuccess) toggleModal();
 
+  // TODO: endre innholdet i denne modalen
+  // lag state for option ("manuell", "kamera")
+  // lag state for barcodeInput
+  // vise to knapper:
+  // [legg inn strekkkode manuelt] --> onclick --> rendrer kun inputfelt med knapp "Scan avfall"
+  // onChange på inputfelt skal endre på barcodeInput
+  // ved klikk på Scan avfall: kall fetchCoordsByBarcode(barcodeInput)
+  // husk å bruke core komponenter
+
+  // [bruk kamera] --> onclick --> render <CameraScanner>
+
+  // rendringen skal skje under knappene, så brukeren kan velge mellom kamera/inputfelt frem og tilbake
+
   return (
-    <ModalOverlay>
-      <ModalContainer>
-        {isLoading && (
-          <>
-            <ResultText>Henter avfallsdata</ResultText> <Loader />
-          </>
-        )}
-        {error && <ResultText>{error}</ResultText>}
-        <CloseButton onClick={toggleModal}>Lukk</CloseButton>
-        <Scanner onDetected={onDetected} />
-      </ModalContainer>
-    </ModalOverlay>
+    <CoreModal onClose={toggleModal}>
+      {isLoading && (
+        <>
+          <ResultText>Henter avfallsdata</ResultText> <CoreLoader />
+        </>
+      )}
+      {error && <ErrorText>{error}</ErrorText>}
+      <CameraScanner
+        toggleModal={toggleModal}
+        barcodeScanned={barcodeScanned}
+        fetchCoordsByBarcode={fetchCoordsByBarcode}
+      />
+    </CoreModal>
   );
 };

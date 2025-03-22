@@ -3,11 +3,15 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
 import { AppProvider } from "./context/ContextProvider.tsx";
+import { ThemeProvider } from "styled-components";
+import { theme } from "./components/core/theme/theme.ts";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <AppProvider>
-      <App />
-    </AppProvider>
+    <ThemeProvider theme={theme}>
+      <AppProvider>
+        <App />
+      </AppProvider>
+    </ThemeProvider>
   </StrictMode>
 );
