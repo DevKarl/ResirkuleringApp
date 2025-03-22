@@ -79,7 +79,7 @@ export const MobileModalMenu = ({
           <LogOutButton onClick={handleLogout}>Logg ut</LogOutButton>
         ) : (
           <HeaderLink to="/logginn" onClick={toggleHamburgerModal}>
-            Logg inn/registrer
+            Logg inn
           </HeaderLink>
         )}
       </ButtonsWrapper>
