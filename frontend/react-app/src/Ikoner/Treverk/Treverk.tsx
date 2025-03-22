@@ -7,5 +7,5 @@ const Image = styled.img`
 
 export const Treverk = ({height= "25px", width= "25px"}: any) => {
 
-  return<img src={treverk} alt="Logo" height={height} width={width}></img>
+  return<img src={treverk} alt="Logo" height={height} width={width} id="10"></img>
 }
