@@ -16,7 +16,7 @@ const StyledButton = styled.button<StyledButtonProps>`
     $type === "white" ? theme.colors.greenWhite : theme.colors.green};
   color: ${({ theme }) => theme.colors.white};
   border: none;
-  border-radius: 5px;
+  border-radius: 15px;
   cursor: pointer;
 
   &:hover {

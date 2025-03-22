@@ -21,8 +21,6 @@ export const BarcodeScannerModal = ({ toggleModal }: any) => {
   const barcodeScanned = useRef<string>(null);
   if (isSuccess) toggleModal();
 
-  // TODO set state for "option"
-
   // TODO: endre innholdet i denne modalen
   // lag state for option ("manuell", "kamera")
   // lag state for barcodeInput
@@ -44,12 +42,11 @@ export const BarcodeScannerModal = ({ toggleModal }: any) => {
         </>
       )}
       {error && <ErrorText>{error}</ErrorText>}
-
-      <CameraScanner
+      {/* <CameraScanner
         toggleModal={toggleModal}
         barcodeScanned={barcodeScanned}
         fetchCoordsByBarcode={fetchCoordsByBarcode}
-      />
+      /> */}
     </Modal>
   );
 };
