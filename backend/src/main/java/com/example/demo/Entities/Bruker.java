@@ -17,11 +17,10 @@ public class Bruker {
 
     private String fornavn;
     private String etternavn;
+    private String brukernavn;
 
     @Column(nullable = false, unique = true)
     private String epost;
-
-   
 
     private String hash;
     private String salt;
@@ -33,10 +32,11 @@ public class Bruker {
     }
 
 
-  public Bruker(int id, String fornavn, String etternavn, String epost, String hash, String salt) {
+  public Bruker(int id, String fornavn, String etternavn,String brukernavn, String epost, String hash, String salt) {
     this.id = id;
     this.fornavn = fornavn;
     this.etternavn = etternavn;
+    this.brukernavn = brukernavn;
     this.epost = epost;
     this.hash = hash;
     this.salt = salt;
@@ -66,6 +66,14 @@ public class Bruker {
 
   public void setEtternavn(String etternavn) {
     this.etternavn = etternavn;
+  }
+  
+  public String getBrukernavn() {
+    return this.brukernavn;
+  }
+
+  public void setBrukernavn(String brukernavn) {
+    this.brukernavn = brukernavn;
   }
 
   public String getEPost() {
