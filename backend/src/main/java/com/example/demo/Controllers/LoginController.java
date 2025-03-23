@@ -54,6 +54,7 @@ public class LoginController {
         session.invalidate();
         return ResponseEntity.ok("Logged out successfully");
     }
+        // kun for testing, kan fjernes etterhvert
        @GetMapping("/profile")
         public ResponseEntity<String> profile(HttpSession session) {
         Object userId = session.getAttribute("userId");
