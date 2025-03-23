@@ -25,7 +25,7 @@ const ModalContainer = styled.div<{
   $width?: string;
   $height?: string;
 }>`
-  background-color: ${({ theme }) => theme.colors.green};
+  background-color: ${({ theme }) => theme.colors.greenBright};
   width: ${({ $width }) => $width || "100vw"};
   height: ${({ $height }) => $height || "500px"};
   display: flex;
