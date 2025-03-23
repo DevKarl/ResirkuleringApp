@@ -1,23 +1,23 @@
 package com.example.demo.DTO;
 
 public class LoginRequest {
-    private String epost;
+    private String brukernavn;
     private String passord;
 
     public LoginRequest() {
     }
 
-    public LoginRequest(String epost, String passord) {
-        this.epost = epost;
+    public LoginRequest(String brukernavn, String passord) {
+        this.brukernavn = brukernavn;
         this.passord = passord;
     }
 
-    public String getEpost() {
-        return epost;
+    public String getBrukernavn() {
+        return brukernavn;
     }
 
-    public void setEpost(String epost) {
-        this.epost = epost;
+    public void setBrukernavn(String brukernavn) {
+        this.brukernavn = brukernavn;
     }
 
     public String getPassord() {

@@ -9,9 +9,9 @@ import com.example.demo.Repositories.BrukerRepo;
 @Service
 public class BrukerService {
 
+    @Autowired
     private final BrukerRepo brukerRepo;
 
-    @Autowired
     public BrukerService(BrukerRepo brukerRepo) {
         this.brukerRepo = brukerRepo;
     }
@@ -20,8 +20,11 @@ public class BrukerService {
         return brukerRepo.save(bruker);
     }
 
-   // brukernavn eller epost HENRIIIIIIIIIK
-    public Bruker findByEpost(String epost) {
-        return brukerRepo.findByEpost(epost);
+    public Bruker findByBrukernavn(String brukernavn) {
+        return brukerRepo.findByBrukernavn(brukernavn);
     }
+
+    public Bruker findById(Integer id) {
+      return brukerRepo.findById(id).orElse(null);
+  }
 }

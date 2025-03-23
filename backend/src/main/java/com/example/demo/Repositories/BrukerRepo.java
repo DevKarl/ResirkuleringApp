@@ -7,6 +7,5 @@ import com.example.demo.Entities.Bruker;
 
 @Repository
 public interface BrukerRepo extends JpaRepository<Bruker, Integer> {
-    //her må også se an med henrik om epost eller brukernavn
-    Bruker findByEpost(String epost);
+    Bruker findByBrukernavn(String brukernavn);
 }
