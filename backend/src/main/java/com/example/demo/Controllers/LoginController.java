@@ -5,9 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.Controllers.Interfaces.ApiController;
 import com.example.demo.DTO.LoginRequest;
 import com.example.demo.Entities.Bruker;
 import com.example.demo.Service.BrukerService;
@@ -15,8 +14,7 @@ import com.example.demo.Service.PassordService;
 
 import jakarta.servlet.http.HttpSession;
 
-@RestController
-@RequestMapping("/api")
+@ApiController
 public class LoginController {
 
     private final BrukerService brukerService;
@@ -31,21 +29,21 @@ public class LoginController {
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequest request, HttpSession session) {
         if (request.getEpost() == null || request.getPassord() == null) {
-            return ResponseEntity.badRequest().body("Epost and passord must be provided");
+            return ResponseEntity.badRequest().body("E-mail and passord must be provided");
         }
         
-        // Retrieve the user based on the provided email (assuming the service maps this correctly)
+        // Må se med henrik om epost eller brukernavn
         Bruker bruker = brukerService.findByEpost(request.getEpost());
         if (bruker == null) {
             return ResponseEntity.badRequest().body("User not found");
         }
         
-        // Verify the password using the PassordService
+
         if (!passordService.erKorrektPassord(request.getPassord(), bruker.getSalt(), bruker.getHash())) {
             return ResponseEntity.badRequest().body("Incorrect email or password");
         }
         
-        // Store user information in the session
+        // lagring av cookies inni sesjonen
         session.setAttribute("userId", bruker.getId());
         
         return ResponseEntity.ok("Login successful");
@@ -57,7 +55,7 @@ public class LoginController {
         return ResponseEntity.ok("Logged out successfully");
     }
        @GetMapping("/profile")
-    public ResponseEntity<String> profile(HttpSession session) {
+        public ResponseEntity<String> profile(HttpSession session) {
         Object userId = session.getAttribute("userId");
         if (userId == null) {
             return ResponseEntity.status(401).body("No user logged in");

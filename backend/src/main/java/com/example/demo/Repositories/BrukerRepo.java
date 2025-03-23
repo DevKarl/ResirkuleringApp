@@ -7,6 +7,6 @@ import com.example.demo.Entities.Bruker;
 
 @Repository
 public interface BrukerRepo extends JpaRepository<Bruker, Integer> {
-    // Custom finder method to locate a user by their unique email
+    //her må også se an med henrik om epost eller brukernavn
     Bruker findByEpost(String epost);
 }
