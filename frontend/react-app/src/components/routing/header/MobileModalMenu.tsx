@@ -67,7 +67,7 @@ export const MobileModalMenu = ({
   };
 
   return (
-    <CoreModal onClose={toggleHamburgerModal} width="90%">
+    <CoreModal onClose={toggleHamburgerModal}>
       <ButtonsWrapper>
         <HeaderLink to="/" onClick={toggleHamburgerModal}>
           Hjem

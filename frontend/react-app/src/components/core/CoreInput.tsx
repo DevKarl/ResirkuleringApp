@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   hasError?: boolean;
+  version?: string;
 }
 
 const FieldWrapper = styled.div`
@@ -11,18 +12,20 @@ const FieldWrapper = styled.div`
   flex-direction: column;
 `;
 
-const Label = styled.label`
+const Label = styled.label<InputProps>`
   font-weight: 500;
   font-size: 15px;
   margin-bottom: 0.25rem;
-  color: ${({ theme }) => theme.colors.darkGrey};
+  color: ${({ theme, version }) =>
+    version === "primary" ? theme.colors.darkGrey : theme.colors.white};
 `;
 
 const Input = styled.input<InputProps>`
-  padding: 0.5rem 0.75rem;
+  height: 45px;
+  padding: 0rem 0.75rem;
   border: 2px solid
     ${({ theme, hasError }) => (hasError ? "tomato" : theme.colors.greenDark)};
-  border-radius: 6px;
+  border-radius: 10px;
   background-color: ${({ theme }) => theme.colors.white};
   color: ${({ theme }) => theme.colors.darkGrey};
   font-size: 1rem;
@@ -54,6 +57,7 @@ interface CoreInputProps {
   name: string;
   type?: string;
   value: string;
+  version?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   error?: string;
@@ -64,6 +68,7 @@ export const CoreInput = ({
   label,
   name,
   type = "text",
+  version = "primary",
   value,
   onChange,
   placeholder,
@@ -81,7 +86,7 @@ export const CoreInput = ({
 
   return (
     <FieldWrapper>
-      <Label htmlFor={id}>
+      <Label htmlFor={id} version={version}>
         {label.toUpperCase()}
         {touched && isEmpty && required && <RequiredMark>*</RequiredMark>}
       </Label>
