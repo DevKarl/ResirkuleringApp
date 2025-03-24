@@ -23,11 +23,7 @@ export const usePostRegister = () => {
         setError(`Error! Status: ${response.status}`);
         return;
       }
-
-      console.log({ response });
-      const data: RegisterResponse = await response.json();
-      console.log({ data });
-      setSuccessResponse(data);
+      setSuccessResponse("Bruker registrert");
     } catch (error) {
       setError(
         error instanceof Error ? error.message : "Unknown error occurred"
