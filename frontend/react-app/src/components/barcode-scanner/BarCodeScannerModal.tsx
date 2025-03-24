@@ -8,11 +8,6 @@ import { CoreButton } from "../core/CoreButton";
 import { CoreInput } from "../core/CoreInput";
 import { CoreContainer } from "../core/CoreContainer";
 
-const ResultText = styled.p`
-  font-size: 1.5rem;
-  color: white;
-`;
-
 const ErrorText = styled.p`
   font-size: 1.5rem;
   color: red;
@@ -42,12 +37,6 @@ const CameraScannerContainer = css`
   border-radius: 15px;
 `;
 
-const ModalStyles = css`
-  height: fit-content;
-  padding-top: 100px;
-  padding-bottom: 100px;
-`;
-
 export const BarcodeScannerModal = ({ toggleModal }: any) => {
   const { error, isLoading, isSuccess, fetchCoordsByBarcode } =
     useFetchCoordsByBarcode();
@@ -68,13 +57,8 @@ export const BarcodeScannerModal = ({ toggleModal }: any) => {
   };
 
   return (
-    <CoreModal onClose={toggleModal} styles={ModalStyles}>
+    <CoreModal onClose={toggleModal}>
       <CoreContainer styles={MainContainer}>
-        {isLoading && (
-          <>
-            <ResultText>Henter avfallsdata</ResultText> <CoreLoader />
-          </>
-        )}
         {error && <ErrorText>{error}</ErrorText>}
         <CoreContainer styles={OptionContainer}>
           <CoreButton
@@ -101,13 +85,17 @@ export const BarcodeScannerModal = ({ toggleModal }: any) => {
               version="secondary"
               value={barcodeInput}
               onChange={(e) => setBarcodeInput(e.target.value)}
-              placeholder="Skriv inn strekkkode"
+              placeholder="ingen mellomrom/spesialtegn)"
               error={inputError || ""}
               required
             />
-            <CoreButton type="white" onClick={handleScanClick}>
-              Scan avfall
-            </CoreButton>
+            {isLoading ? (
+              <CoreLoader />
+            ) : (
+              <CoreButton type="white" onClick={handleScanClick}>
+                Scan avfall
+              </CoreButton>
+            )}
           </>
         )}
         {option === "kamera" && (
