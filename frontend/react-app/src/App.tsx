@@ -9,6 +9,7 @@ import { Registrer } from "./components/routing/pages/Register";
 const MainContent = styled.main`
   background-color: #e2f0e5;
   height: 100%;
+  overflow-y: scroll;
 `;
 
 function App() {
