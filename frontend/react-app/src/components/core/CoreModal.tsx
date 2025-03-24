@@ -4,11 +4,12 @@ import styled from "styled-components";
 interface CoreModalProps {
   children: ReactNode;
   onClose: () => void;
-  width?: string;
-  height?: string;
+  styles?: any;
 }
 
-const ModalOverlay = styled.div`
+const ModalOverlay = styled.div<{
+  styles?: React.CSSProperties;
+}>`
   position: fixed;
   top: 0;
   left: 0;
@@ -22,12 +23,11 @@ const ModalOverlay = styled.div`
 `;
 
 const ModalContainer = styled.div<{
-  $width?: string;
-  $height?: string;
+  styles?: React.CSSProperties;
 }>`
   background-color: ${({ theme }) => theme.colors.green};
-  width: ${({ $width }) => $width || "100vw"};
-  height: ${({ $height }) => $height || "500px"};
+  max-width: 90vw;
+  padding: 100px 40px;
   display: flex;
   flex-direction: column;
   margin-left: 15px;
@@ -37,6 +37,7 @@ const ModalContainer = styled.div<{
   position: relative;
   border-radius: 15px;
   border: 1.5px solid ${({ theme }) => theme.colors.greenBright};
+  ${({ styles }) => styles && { ...styles }};
 `;
 
 const CloseIcon = () => (
@@ -52,7 +53,9 @@ const CloseIcon = () => (
   </svg>
 );
 
-const CloseButton = styled.button`
+const CloseButton = styled.button<{
+  styles?: React.CSSProperties;
+}>`
   position: absolute;
   top: 20px;
   right: 20px;
@@ -74,19 +77,10 @@ const CloseButton = styled.button`
   }
 `;
 
-export const CoreModal = ({
-  children,
-  onClose,
-  width,
-  height,
-}: CoreModalProps) => {
+export const CoreModal = ({ children, onClose, styles }: CoreModalProps) => {
   return (
     <ModalOverlay onClick={onClose}>
-      <ModalContainer
-        $width={width}
-        $height={height}
-        onClick={(e) => e.stopPropagation()}
-      >
+      <ModalContainer styles={styles} onClick={(e) => e.stopPropagation()}>
         <CloseButton onClick={onClose}>
           <CloseIcon />
         </CloseButton>
