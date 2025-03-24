@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.demo.Controllers.Interfaces.ApiController;
 import com.example.demo.DTO.RegisterRequest;
+import com.example.demo.DTO.RegisterResponse;
 import com.example.demo.DTO.LoginRequest;
+import com.example.demo.DTO.LoginResponse;
 import com.example.demo.Entities.Bruker;
 import com.example.demo.Service.BrukerService;
 import com.example.demo.Service.PassordService;
@@ -28,13 +30,13 @@ public class BrukerController {
   PassordService passordService;
 
   @PostMapping("/register")
-  public ResponseEntity<String> register(@RequestBody @Valid RegisterRequest request, BindingResult bindResult) {
+  public ResponseEntity<RegisterResponse> register(@RequestBody @Valid RegisterRequest request, BindingResult bindResult) {
 
     if(bindResult.hasErrors()) {
-      return ResponseEntity.badRequest().body(buildErrorString(bindResult));
+      return ResponseEntity.badRequest().body(new RegisterResponse(buildErrorString(bindResult)));
     }
     if (brukerService.brukernavnIsTaken(request.getBrukernavn())) {
-      return ResponseEntity.badRequest().body("Brukernavn eksisterer allerede. Velg et annet.");
+      return ResponseEntity.badRequest().body(new RegisterResponse("Brukernavn er allerede i bruk."));
     }
 
     String salt = passordService.genererSalt();
@@ -49,11 +51,11 @@ public class BrukerController {
     newUser.setAdminrettigheter(false);
 
     brukerService.createNewUser(newUser);
-    return ResponseEntity.ok("Bruker registrert!");
+    return ResponseEntity.ok(new RegisterResponse("Bruker registrert!"));
   }
 
   @PostMapping("/login")
-  public ResponseEntity<String> login(
+  public ResponseEntity<?> login(
     @RequestBody @Valid LoginRequest request, 
     BindingResult bindResult, 
     HttpSession session) 
@@ -75,7 +77,12 @@ public class BrukerController {
 
     session.setAttribute("userId", bruker.getId());
     session.setMaxInactiveInterval(1800); // 30min
-    return ResponseEntity.ok("Innlogging vellykket");
+    LoginResponse loginResponse = new LoginResponse(
+      bruker.getFornavn(),
+      bruker.getEtternavn(),
+      bruker.getBrukernavn()
+    );
+    return ResponseEntity.ok(loginResponse);
   }
 
   @PostMapping("/logout")

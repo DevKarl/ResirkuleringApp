@@ -4,6 +4,19 @@ import { CoreHeading } from "../../core/CoreHeading";
 import { CoreForm } from "../../core/CoreForm";
 import { CoreInput } from "../../core/CoreInput";
 import { CoreButton } from "../../core/CoreButton";
+import { usePostRegister } from "../../API/usePostRegister";
+import { CoreLoader } from "../../core/CoreLoader";
+import styled from "styled-components";
+
+const ErrorText = styled.p`
+  font-size: 1.5rem;
+  color: red;
+`;
+
+const SucessText = styled.p`
+  font-size: 1.5rem;
+  color: green;
+`;
 
 export const Registrer = () => {
   const [formData, setFormData] = useState({
@@ -19,10 +32,12 @@ export const Registrer = () => {
     passord: "",
   });
 
+  const { isLoading, error, successResponse, postRegister } = usePostRegister();
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (validate()) {
-      // TODO:  usePostRegister
+    if (!hasErrors()) {
+      postRegister(formData);
       console.log("Form data:", formData);
     }
   };
@@ -32,7 +47,7 @@ export const Registrer = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const validate = () => {
+  const hasErrors = (): boolean => {
     const newErrors: typeof errors = {
       fornavn: "",
       etternavn: "",
@@ -52,13 +67,15 @@ export const Registrer = () => {
       newErrors.passord = "Passord må være minst 3 tegn";
     }
     setErrors(newErrors);
-    return Object.values(newErrors).every((err) => err === "");
+    return Object.values(newErrors).some((item) => item.trim().length > 0);
   };
 
   return (
     <CoreContainer>
       <CoreHeading>Registrer</CoreHeading>
       <CoreForm onSubmit={handleSubmit} title="Registrer en bruker hos oss">
+        {error && <ErrorText>{error}</ErrorText>}
+        {successResponse && <SucessText>{successResponse}</SucessText>}
         <CoreInput
           value={formData.fornavn}
           onChange={handleChange}
@@ -91,11 +108,12 @@ export const Registrer = () => {
           onChange={handleChange}
           label="Passord"
           name="passord"
+          type="password"
           placeholder="Ditt passord"
           required
           error={errors.passord}
         />
-        <CoreButton>Registrer</CoreButton>
+        {isLoading ? <CoreLoader /> : <CoreButton>Registrer</CoreButton>}
       </CoreForm>
     </CoreContainer>
   );
