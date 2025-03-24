@@ -22,16 +22,30 @@ const MainContainer = css`
   gap: 25px;
   padding-left: 20px;
   padding-right: 20px;
+  width: 100%;
 `;
 const OptionContainer = css`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  width: 100%;
+  gap: 20px;
 `;
 
 const OptionBtn = css`
   width: 100%;
   height: 100%;
+`;
+
+const CameraScannerContainer = css`
+  position: relative;
+  border-radius: 15px;
+`;
+
+const ModalStyles = css`
+  height: fit-content;
+  padding-top: 100px;
+  padding-bottom: 100px;
 `;
 
 export const BarcodeScannerModal = ({ toggleModal }: any) => {
@@ -54,7 +68,7 @@ export const BarcodeScannerModal = ({ toggleModal }: any) => {
   };
 
   return (
-    <CoreModal onClose={toggleModal} height="600px">
+    <CoreModal onClose={toggleModal} styles={ModalStyles}>
       <CoreContainer styles={MainContainer}>
         {isLoading && (
           <>
@@ -97,11 +111,13 @@ export const BarcodeScannerModal = ({ toggleModal }: any) => {
           </>
         )}
         {option === "kamera" && (
-          <CameraScanner
-            toggleModal={toggleModal}
-            barcodeScanned={barcodeScanned}
-            fetchCoordsByBarcode={fetchCoordsByBarcode}
-          />
+          <CoreContainer styles={CameraScannerContainer}>
+            <CameraScanner
+              toggleModal={toggleModal}
+              barcodeScanned={barcodeScanned}
+              fetchCoordsByBarcode={fetchCoordsByBarcode}
+            />
+          </CoreContainer>
         )}
       </CoreContainer>
     </CoreModal>

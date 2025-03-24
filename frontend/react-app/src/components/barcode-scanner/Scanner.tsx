@@ -6,23 +6,25 @@ import Quagga from "quagga";
 
 // Styled-components for Scanner
 const ScannerContainer = styled.div`
-  position: relative;
-  width: 400px;
-  height: 300px;
-
   canvas,
   video {
-    width: 400px;
-    height: 300px;
-    position: absolute;
-    top: 0;
-    left: 0;
+    width: 100%;
+    height: 100%;
   }
 
-  canvas.drawingBuffer,
+  canvas.drawingBuffer {
+    display: block;
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
   video.drawingBuffer {
-    width: 400px;
-    height: 300px;
+    height: 100%;
+    width: 100%;
   }
 `;
 
