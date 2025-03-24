@@ -9,22 +9,26 @@ import com.example.demo.Repositories.BrukerRepo;
 @Service
 public class BrukerService {
 
-    @Autowired
-    private final BrukerRepo brukerRepo;
+  @Autowired
+  private final BrukerRepo brukerRepo;
 
-    public BrukerService(BrukerRepo brukerRepo) {
-        this.brukerRepo = brukerRepo;
-    }
+  public BrukerService(BrukerRepo brukerRepo) {
+    this.brukerRepo = brukerRepo;
+  }
 
-    public Bruker save(Bruker bruker) {
-        return brukerRepo.save(bruker);
-    }
+  public Bruker createNewUser(Bruker bruker) {
+    return brukerRepo.save(bruker);
+  }
 
-    public Bruker findByBrukernavn(String brukernavn) {
-        return brukerRepo.findByBrukernavn(brukernavn);
-    }
+  public Bruker findByBrukernavn(String brukernavn) {
+    return brukerRepo.findByBrukernavn(brukernavn);
+  }
 
-    public Bruker findById(Integer id) {
-      return brukerRepo.findById(id).orElse(null);
+  public Bruker findById(Integer id) {
+    return brukerRepo.findById(id).orElse(null);
+  }
+
+  public boolean brukernavnIsTaken(String brukernavn) {
+    return findByBrukernavn(brukernavn) != null;
   }
 }

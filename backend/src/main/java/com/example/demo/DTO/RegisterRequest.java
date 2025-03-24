@@ -1,22 +1,27 @@
 package com.example.demo.DTO;
 
-public class BrukerDTO {
-  private String fornavn;
-  private String etternavn;
-  private String brukernavn;
-  private String passord;
-  private boolean adminrettigheter;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
-//DataTransferObject som sendes fra frontend til backend. 
-//Denne brukes til å kryptere passord, og deretter oppretter en Bruker som kan saves i databasen.
-  public BrukerDTO(String fornavn, String etternavn, String brukernavn, String passord, boolean adminrettigheter) {
+public class RegisterRequest {
+
+  @NotBlank(message = "Fornavn må oppgis")
+  private String fornavn;
+  @NotBlank(message = "Etternavn må oppgis")
+  private String etternavn;
+  @NotBlank(message = "Brukernavn må oppgis")
+  @Size(min = 5, max = 20, message = "Brukernavn må være mellom 5 og 20 tegn")
+  private String brukernavn;
+  @NotBlank(message = "Passord må oppgis")
+  @Size(min = 8, message = "Passord må være minst 8 tegn langt")
+  private String passord;
+
+  public RegisterRequest(String fornavn, String etternavn, String brukernavn, String passord, boolean adminrettigheter) {
     this.fornavn = fornavn;
     this.etternavn = etternavn;
     this.brukernavn = brukernavn;
     this.passord = passord;
-    this.adminrettigheter = adminrettigheter;
   }
-
 
   public String getFornavn() {
     return this.fornavn;
@@ -49,20 +54,5 @@ public class BrukerDTO {
   public void setPassord(String passord) {
     this.passord = passord;
   }
-
-  public boolean isAdminrettigheter() {
-    return this.adminrettigheter;
-  }
-
-  public boolean getAdminrettigheter() {
-    return this.adminrettigheter;
-  }
-
-  public void setAdminrettigheter(boolean adminrettigheter) {
-    this.adminrettigheter = adminrettigheter;
-  }
-
-
-
 
 }
