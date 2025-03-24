@@ -10,8 +10,9 @@ interface StyledButtonProps {
 
 const StyledButton = styled.button<StyledButtonProps>`
   width: 300px;
+  max-width: 100%;
   height: 50px;
-  padding: 10px 20px;
+  padding: 10px;
   font-size: 1.2rem;
   background-color: ${({ $type, theme }) =>
     $type === "white" ? theme.colors.greenWhite : theme.colors.green};

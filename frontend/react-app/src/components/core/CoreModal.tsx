@@ -26,12 +26,10 @@ const ModalContainer = styled.div<{
   styles?: React.CSSProperties;
 }>`
   background-color: ${({ theme }) => theme.colors.green};
-  max-width: 90vw;
+  max-width: 70vw;
   padding: 100px 40px;
   display: flex;
   flex-direction: column;
-  margin-left: 15px;
-  margin-right: 15px;
   align-items: center;
   justify-content: center;
   position: relative;
