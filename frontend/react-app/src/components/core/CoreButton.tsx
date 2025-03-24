@@ -1,10 +1,11 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { ReactNode } from "react";
 
 type ButtonType = "green" | "white";
 
 interface StyledButtonProps {
   $type: ButtonType;
+  styles?: any;
 }
 
 const StyledButton = styled.button<StyledButtonProps>`
@@ -14,30 +15,41 @@ const StyledButton = styled.button<StyledButtonProps>`
   font-size: 1.2rem;
   background-color: ${({ $type, theme }) =>
     $type === "white" ? theme.colors.greenWhite : theme.colors.green};
-  color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme, $type }) =>
+    $type === "white" ? theme.colors.greenDark : theme.colors.white};
   border: none;
   border-radius: 15px;
   cursor: pointer;
 
   &:hover {
     background-color: ${({ $type, theme }) =>
-      $type === "white" ? "#8dab8c" : theme.colors.greenDark};
+      $type === "white"
+        ? theme.colors.greenWhiteHover
+        : theme.colors.greenDark};
   }
+
+  ${({ styles }) =>
+    styles &&
+    css`
+      ${styles}
+    `}
 `;
 
 interface ButtonProps {
   type?: ButtonType;
   onClick?: () => void;
   children?: ReactNode;
+  styles?: any;
 }
 
 export const CoreButton = ({
   type = "green",
   onClick,
   children,
+  styles,
 }: ButtonProps) => {
   return (
-    <StyledButton $type={type} onClick={onClick}>
+    <StyledButton $type={type} onClick={onClick} styles={styles}>
       {children}
     </StyledButton>
   );
