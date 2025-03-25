@@ -3,7 +3,6 @@ import { ScanAvfallResponse } from "../../types";
 import { useAppContext } from "../../context/ContextProvider";
 
 export const useFetchCoordsByBarcode = () => {
-  const [data, setData] = useState<ScanAvfallResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);

@@ -1,16 +1,19 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import { ScanAvfallResponse } from "../types";
+import { User } from "../types/userTypes";
 
 interface AppContextType {
-  bruker: any;
+  user: any;
   scannedAvfallResult: ScanAvfallResponse;
   setScannedAvfallResult: (response: ScanAvfallResponse) => void;
+  setUser: (reponse: User) => void;
 }
 
 const defaultContextValue: AppContextType = {
-  bruker: null,
+  user: null,
   scannedAvfallResult: null,
   setScannedAvfallResult: () => {},
+  setUser: () => {},
 };
 
 export const appContext = createContext<AppContextType>(defaultContextValue);
@@ -22,14 +25,15 @@ interface AppProviderProps {
 }
 
 export const AppProvider = ({ children }: AppProviderProps) => {
-  const [bruker, setUser] = useState<any>(null);
+  const [user, setUser] = useState<any>(null);
   const [scannedAvfallResult, setScannedAvfallResult] =
     useState<ScanAvfallResponse>(null);
 
   const contextValue = {
-    bruker,
+    user,
     scannedAvfallResult,
     setScannedAvfallResult,
+    setUser,
   };
 
   return (

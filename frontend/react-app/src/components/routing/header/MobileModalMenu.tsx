@@ -1,42 +1,47 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { CoreModal } from "../../core/CoreModal";
+import { useAppContext } from "../../../context/ContextProvider";
 
-const Overlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* Dimming effect */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1200;
-`;
-
-const MobileNavContainer = styled.nav`
+const ButtonsWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: #628867;
-  padding: 20px;
-  border-radius: 15px;
-  z-index: 1000;
-  width: 200px;
-  gap: 15px;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
 `;
 
-const HeaderButton = styled(Link)`
+const HeaderLink = styled(Link)`
   font-size: 25px;
-  color: white;
+  color: ${({ theme }) => theme.colors.white};
   text-decoration: none;
-  background-color: #628867;
+  background-color: ${({ theme }) => theme.colors.green};
   height: 50px;
-  border-radius: 5px;
-  border-bottom: 1px solid lightgrey;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
+  border-radius: 15px;
+  width: 200px;
+  align-content: center;
+  text-align: center;
+  padding: 5px;
+  border: 1px solid white;
   &:hover {
-    background-color: #46694a;
+    background-color: ${({ theme }) => theme.colors.greenDark};
+  }
+`;
+
+const LogOutButton = styled.button`
+  background-color: ${({ theme }) => theme.colors.greenDark};
+  border: 1px solid ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.greenWhite};
+  font-size: 25px;
+  text-decoration: none;
+  height: 62px;
+  border-radius: 15px;
+  width: 212px;
+  align-content: center;
+  text-align: center;
+  padding: 5px;
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.green};
   }
 `;
 
@@ -49,24 +54,35 @@ export const MobileModalMenu = ({
   hamburgerModalOpen,
   toggleHamburgerModal,
 }: MobileNavProps) => {
+  const navigate = useNavigate();
+  const { isLoggedIn } = useAppContext();
   if (!hamburgerModalOpen) return null;
 
-  const handleOverlayClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
+  const handleLogout = () => {
+    const result = window.confirm("Er du sikker på at du vil logge ut?");
+    if (result) {
+      navigate("/");
       toggleHamburgerModal();
     }
   };
 
   return (
-    <Overlay onClick={handleOverlayClick}>
-      <MobileNavContainer>
-        <HeaderButton to="/" onClick={toggleHamburgerModal}>
+    <CoreModal onClose={toggleHamburgerModal}>
+      <ButtonsWrapper>
+        <HeaderLink to="/" onClick={toggleHamburgerModal}>
           Hjem
-        </HeaderButton>
-        <HeaderButton to="/minside" onClick={toggleHamburgerModal}>
+        </HeaderLink>
+        <HeaderLink to="/minside" onClick={toggleHamburgerModal}>
           Min Side
-        </HeaderButton>
-      </MobileNavContainer>
-    </Overlay>
+        </HeaderLink>
+        {isLoggedIn ? (
+          <LogOutButton onClick={handleLogout}>Logg ut</LogOutButton>
+        ) : (
+          <HeaderLink to="/logginn" onClick={toggleHamburgerModal}>
+            Logg inn
+          </HeaderLink>
+        )}
+      </ButtonsWrapper>
+    </CoreModal>
   );
 };

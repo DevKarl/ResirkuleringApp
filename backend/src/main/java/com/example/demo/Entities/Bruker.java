@@ -1,5 +1,6 @@
 package com.example.demo.Entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,6 +18,7 @@ public class Bruker {
     private String fornavn;
     private String etternavn;
 
+    @Column(nullable = false, unique = true)
     private String brukernavn;
 
     private String hash;
@@ -29,7 +31,7 @@ public class Bruker {
     }
 
 
-  public Bruker(int id, String fornavn, String etternavn, String brukernavn, String hash, String salt) {
+  public Bruker(int id, String fornavn, String etternavn,String brukernavn,String hash, String salt) {
     this.id = id;
     this.fornavn = fornavn;
     this.etternavn = etternavn;
@@ -63,7 +65,7 @@ public class Bruker {
   public void setEtternavn(String etternavn) {
     this.etternavn = etternavn;
   }
-
+  
   public String getBrukernavn() {
     return this.brukernavn;
   }

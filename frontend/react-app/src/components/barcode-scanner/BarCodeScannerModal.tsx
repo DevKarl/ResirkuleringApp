@@ -1,102 +1,113 @@
-import { useRef } from "react";
-import styled from "styled-components";
-import Scanner from "./Scanner";
-import { useFetchCoordsByBarcode } from "./useFetchCoordsByBarcode";
-import { debounce } from "../../utils";
-import { Loader } from "../Loader";
+import styled, { css } from "styled-components";
+import { CoreModal } from "../core/CoreModal";
+import { CameraScanner } from "./CameraScanner";
+import { useFetchCoordsByBarcode } from "../API/useFetchCoordsByBarcode";
+import { useState, useRef } from "react";
+import { CoreLoader } from "../core/CoreLoader";
+import { CoreButton } from "../core/CoreButton";
+import { CoreInput } from "../core/CoreInput";
+import { CoreContainer } from "../core/CoreContainer";
 
-const ModalOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7); /* Darker dimming effect for fullscreen */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1200;
-`;
-
-const ModalContainer = styled.div`
-  background-color: #628867;
-  width: 100%;
-  height: 100%;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-`;
-
-const CloseButton = styled.button`
-  position: absolute;
-  top: 60px;
-  right: 40px;
-  font-size: 1.2rem;
-  background-color: #a7baa9;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 15px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #628867;
-  }
-`;
-
-const ResultText = styled.p`
+const ErrorText = styled.p`
   font-size: 1.5rem;
-  color: white;
+  color: red;
 `;
 
-const Button = styled.button`
-  margin-top: 20px;
-  margin-bottom: 20px;
-  width: 300px;
-  height: 50px;
-  padding: 10px 20px;
-  font-size: 1.2rem;
-  background-color: #a7baa9;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #46694a;
-  }
+const MainContainer = css`
+  gap: 25px;
+  padding-left: 20px;
+  padding-right: 20px;
+  width: 100%;
+`;
+const OptionContainer = css`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  gap: 20px;
 `;
 
-export const BarcodeScannerModal = ({ isModalOpen, toggleModal }: any) => {
+const OptionBtn = css`
+  width: 100%;
+  height: 100%;
+`;
+
+const CameraScannerContainer = css`
+  position: relative;
+  border-radius: 15px;
+`;
+
+export const BarcodeScannerModal = ({ toggleModal }: any) => {
   const { error, isLoading, isSuccess, fetchCoordsByBarcode } =
     useFetchCoordsByBarcode();
   const barcodeScanned = useRef<string>(null);
+  const [option, setOption] = useState<"manuell" | "kamera" | null>(null);
+  const [barcodeInput, setBarcodeInput] = useState("");
+  const [inputError, setInputError] = useState<string | null>(null);
 
-  const onDetected = debounce((barcode: string) => {
-    if (barcode !== barcodeScanned.current) {
-      barcodeScanned.current = barcode;
-      fetchCoordsByBarcode(barcode);
-    }
-  }, 500);
-
-  if (!isModalOpen) return null;
   if (isSuccess) toggleModal();
 
+  const handleScanClick = () => {
+    if (!barcodeInput.trim()) {
+      setInputError("Strekkode kan ikke være tom.");
+      return;
+    }
+    setInputError(null);
+    fetchCoordsByBarcode(barcodeInput);
+  };
+
   return (
-    <ModalOverlay>
-      <ModalContainer>
-        {isLoading && (
+    <CoreModal onClose={toggleModal}>
+      <CoreContainer styles={MainContainer}>
+        {error && <ErrorText>{error}</ErrorText>}
+        <CoreContainer styles={OptionContainer}>
+          <CoreButton
+            type="white"
+            onClick={() => setOption("kamera")}
+            styles={OptionBtn}
+          >
+            Bruk kamera 🤳🏼
+          </CoreButton>
+          <CoreButton
+            type="white"
+            onClick={() => setOption("manuell")}
+            styles={OptionBtn}
+          >
+            Skriv inn strekkode
+          </CoreButton>
+        </CoreContainer>
+        {option === "manuell" && (
           <>
-            <ResultText>Henter avfallsdata</ResultText> <Loader />
+            <CoreInput
+              label="Strekkode"
+              name="barcode"
+              type="text"
+              version="secondary"
+              value={barcodeInput}
+              onChange={(e) => setBarcodeInput(e.target.value)}
+              placeholder="ingen mellomrom/spesialtegn)"
+              error={inputError || ""}
+              required
+            />
+            {isLoading ? (
+              <CoreLoader />
+            ) : (
+              <CoreButton type="white" onClick={handleScanClick}>
+                Scan avfall
+              </CoreButton>
+            )}
           </>
         )}
-        {error && <ResultText>{error}</ResultText>}
-        <CloseButton onClick={toggleModal}>Lukk</CloseButton>
-        <Scanner onDetected={onDetected} />
-      </ModalContainer>
-    </ModalOverlay>
+        {option === "kamera" && (
+          <CoreContainer styles={CameraScannerContainer}>
+            <CameraScanner
+              toggleModal={toggleModal}
+              barcodeScanned={barcodeScanned}
+              fetchCoordsByBarcode={fetchCoordsByBarcode}
+            />
+          </CoreContainer>
+        )}
+      </CoreContainer>
+    </CoreModal>
   );
 };

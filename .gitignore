@@ -14,8 +14,6 @@ frontend/dist/
 *.local
 
 # Editor directories and files
-.vscode/*
-!.vscode/extensions.json
 .idea
 .DS_Store
 *.suo
@@ -53,7 +51,12 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-# VS Code
-.vscode/
+# Ignore all files inside .vscode
+.vscode/*
+
+# But keep the settings.json and extensions.json files inside the backend/.vscode directory
+!.vscode/backend/settings.json
+!.vscode/backend/extensions.json
+
 .env
 /scripts.SQL
