@@ -7,15 +7,26 @@ import { CoreHeading } from "../../core/CoreHeading";
 import { CoreLink } from "../../core/CoreLink";
 import { useAppContext } from "../../../context/ContextProvider";
 import { useNavigate } from "react-router-dom";
+import { usePostLogin } from "../../API/usePostLogin";
+import styled from "styled-components";
+import { CoreLoader } from "../../core/CoreLoader";
+
+const ErrorText = styled.p`
+  font-size: 1.5rem;
+  color: red;
+`;
 
 export const Login = () => {
-  const { isLoggedIn } = useAppContext();
+  const { user } = useAppContext();
   const navigate = useNavigate();
-  useEffect(() => {
-    if (isLoggedIn) {
-      navigate("/");
-    }
-  }, [isLoggedIn, navigate]);
+  const { isLoading, error, postLogin } = usePostLogin();
+  // useEffect(() => {
+  //   if (user) {
+  //     navigate("/");
+  //   }
+  // }, [user, navigate]);
+
+  console.log(user);
 
   const [formData, setFormData] = useState({ brukernavn: "", passord: "" });
   const [errors, setErrors] = useState({
@@ -26,8 +37,7 @@ export const Login = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validate()) {
-      // TODO:  usePostLogin
-      console.log("Form data:", formData);
+      postLogin(formData);
     }
   };
 
@@ -53,6 +63,7 @@ export const Login = () => {
   return (
     <CoreContainer>
       <CoreHeading>Logg inn</CoreHeading>
+      {error && <ErrorText>{error}</ErrorText>}
       <CoreForm onSubmit={handleSubmit} title="Logg inn på brukerkontoen din">
         <CoreInput
           value={formData.brukernavn}
@@ -72,7 +83,7 @@ export const Login = () => {
           required
           error={errors.passord}
         />
-        <CoreButton>Logg inn</CoreButton>
+        {isLoading ? <CoreLoader /> : <CoreButton>Logg inn</CoreButton>}
         <CoreLink to="/registrer">
           Mangler du konto? Klikk her for å registrere
         </CoreLink>
