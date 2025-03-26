@@ -13,6 +13,16 @@ import { useGeolocated } from "react-geolocated";
 import L from "leaflet";
 import MapLoader from "./MapLoader";
 import { useEffect, useMemo } from "react";
+import { CoreContainer } from "../core/CoreContainer";
+import { CoreButton } from "../core/CoreButton";
+import { CoreLoader } from "../core/CoreLoader";
+import { usePostHivAvfall } from "../API/usePostHivAvfall";
+import { css } from "styled-components";
+
+const PopupContainer = css`
+  flex-direction: row;
+  gap: 10px;
+`
 
 const markerIcon = new L.Icon({
   iconUrl:
@@ -82,6 +92,12 @@ const findClosestPoint = (coords: any, avfallspunkter: any) => {
 export const Map = () => {
   const { scannedAvfallResult } = useAppContext();
   const defaultLocation = { lat: 61.458982498103865, lng: 5.888914753595201 }; // HVL Førde
+  const {responseData, error, isLoading, postHivAvfall} = usePostHivAvfall();
+  const {user, scannedAvfall} = useAppContext();
+
+  const handleHivAvfall = () => {
+    postHivAvfall(user.id, scannedAvfall.id);
+  }
 
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
     useGeolocated({
@@ -132,7 +148,18 @@ export const Map = () => {
           position={[parseFloat(punkt.latitude), parseFloat(punkt.longitude)]}
           icon={markerIcon}
         >
-          <Popup>{punkt.navn}</Popup>
+
+          <Popup>
+            {punkt.navn}
+            <CoreContainer styles={PopupContainer}>
+              {punkt.avfallsTyper.map( type => getIkonById(type.id))}
+            </CoreContainer>
+            {isLoading ? <CoreLoader/> :
+            <CoreButton onClick={handleHivAvfall}>
+            Hiv Avfall
+            </CoreButton>
+            }
+            </Popup>
         </Marker>
       ))}
       {closestPoint && (
