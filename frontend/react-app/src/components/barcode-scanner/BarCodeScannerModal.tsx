@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 import { CoreModal } from "../core/CoreModal";
 import { CameraScanner } from "./CameraScanner";
-import { useFetchCoordsByBarcode } from "../API/useFetchCoordsByBarcode";
+import { useFetchCoordsByBarcode } from "../../hooks/API/useFetchCoordsByBarcode";
 import { useState, useRef } from "react";
 import { CoreLoader } from "../core/CoreLoader";
 import { CoreButton } from "../core/CoreButton";
