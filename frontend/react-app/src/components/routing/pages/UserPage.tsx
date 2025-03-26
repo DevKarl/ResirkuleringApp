@@ -14,6 +14,7 @@ import { Recycle } from "../../../Ikoner/Recycle/Recycle";
 import { useAppContext } from "../../../context/ContextProvider";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { usePostLogin } from "../../API/usePostLogin";
 
 const Container = styled.div`
   display: flex;
@@ -39,11 +40,15 @@ export const UserPage = () => {
   //   }
   // }, [isLoggedIn, navigate]);
 
+  
+  const { user } = useAppContext();
+  useEffect(() => getAvfallsPunkter(), [user])
+
   return (
     <Container>
       <Heading>Min Side</Heading>
       <h3>Masse info om kunden bla bla bla</h3>
-
+      
       <Plast />
       <Metall />
       <Restavfall />
