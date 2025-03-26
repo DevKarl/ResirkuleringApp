@@ -4,7 +4,7 @@ import { CoreHeading } from "../../core/CoreHeading";
 import { CoreForm } from "../../core/CoreForm";
 import { CoreInput } from "../../core/CoreInput";
 import { CoreButton } from "../../core/CoreButton";
-import { usePostRegister } from "../../API/usePostRegister";
+import { usePostRegister } from "../../../hooks/API/usePostRegister";
 import { CoreLoader } from "../../core/CoreLoader";
 import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
@@ -102,7 +102,6 @@ export const Registrer = () => {
     e.preventDefault();
     if (!hasErrors()) {
       postRegister(formData);
-      console.log("Form data:", formData);
     }
   };
 

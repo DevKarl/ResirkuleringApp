@@ -3,7 +3,7 @@ import useBreakpoints from "../../../hooks/useBreakpoints";
 import { useState } from "react";
 import { DesktopNav } from "./DesktopNav";
 import { MobileModalMenu } from "./MobileModalMenu";
-import { AppLogo } from "../../../Ikoner/AppLogo/AppLogo";
+import { AppLogo } from "../../iconsAndLogos/AppLogo";
 
 const HeaderContainer = styled.header`
   background-color: #628867;
