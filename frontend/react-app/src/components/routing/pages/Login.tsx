@@ -7,7 +7,7 @@ import { CoreHeading } from "../../core/CoreHeading";
 import { CoreLink } from "../../core/CoreLink";
 import { useAppContext } from "../../../context/ContextProvider";
 import { useNavigate } from "react-router-dom";
-import { usePostLogin } from "../../API/usePostLogin";
+import { usePostLogin } from "../../../hooks/API/usePostLogin";
 import styled from "styled-components";
 import { CoreLoader } from "../../core/CoreLoader";
 
