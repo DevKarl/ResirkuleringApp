@@ -13,8 +13,10 @@ import com.example.demo.Entities.Avfallspunkt;
 @Repository
 public interface AvfallspunktRepo extends JpaRepository<Avfallspunkt, Integer>{
 
-  @Query("SELECT ap FROM Avfallspunkt ap JOIN ap.avfallspunktAvfallstyper apas WHERE apas.avfallstype.id = :avfallstypeId")
-    List<Avfallspunkt> findAvfallspunkterByAvfallstype_id(@Param("avfallstypeId") int avfallstypeId);
+  // @Query("SELECT ap FROM Avfallspunkt ap JOIN ap.avfallspunktAvfallstyper apas WHERE apas.avfallstype.id = :avfallstypeId")
+  //   List<Avfallspunkt> findAvfallspunkterByAvfallstype_id(@Param("avfallstypeId") int avfallstypeId);
+  List<Avfallspunkt> findByAvfallspunktAvfallstyper_Avfallstype_Id(int avfallstypeId);
+
 
 }
 
