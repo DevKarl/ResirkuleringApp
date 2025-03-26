@@ -52,11 +52,7 @@ build/
 !**/src/test/**/build/
 
 # Ignore all files inside .vscode
-.vscode/*
-
-# But keep the settings.json and extensions.json files inside the backend/.vscode directory
-!.vscode/backend/settings.json
-!.vscode/backend/extensions.json
+/backend/.vscode/
 
 .env
 /scripts.SQL

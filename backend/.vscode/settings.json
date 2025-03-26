@@ -1,4 +1,0 @@
-{
-  "maven.projectFolder": "./", // This tells VS Code to treat the current folder as the Maven project
-  "maven.executable.path": "./mvnw" // Use the Maven wrapper (mvnw) to run Maven commands
-}
