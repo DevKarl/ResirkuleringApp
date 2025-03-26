@@ -55,7 +55,7 @@ export const MobileModalMenu = ({
   toggleHamburgerModal,
 }: MobileNavProps) => {
   const navigate = useNavigate();
-  const { isLoggedIn } = useAppContext();
+  const {} = useAppContext();
   if (!hamburgerModalOpen) return null;
 
   const handleLogout = () => {
@@ -75,13 +75,13 @@ export const MobileModalMenu = ({
         <HeaderLink to="/minside" onClick={toggleHamburgerModal}>
           Min Side
         </HeaderLink>
-        {isLoggedIn ? (
+        {/* {isLoggedIn ? (
           <LogOutButton onClick={handleLogout}>Logg ut</LogOutButton>
         ) : (
           <HeaderLink to="/logginn" onClick={toggleHamburgerModal}>
             Logg inn
           </HeaderLink>
-        )}
+        )} */}
       </ButtonsWrapper>
     </CoreModal>
   );
