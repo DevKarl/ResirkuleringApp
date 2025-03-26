@@ -13,8 +13,7 @@ import { useGeolocated } from "react-geolocated";
 import L from "leaflet";
 import MapLoader from "./MapLoader";
 import { useEffect, useMemo } from "react";
-import { Svenolai } from "../../Ikoner/Sven-ol-AI/Sven-ol-AI";
-import ikon from "../../Ikoner/Sven-ol-AI/Sven-ol-AI.png";
+import ikon from "../../assets/map/Sven-ol-AI.png";
 
 const markerIcon = new L.Icon({
   iconUrl:
@@ -24,8 +23,7 @@ const markerIcon = new L.Icon({
 });
 
 const userIcon = new L.Icon({
-  iconUrl:
-  ikon,
+  iconUrl: ikon,
   iconSize: [60, 77],
   iconAnchor: [28, 63],
 });
@@ -112,7 +110,6 @@ export const Map = () => {
     return <div>Kart krever at posisjon deles 😠 </div>;
 
   if (!coords) return <MapLoader />;
-  
 
   return (
     <MapContainer
@@ -129,10 +126,7 @@ export const Map = () => {
         attribution="© OpenStreetMap contributors"
       />
       <FitBounds coords={coords} scannedAvfallResult={scannedAvfallResult} />
-      <Marker
-        position={[coords?.latitude, coords?.longitude]}
-        icon={userIcon}
-      >
+      <Marker position={[coords?.latitude, coords?.longitude]} icon={userIcon}>
         <Popup>Din posisjon</Popup>
       </Marker>
       <Circle center={[coords?.latitude, coords?.longitude]} radius={100} />
