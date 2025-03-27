@@ -1,7 +1,7 @@
 package com.example.demo.Entities;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -22,7 +22,7 @@ public class Avfallspunkt {
   private String latitude;
   private String navn;
 
-  @JsonIgnore
+  @JsonManagedReference
   @OneToMany(mappedBy = "avfallspunkt", fetch = FetchType.EAGER)
   private Set<AvfallspunktAvfallstype> avfallspunktAvfallstyper;
 
@@ -84,8 +84,4 @@ public class Avfallspunkt {
     this.avfallspunktAvfallstyper = avfallspunktAvfallstyper;
   }
  
-
-
-
-
 }
