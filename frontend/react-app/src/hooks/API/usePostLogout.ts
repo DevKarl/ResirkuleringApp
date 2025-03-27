@@ -24,8 +24,8 @@ export const usePostLogout = () => {
       }
       setUser(null);
       setResponse(data.message);
-      document.cookie =
-        "JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      // document.cookie =
+      //   "JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     } catch (error) {
       setError(
         error instanceof Error ? error.message : "Unknown error occurred"
