@@ -8,4 +8,5 @@ export const theme = {
     white: "#fff",
     darkGrey: "#4d4c4c",
   },
+  fontFamily: "Arial",
 };

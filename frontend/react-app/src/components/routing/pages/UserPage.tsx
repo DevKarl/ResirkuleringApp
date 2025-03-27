@@ -17,15 +17,16 @@ const Container = styled.div`
 const Heading = styled.h1`
   font-size: 3rem;
   color: #333;
-  font-family: Arial, sans-serif;
+  font-family: ${({ theme }) => theme.fontFamily};
   text-align: center;
 `;
 
 const StatsContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: left;
   gap: 10px;
+  font-family: ${({ theme }) => theme.fontFamily};
 `;
 
 const StatEntry = styled.div`
@@ -42,7 +43,8 @@ const InfoContainer = styled.div`
   border-radius: 10px;
   width: 100%;
   max-width: 400px;
-  text-align: center;
+  text-align: left;
+  font-family: ${({ theme }) => theme.fontFamily};
 `;
 
 type StatEntryType = {
@@ -70,7 +72,7 @@ export const UserPage = () => {
       <Heading>Min Side</Heading>
 
       <InfoContainer>
-        <h3>User Information</h3>
+        <h4>Bruker informasjon:</h4>
         <p>{`${user?.fornavn} ${user?.etternavn}`}</p>
       </InfoContainer> 
 
@@ -81,13 +83,13 @@ export const UserPage = () => {
 
 {/*      <StatsContainer>
         {user.statistikk?.map((entry: StatEntryType) => (
-          <StatEntry key={entry.id}>
-            <AvfallsIcon id={entry.id} />
-            <span>{entry.name}</span>
-            <span>({entry.antall})</span>
+          <StatEntry key={entry?.id}>
+            <AvfallsIcon id={entry?.id} />
+            <span>{entry?.name}</span>
+            <span>({entry?.antall})</span>
           </StatEntry>
         ))}
-      </StatsContainer>*/}
+      </StatsContainer> */}
 
       <CoreButton>Del min statistikk</CoreButton>
     </Container>
