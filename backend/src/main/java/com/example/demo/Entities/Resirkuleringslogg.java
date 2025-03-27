@@ -1,7 +1,8 @@
 package com.example.demo.Entities;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,7 +31,8 @@ private Bruker bruker;
 @JoinColumn(name = "avfallspunkt_id")
 private Avfallspunkt avfallspunkt;
 
-private LocalDateTime tidspunktKastet;
+@Column(name = "tidspunktkastet")
+private LocalDate tidspunktKastet;
 
 
 
@@ -38,11 +40,11 @@ public Resirkuleringslogg(){
 //Standard konstruktør
 }
 
-public Resirkuleringslogg(Avfall avfall, Bruker bruker, Avfallspunkt avfallspunkt){
+public Resirkuleringslogg(Avfall avfall, Bruker bruker, Avfallspunkt avfallspunkt, LocalDate dato){
   this.avfall = avfall;
   this.bruker = bruker;
   this.avfallspunkt = avfallspunkt;
-  this.tidspunktKastet = LocalDateTime.now();
+  this.tidspunktKastet = dato;
 }
 
 
@@ -78,11 +80,11 @@ public Resirkuleringslogg(Avfall avfall, Bruker bruker, Avfallspunkt avfallspunk
     this.avfallspunkt = avfallspunkt;
   }
 
-  public LocalDateTime getTidspunktKastet() {
+  public LocalDate getTidspunktKastet() {
     return this.tidspunktKastet;
   }
 
-  public void setTidspunktKastet(LocalDateTime tidspunktKastet) {
+  public void setTidspunktKastet(LocalDate tidspunktKastet) {
     this.tidspunktKastet = tidspunktKastet;
   }
 
