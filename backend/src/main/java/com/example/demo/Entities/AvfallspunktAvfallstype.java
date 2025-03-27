@@ -1,5 +1,7 @@
 package com.example.demo.Entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -23,8 +25,10 @@ public class AvfallspunktAvfallstype {
     private Avfallspunkt avfallspunkt;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JsonManagedReference
     @JoinColumn(name = "avfallstype_id", nullable = false)
     private AvfallsType avfallstype;
+
 }
 
 
