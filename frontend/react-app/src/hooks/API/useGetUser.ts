@@ -1,22 +1,18 @@
 import { useState } from "react";
-import { LoginRequest } from "../../types/userTypes";
 import { useAppContext } from "../../context/ContextProvider";
 
-export const usePostLogin = () => {
+export const useGetUser = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { setUser } = useAppContext();
 
-  const postLogin = async (formData: LoginRequest) => {
+  const getUser = async () => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+      const response = await fetch("/api/getUser", {
+        method: "GET",
+        headers: { Accept: "application/json" },
       });
       const data = await response.json();
       if (!response.ok) {
@@ -33,5 +29,5 @@ export const usePostLogin = () => {
     }
   };
 
-  return { isLoading, error, postLogin };
+  return { isLoading, error, getUser };
 };

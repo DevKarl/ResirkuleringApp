@@ -20,10 +20,10 @@ export const usePostRegister = () => {
       });
 
       if (!response.ok) {
-        setError(`Error! Status: ${response.status}`);
+        setError(response.message);
         return;
       }
-      setSuccessResponse("Bruker registrert");
+      setSuccessResponse("Bruker registrert! ✅");
     } catch (error) {
       setError(
         error instanceof Error ? error.message : "Unknown error occurred"
