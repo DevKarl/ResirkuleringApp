@@ -2,6 +2,7 @@ package com.example.demo.Controllers;
 import java.util.stream.Collectors;
 
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -107,20 +108,27 @@ public class BrukerController {
   }
 
   @GetMapping("/getUser")
-  public ResponseEntity<?> getUser(HttpSession session) {
+  public ResponseEntity<?> getUser(HttpServletRequest request) {
+    HttpSession session = request.getSession(false); // Prevent new session creation
     if (session == null) {
       return ResponseEntity.badRequest().body(new ErrorResponse("Sesjonen er utløpt, vennligst logg inn på nytt."));
     }
+
     Object userId = session.getAttribute("userId");
-    if(userId == null) {
-    return ResponseEntity.status(401).body(new ErrorResponse("Ingen bruker logget inn"));
+    if (userId == null) {
+      return ResponseEntity.status(401).body(new ErrorResponse("Ingen bruker logget inn"));
     }
-    Bruker bruker = brukerService.findById((Integer) userId);
-    if(bruker == null) {
-      return ResponseEntity.status(404).body(new ErrorResponse("Bruker ikke funnet"));
+
+    try {
+      Bruker bruker = brukerService.findById((Integer) userId);
+      if (bruker == null) {
+          return ResponseEntity.status(404).body(new ErrorResponse("Bruker ikke funnet"));
+      }
+      session.setMaxInactiveInterval(1800); // Refresh session timeout
+      return ResponseEntity.ok(new GetUserResponse(bruker.getFornavn(), bruker.getEtternavn(), bruker.getBrukernavn()));
+    } catch (Exception e) {
+        return ResponseEntity.status(500).body(new ErrorResponse("En feil oppstod under henting av brukerdata"));
     }
-    session.setMaxInactiveInterval(1800);
-    return ResponseEntity.ok(new GetUserResponse(bruker.getFornavn(), bruker.getEtternavn(), bruker.getBrukernavn()));
   }
 
   private String buildErrorString(BindingResult bindResult) {
