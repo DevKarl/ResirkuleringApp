@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 import { CoreModal } from "../core/CoreModal";
 import { CameraScanner } from "./CameraScanner";
-import { useFetchCoordsByBarcode } from "../../hooks/API/useFetchCoordsByBarcode";
+import { useGetCoordsByBarcode } from "../../hooks/API/useGetCoordsByBarcode";
 import { useState, useRef } from "react";
 import { CoreLoader } from "../core/CoreLoader";
 import { CoreButton } from "../core/CoreButton";
@@ -38,8 +38,8 @@ const CameraScannerContainer = css`
 `;
 
 export const BarcodeScannerModal = ({ toggleModal }: any) => {
-  const { error, isLoading, isSuccess, fetchCoordsByBarcode } =
-    useFetchCoordsByBarcode();
+  const { error, isLoading, isSuccess, getCoordsByBarcode } =
+    useGetCoordsByBarcode();
   const barcodeScanned = useRef<string>(null);
   const [option, setOption] = useState<"manuell" | "kamera" | null>(null);
   const [barcodeInput, setBarcodeInput] = useState("");
@@ -53,7 +53,7 @@ export const BarcodeScannerModal = ({ toggleModal }: any) => {
       return;
     }
     setInputError(null);
-    fetchCoordsByBarcode(barcodeInput);
+    getCoordsByBarcode(barcodeInput);
   };
 
   return (
@@ -103,7 +103,7 @@ export const BarcodeScannerModal = ({ toggleModal }: any) => {
             <CameraScanner
               toggleModal={toggleModal}
               barcodeScanned={barcodeScanned}
-              fetchCoordsByBarcode={fetchCoordsByBarcode}
+              fetchCoordsByBarcode={getCoordsByBarcode}
             />
           </CoreContainer>
         )}

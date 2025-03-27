@@ -5,6 +5,8 @@ import { UserPage } from "./components/routing/pages/UserPage";
 import { Header } from "./components/routing/header/Header";
 import { Login } from "./components/routing/pages/Login";
 import { Registrer } from "./components/routing/pages/Register";
+import { useEffect } from "react";
+import { useGetUser } from "./hooks/API/useGetUser";
 
 const MainContent = styled.main`
   background-color: #e2f0e5;
@@ -13,6 +15,11 @@ const MainContent = styled.main`
 `;
 
 function App() {
+  const { getUser } = useGetUser();
+  useEffect(() => {
+    getUser();
+  }, []);
+
   return (
     <Router>
       <MainContent>
