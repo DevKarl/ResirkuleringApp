@@ -24,8 +24,8 @@ const markerIcon = new L.Icon({
 
 const userIcon = new L.Icon({
   iconUrl: ikon,
-  iconSize: [60, 77],
-  iconAnchor: [28, 63],
+  iconSize: [50, 67],
+  iconAnchor: [25, 61],
 });
 
 const FitBounds = ({ coords, scannedAvfallResult }: any) => {
