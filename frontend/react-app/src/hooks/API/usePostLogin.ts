@@ -26,7 +26,7 @@ export const usePostLogin = () => {
       console.log(response);
       const data = await response.json();
       console.log({ data });
-      // setUser(data)
+      setUser(data);
     } catch (error) {
       setError(
         error instanceof Error ? error.message : "Unknown error occurred"
