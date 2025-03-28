@@ -12,7 +12,9 @@ import { useAppContext } from "../../context/ContextProvider";
 import { useGeolocated } from "react-geolocated";
 import L from "leaflet";
 import MapLoader from "./MapLoader";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { usePostHivAvfall } from "../../hooks/API/usePostHivAvfall";
+import { AvfallspunktMarker } from "./AvfallspunktMarker";
 
 const markerIcon = new L.Icon({
   iconUrl:
@@ -80,8 +82,16 @@ const findClosestPoint = (coords: any, avfallspunkter: any) => {
 };
 
 export const Map = () => {
-  const { scannedAvfallResult } = useAppContext();
+  const { user, scannedAvfallResult } = useAppContext();
+  const [activeAvfallspunkt, setActiveAvfallspunkt] = useState<number | null>(
+    null
+  );
   const defaultLocation = { lat: 61.458982498103865, lng: 5.888914753595201 }; // HVL Førde
+  const { responseData, error, isLoading, postHivAvfall } = usePostHivAvfall();
+
+  const handleHivAvfall = () => {
+    postHivAvfall(scannedAvfallResult.avfall.id, activeAvfallspunkt);
+  };
 
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
     useGeolocated({
@@ -127,13 +137,13 @@ export const Map = () => {
       </Marker>
       <Circle center={[coords?.latitude, coords?.longitude]} radius={100} />
       {scannedAvfallResult?.avfallspunkter?.map((punkt) => (
-        <Marker
-          key={punkt.id}
-          position={[parseFloat(punkt.latitude), parseFloat(punkt.longitude)]}
-          icon={markerIcon}
-        >
-          <Popup>{punkt.navn}</Popup>
-        </Marker>
+        <AvfallspunktMarker
+          punkt={punkt}
+          handleHivAvfall={handleHivAvfall}
+          setActiveAvfallspunkt={setActiveAvfallspunkt}
+          isLoading={isLoading}
+          error={error}
+        />
       ))}
       {closestPoint && (
         <Polyline

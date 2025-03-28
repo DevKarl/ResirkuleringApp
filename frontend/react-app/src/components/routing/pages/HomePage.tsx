@@ -78,8 +78,6 @@ export const HomePage = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  console.log(user);
-
   return (
     <HomePageContainer>
       {user && <Hilsen user={user} />}
