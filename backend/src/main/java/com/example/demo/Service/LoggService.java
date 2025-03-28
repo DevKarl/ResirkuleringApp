@@ -1,5 +1,6 @@
 package com.example.demo.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,13 @@ public class LoggService {
     
     return loggRepo.findByBruker_id(id);
     
+  }
+
+  public void hivAvfall(int brukerid, int avfallsid, int avfallspunktid, LocalDate localdate) {
+    // TODO Auto-generated method stub
+    loggRepo.save(brukerid, avfallsid, avfallspunktid, localdate);
+    // throw new UnsupportedOperationException("Unimplemented method 'hivAvfall'");
+    return;
   }
     
 }
