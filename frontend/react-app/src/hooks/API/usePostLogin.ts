@@ -1,29 +1,29 @@
 import { useState } from "react";
-import { RegisterRequest, RegisterResponse } from "../../types/userTypes";
+import { LoginRequest } from "../../types/userTypes";
+import { useAppContext } from "../../context/ContextProvider";
 
-export const usePostRegister = () => {
+export const usePostLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [successResponse, setSuccessResponse] =
-    useState<RegisterResponse>(null);
   const [error, setError] = useState<string | null>(null);
+  const { setUser } = useAppContext();
 
-  const postRegister = async (formData: RegisterRequest) => {
+  const postLogin = async (formData: LoginRequest) => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch("/api/register", {
+      const response = await fetch("/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
-
+      const data = await response.json();
       if (!response.ok) {
-        setError(`Error! Status: ${response.status}`);
+        setError(data.message);
         return;
       }
-      setSuccessResponse("Bruker registrert");
+      setUser(data);
     } catch (error) {
       setError(
         error instanceof Error ? error.message : "Unknown error occurred"
@@ -33,5 +33,5 @@ export const usePostRegister = () => {
     }
   };
 
-  return { isLoading, error, successResponse, postRegister };
+  return { isLoading, error, postLogin };
 };

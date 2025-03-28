@@ -1,16 +1,14 @@
 package com.example.demo.DTO;
 
-public class LoginResponse {
+public class GetUserResponse {
   private String fornavn;
   private String etternavn;
   private String brukernavn;
-  private String message;
 
-  public LoginResponse(String message, String fornavn, String etternavn, String brukernavn) {
+  public GetUserResponse(String fornavn, String etternavn, String brukernavn) {
     this.fornavn = fornavn;
     this.etternavn = etternavn;
     this.brukernavn = brukernavn;
-    this.message = message;
   }
 
   public String getFornavn() {
@@ -35,13 +33,5 @@ public class LoginResponse {
 
   public void setBrukernavn(String brukernavn) {
       this.brukernavn = brukernavn;
-  }
-
-  public String getMessage() {
-    return message;
-  }
-
-  public void setMessage(String message) {
-    this.message = message;
-  }
+  }  
 }
