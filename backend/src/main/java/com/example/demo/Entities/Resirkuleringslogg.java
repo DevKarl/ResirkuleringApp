@@ -1,6 +1,7 @@
 package com.example.demo.Entities;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,38 +16,37 @@ import jakarta.persistence.Table;
 @Table(schema = "resirkulering")
 public class Resirkuleringslogg {
   
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-private int id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private int id;
 
-@ManyToOne
-@JoinColumn(name = "avfall_id")
-private Avfall avfall;
+  @ManyToOne
+  @JoinColumn(name = "avfall_id")
+  private Avfall avfall;
 
-@ManyToOne
-@JoinColumn(name = "bruker_id")
-private Bruker bruker;
+  @ManyToOne
+  @JoinColumn(name = "bruker_id")
+  private Bruker bruker;
 
-@ManyToOne
-@JoinColumn(name = "avfallspunkt_id")
-private Avfallspunkt avfallspunkt;
+  @ManyToOne
+  @JoinColumn(name = "avfallspunkt_id")
+  private Avfallspunkt avfallspunkt;
 
-@Column(name = "tidspunktkastet")
-private LocalDate tidspunktKastet;
+  @Column(name = "tidspunktKastet", nullable = false)
+  private LocalDateTime tidspunktKastet;
 
 
 
-public Resirkuleringslogg(){
-//Standard konstruktør
-}
+  public Resirkuleringslogg(){
+  //Standard konstruktør
+  }
 
-public Resirkuleringslogg(Avfall avfall, Bruker bruker, Avfallspunkt avfallspunkt, LocalDate dato){
-  this.avfall = avfall;
-  this.bruker = bruker;
-  this.avfallspunkt = avfallspunkt;
-  this.tidspunktKastet = dato;
-}
-
+  public Resirkuleringslogg(Avfall avfall, Bruker bruker, Avfallspunkt avfallspunkt, LocalDateTime tidspunktKastet){
+    this.avfall = avfall;
+    this.bruker = bruker;
+    this.avfallspunkt = avfallspunkt;
+    this.tidspunktKastet = tidspunktKastet;
+  }
 
   public int getId() {
     return this.id;
@@ -80,15 +80,12 @@ public Resirkuleringslogg(Avfall avfall, Bruker bruker, Avfallspunkt avfallspunk
     this.avfallspunkt = avfallspunkt;
   }
 
-  public LocalDate getTidspunktKastet() {
+  public LocalDateTime getTidspunktKastet() {
     return this.tidspunktKastet;
   }
 
-  public void setTidspunktKastet(LocalDate tidspunktKastet) {
+  public void setTidspunktKastet(LocalDateTime tidspunktKastet) {
     this.tidspunktKastet = tidspunktKastet;
   }
-
-
-
 
 }
