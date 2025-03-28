@@ -21,11 +21,7 @@ public class LoggService {
   }
 
   public void hivAvfall(Resirkuleringslogg logg) {
-    // TODO Auto-generated method stub
-    // Avfall avfall = AvfallRepo.findByStrekkode(avfallsid);
-    // Resirkuleringslogg logg = new Resirkuleringslogg(avfallsid, brukerid, avfallspunktid, localdate);
     loggRepo.save(logg);
-    // throw new UnsupportedOperationException("Unimplemented method 'hivAvfall'");
     return;
   }
     
