@@ -35,5 +35,21 @@ public class LoggController {
       return ResponseEntity.status(500).body("Ops! Noe feil skjedde.");
     } 
   }
- 
+
+  @GetMapping("/getSharedStat")
+  public ResponseEntity<?> getSharedStat(HttpSession session) {
+    if (session == null) {
+      return ResponseEntity.badRequest().body(new ErrorResponse("Sesjonen er utløpt, vennligst logg inn på nytt."));
+    }
+    Object userId = session.getAttribute("userId");
+    if(userId == null) {
+      return ResponseEntity.status(401).body("Ingen bruker logget inn");
+    }
+    try {
+      List<Resirkuleringslogg> logger = loggService.getLoggerForBrukereSomDelerStatistikk();
+      return ResponseEntity.ok(logger);
+    } catch (Exception e) {
+      return ResponseEntity.status(500).body("Ops! Noe feil skjedde.");
+    } 
+  }
 }

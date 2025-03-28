@@ -10,7 +10,6 @@ import com.example.demo.Entities.Resirkuleringslogg;
 
 @Repository
 public interface LoggRepo extends JpaRepository<Resirkuleringslogg, Integer>{
-  //getAlleLoggerForBrukerMedId
-
   List<Resirkuleringslogg> findByBruker_id(int id);
+  List<Resirkuleringslogg> findByBruker_DelerstatTrue();
 }

@@ -15,9 +15,11 @@ public class LoggService {
   private LoggRepo loggRepo;
 
   public List<Resirkuleringslogg> getAlleLoggerForBrukerMedId(int id) {
-    
     return loggRepo.findByBruker_id(id);
-    
   }
-    
+
+  public List<Resirkuleringslogg> getLoggerForBrukereSomDelerStatistikk() {
+    return loggRepo.findByBruker_DelerstatTrue();
+  }
+ 
 }
