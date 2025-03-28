@@ -20,7 +20,7 @@ public class LoggService {
     
   }
 
-  public void hivAvfall(Resirkuleringslogg logg) {
+  public void saveHivdAvfall(Resirkuleringslogg logg) {
     loggRepo.save(logg);
     return;
   }
