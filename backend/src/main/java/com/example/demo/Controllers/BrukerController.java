@@ -84,12 +84,14 @@ public class BrukerController {
 
     session.setAttribute("userId", bruker.getId());
     session.setMaxInactiveInterval(1800); // 30min
-    String message = bruker.getFornavn() + "ble logget inn! ✅";
+    String message = bruker.getFornavn() + " ble logget inn! ✅";
     LoginResponse loginResponse = new LoginResponse(
       message,
       bruker.getFornavn(),
       bruker.getEtternavn(),
-      bruker.getBrukernavn()
+      bruker.getBrukernavn(),
+      bruker.getAdminrettigheter(),
+      bruker.getDelerStat()
     );
     return ResponseEntity.ok(loginResponse);
   }
@@ -127,7 +129,13 @@ public class BrukerController {
           return ResponseEntity.status(404).body(new ErrorResponse("Bruker ikke funnet"));
       }
       session.setMaxInactiveInterval(1800); // Refresh session timeout
-      return ResponseEntity.ok(new GetUserResponse(bruker.getFornavn(), bruker.getEtternavn(), bruker.getBrukernavn()));
+      return ResponseEntity.ok(new GetUserResponse(
+        bruker.getFornavn(), 
+        bruker.getEtternavn(), 
+        bruker.getBrukernavn(), 
+        bruker.getAdminrettigheter(), 
+        bruker.getDelerStat()
+        ));
     } catch (Exception e) {
         return ResponseEntity.status(500).body(new ErrorResponse("En feil oppstod under henting av brukerdata"));
     }
