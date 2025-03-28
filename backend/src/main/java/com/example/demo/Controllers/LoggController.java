@@ -57,8 +57,16 @@ public class LoggController {
 
   @PostMapping("/postHivAvfall")
   public ResponseEntity<?> postHivAvfall(HttpSession session, @RequestBody HivAvfallRequest request) {
+    if (session == null) {
+      return ResponseEntity.badRequest().body(new ErrorResponse("Sesjonen er utløpt, vennligst logg inn på nytt."));
+    }
+
     Object userId = session.getAttribute("userId");
-    if (request == null || request.getAvfallsid() == 0 || request.getAvfallspunktid() == 0 || userId == null) {
+    if (userId == null) {
+      return ResponseEntity.status(401).body("Ingen bruker logget inn");
+    }
+
+    if (request == null || request.getAvfallsid() == 0 || request.getAvfallspunktid() == 0) {
       return ResponseEntity.badRequest()
           .body(new ErrorResponse("Ugyldig forespørsel. AvfallsID og AvfallspunktID må være satt."));
     }
