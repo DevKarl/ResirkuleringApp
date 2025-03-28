@@ -25,11 +25,12 @@ public class Bruker {
     private String salt;
 
     private boolean adminrettigheter;
+    private boolean delerstat;
 
-    public Bruker(){
+
+    public Bruker() {
 
     }
-
 
   public Bruker(int id, String fornavn, String etternavn,String brukernavn,String hash, String salt) {
     this.id = id;
@@ -39,8 +40,16 @@ public class Bruker {
     this.hash = hash;
     this.salt = salt;
     this.adminrettigheter = false;
+    this.delerstat = false;
   }
 
+  public boolean getDelerStat() {
+    return delerstat;
+  }
+
+  public void setDelerStat(boolean delerstat) {
+    this.delerstat = delerstat;
+  }
 
   public int getId() {
     return this.id;
@@ -88,10 +97,6 @@ public class Bruker {
 
   public void setSalt(String salt) {
     this.salt = salt;
-  }
-
-  public boolean isAdminrettigheter() {
-    return this.adminrettigheter;
   }
 
   public boolean getAdminrettigheter() {
