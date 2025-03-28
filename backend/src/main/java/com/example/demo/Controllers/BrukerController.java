@@ -55,6 +55,7 @@ public class BrukerController {
     newUser.setSalt(salt);
     newUser.setHash(hash);
     newUser.setAdminrettigheter(false);
+    newUser.setDelerStat(false);
 
     brukerService.createNewUser(newUser);
     return ResponseEntity.ok(new RegisterResponse("Bruker registrert!"));
@@ -121,6 +122,7 @@ public class BrukerController {
 
     try {
       Bruker bruker = brukerService.findById((Integer) userId);
+      System.out.println(bruker);
       if (bruker == null) {
           return ResponseEntity.status(404).body(new ErrorResponse("Bruker ikke funnet"));
       }
