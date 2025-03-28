@@ -7,6 +7,8 @@ import com.example.demo.Entities.Avfall;
 public interface AvfallRepo extends JpaRepository<Avfall,Integer> {
   
   Avfall findByStrekkode(String strekkode);
+
+  Avfall findById(int Id);
 }
 
 
