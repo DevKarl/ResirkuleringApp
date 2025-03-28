@@ -3,10 +3,10 @@ import { ScanAvfallResponse } from "../types";
 import { User } from "../types/userTypes";
 
 interface AppContextType {
-  user: any;
+  user: null | User;
   scannedAvfallResult: ScanAvfallResponse;
   setScannedAvfallResult: (response: ScanAvfallResponse) => void;
-  setUser: (reponse: User) => void;
+  setUser: (user: User | null) => void;
 }
 
 const defaultContextValue: AppContextType = {
@@ -25,7 +25,7 @@ interface AppProviderProps {
 }
 
 export const AppProvider = ({ children }: AppProviderProps) => {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<null | User>(null);
   const [scannedAvfallResult, setScannedAvfallResult] =
     useState<ScanAvfallResponse>(null);
 

@@ -20,6 +20,7 @@ export const usePostRegister = () => {
       });
 
       if (!response.ok) {
+        // @ts-ignore
         setError(response.message);
         return;
       }
