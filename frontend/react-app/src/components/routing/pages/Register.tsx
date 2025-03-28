@@ -8,7 +8,6 @@ import { usePostRegister } from "../../../hooks/API/usePostRegister";
 import { CoreLoader } from "../../core/CoreLoader";
 import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
-import { theme } from "../../core/theme/theme";
 
 const ErrorText = styled.p`
   font-size: 1.5rem;
@@ -26,27 +25,6 @@ const HeaderContainerStyles = css`
   gap: 20px;
   width: 100%;
 `;
-
-// const NavigateBack = () => {
-//   return (
-//     <Link
-//       to="/logginn"
-//       style={{ display: "flex", alignItems: "center", textDecoration: "none" }}
-//     >
-//       <svg
-//         xmlns="http://www.w3.org/2000/svg"
-//         xmlnsXlink="http://www.w3.org/1999/xlink"
-//         viewBox="0 0 512 512"
-//         style={{ width: "40px", height: "40px", marginRight: "8px" }}
-//       >
-//         <polygon
-//           points="352,128.4 319.7,96 160,256 160,256 160,256 319.7,416 352,383.6 224.7,256"
-//           fill=""
-//         />
-//       </svg>
-//     </Link>
-//   );
-// };
 
 const StyledLink = styled(Link)`
   display: flex;
@@ -117,17 +95,17 @@ export const Registrer = () => {
       brukernavn: "",
       passord: "",
     };
-    if (formData.fornavn.length < 3) {
+    if (formData.fornavn.length < 1) {
       newErrors.brukernavn = "Brukernavn må være minst 6 tegn";
     }
-    if (formData.etternavn.length < 3) {
-      newErrors.brukernavn = "Brukernavn må være minst 6 tegn";
+    if (formData.etternavn.length < 1) {
+      newErrors.brukernavn = "Brukernavn må være minst 5 tegn";
     }
-    if (formData.brukernavn.length < 3) {
-      newErrors.brukernavn = "Brukernavn må være minst 6 tegn";
+    if (formData.brukernavn.length < 5 || formData.brukernavn.length > 20) {
+      newErrors.brukernavn = "Brukernavn må være mellom 5 og 20 tegn";
     }
-    if (formData.passord.length < 3) {
-      newErrors.passord = "Passord må være minst 3 tegn";
+    if (formData.brukernavn.length < 5 || formData.brukernavn.length > 20) {
+      newErrors.passord = "Passord må være mellom 5 og 20 tegn";
     }
     setErrors(newErrors);
     return Object.values(newErrors).some((item) => item.trim().length > 0);

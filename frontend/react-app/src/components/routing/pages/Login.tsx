@@ -20,13 +20,11 @@ export const Login = () => {
   const { user } = useAppContext();
   const navigate = useNavigate();
   const { isLoading, error, postLogin } = usePostLogin();
-  // useEffect(() => {
-  //   if (user) {
-  //     navigate("/");
-  //   }
-  // }, [user, navigate]);
-
-  console.log(user);
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
   const [formData, setFormData] = useState({ brukernavn: "", passord: "" });
   const [errors, setErrors] = useState({
@@ -47,8 +45,6 @@ export const Login = () => {
   };
 
   const validate = () => {
-    // SETT ERRORS I FØLGE BACKEND RESPONSE HER:
-
     const newErrors: typeof errors = { brukernavn: "", passord: "" };
     if (formData.brukernavn.length < 3) {
       newErrors.brukernavn = "Brukernavn må være minst 3 tegn";
