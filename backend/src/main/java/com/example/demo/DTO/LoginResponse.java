@@ -4,13 +4,18 @@ public class LoginResponse {
   private String fornavn;
   private String etternavn;
   private String brukernavn;
+  private Boolean isAdmin;
+  private Boolean delerStat;
+
   private String message;
 
-  public LoginResponse(String message, String fornavn, String etternavn, String brukernavn) {
+  public LoginResponse(String message, String fornavn, String etternavn, String brukernavn, Boolean isAdmin, Boolean delerStat) {
     this.fornavn = fornavn;
     this.etternavn = etternavn;
     this.brukernavn = brukernavn;
     this.message = message;
+    this.isAdmin = isAdmin;
+    this.delerStat = delerStat;
   }
 
   public String getFornavn() {
@@ -43,5 +48,21 @@ public class LoginResponse {
 
   public void setMessage(String message) {
     this.message = message;
+  }
+
+  public Boolean getIsAdmin() {
+    return isAdmin;
+  }
+
+  public void setIsAdmin(Boolean isAdmin) {
+    this.isAdmin = isAdmin;
+  }
+
+  public Boolean getDelerStat() {
+    return delerStat;
+  }
+
+  public void setDelerStat(Boolean delerStat) {
+    this.delerStat = delerStat;
   }
 }
