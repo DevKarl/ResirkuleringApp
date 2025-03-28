@@ -1,27 +1,33 @@
 package com.example.demo.DTO;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class HivAvfallRequest {
-  private int avfallsid;
-  private int avfallspunktid;
 
-  public HivAvfallRequest(int avfall, int avfallspunkt){
-    this.avfallsid = avfall;
-    this.avfallspunktid = avfallspunkt;
+  @NotBlank(message = "avfalls ID må oppgis")
+  private int avfallsId;
+
+  @NotBlank(message = "avfallspunkt ID må oppgis")
+  private int avfallspunktId;
+
+  public HivAvfallRequest(int avfallsId, int avfallspunktId){
+    this.avfallsId = avfallsId;
+    this.avfallspunktId = avfallspunktId;
   }
 
-  public int getAvfallsid() {
-    return avfallsid;
+  public int getAvfallsId() {
+    return avfallsId;
   }
 
-  public void setAvfallsid(int avfallsid) {
-    this.avfallsid = avfallsid;
+  public void setAvfallsId(int avfallsId) {
+    this.avfallsId = avfallsId;
   }
 
-  public int getAvfallspunktid() {
-    return avfallspunktid;
+  public int getAvfallspunktId() {
+    return avfallspunktId;
   }
 
-  public void setAvfallspunktid(int avfallspunktid) {
-    this.avfallspunktid = avfallspunktid;
+  public void setAvfallspunktId(int avfallspunktId) {
+    this.avfallspunktId = avfallspunktId;
   }
 }
