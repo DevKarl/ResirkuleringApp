@@ -16,12 +16,27 @@ import { useEffect, useMemo } from "react";
 import { CoreContainer } from "../core/CoreContainer";
 import { CoreButton } from "../core/CoreButton";
 import { CoreLoader } from "../core/CoreLoader";
-import { usePostHivAvfall } from "../API/usePostHivAvfall";
+import { usePostHivAvfall } from "../../hooks/API/usePostHivAvfall";
 import { css } from "styled-components";
+import { AvfallsIcon } from "../iconsAndLogos/AvfallsIcon";
+import { CoreSubheading } from "../core/CoreSubheading";
 
-const PopupContainer = css`
+const IconsContainer = css`
   flex-direction: row;
   gap: 10px;
+  flex-wrap: wrap
+`
+
+
+const Buttonstyles = css`
+  width: 230px;
+  max-width: 100%;
+  height: 50px;
+  padding: 10px;
+  font-size: 1.2rem;
+`
+const PopupContainer = css`
+    align-items: flex-start;
 `
 
 const markerIcon = new L.Icon({
@@ -90,10 +105,10 @@ const findClosestPoint = (coords: any, avfallspunkter: any) => {
 };
 
 export const Map = () => {
-  const { scannedAvfallResult } = useAppContext();
+  const {user, scannedAvfallResult} = useAppContext();
   const defaultLocation = { lat: 61.458982498103865, lng: 5.888914753595201 }; // HVL Førde
   const {responseData, error, isLoading, postHivAvfall} = usePostHivAvfall();
-  const {user, scannedAvfall} = useAppContext();
+
 
   const handleHivAvfall = () => {
     postHivAvfall(user.id, scannedAvfall.id);
@@ -119,6 +134,8 @@ export const Map = () => {
     return <div>Kart krever at posisjon deles 😠 </div>;
 
   if (!coords) return <MapLoader />;
+
+  console.log(scannedAvfallResult?.avfallspunkter);
 
   return (
     <MapContainer
@@ -150,15 +167,19 @@ export const Map = () => {
         >
 
           <Popup>
-            {punkt.navn}
             <CoreContainer styles={PopupContainer}>
-              {punkt.avfallsTyper.map( type => getIkonById(type.id))}
+            <CoreSubheading>
+            {punkt.navn}
+            </CoreSubheading>
+            <CoreContainer styles={IconsContainer}>
+              {punkt.avfallspunktAvfallstyper?.map(type => <AvfallsIcon id={type.avfallstype.id}/>)}
             </CoreContainer>
             {isLoading ? <CoreLoader/> :
-            <CoreButton onClick={handleHivAvfall}>
+            <CoreButton onClick={handleHivAvfall} styles={Buttonstyles}>
             Hiv Avfall
             </CoreButton>
             }
+            </CoreContainer>
             </Popup>
         </Marker>
       ))}
