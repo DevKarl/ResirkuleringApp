@@ -1,14 +1,12 @@
 package com.example.demo.Controllers;
-
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
 import com.example.demo.Controllers.Interfaces.ApiController;
 import com.example.demo.DTO.ErrorResponse;
 import com.example.demo.DTO.HivAvfallRequest;
@@ -20,8 +18,9 @@ import com.example.demo.Service.AvfPunktService;
 import com.example.demo.Service.AvfallService;
 import com.example.demo.Service.BrukerService;
 import com.example.demo.Service.LoggService;
-
+import com.example.demo.Utils.ErrorMsgBuilder;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 @ApiController
 public class LoggController {
@@ -56,39 +55,36 @@ public class LoggController {
   }
 
   @PostMapping("/postHivAvfall")
-  public ResponseEntity<?> postHivAvfall(HttpSession session, @RequestBody HivAvfallRequest request) {
+  public ResponseEntity<?> postHivAvfall(
+    HttpSession session,
+    @RequestBody @Valid HivAvfallRequest request, 
+    BindingResult bindResult) {
     if (session == null) {
       return ResponseEntity.badRequest().body(new ErrorResponse("Sesjonen er utløpt, vennligst logg inn på nytt."));
     }
-
+    if(bindResult.hasErrors()) {
+      return ResponseEntity.badRequest().body(new ErrorResponse(ErrorMsgBuilder.buildError(bindResult)));
+    }
     Object userId = session.getAttribute("userId");
     if (userId == null) {
-      return ResponseEntity.status(401).body("Ingen bruker logget inn");
+      return ResponseEntity.status(401).body(new ErrorResponse("Brukeren er ikke logget inn"));
     }
 
-    if (request == null || request.getAvfallsid() == 0 || request.getAvfallspunktid() == 0) {
-      return ResponseEntity.badRequest()
-          .body(new ErrorResponse("Ugyldig forespørsel. AvfallsID og AvfallspunktID må være satt."));
-    }
     try {
-      // bruker
+      Avfall avfall = avfallService.getAvfallById(request.getAvfallsId());
       Bruker bruker = brukerService.findById((Integer)userId);
-      // avfall
-      Avfall avfall = avfallService.getAvfallById(request.getAvfallsid());
-      // avfallspunkt
-      Avfallspunkt avfallspunkt = avfPunktService.getAvfallspunktById(request.getAvfallspunktid());
-      
-      // logg
-      Resirkuleringslogg logg = new Resirkuleringslogg();
-      logg.setBruker(bruker);
-      logg.setAvfall(avfall);
-      logg.setAvfallspunkt(avfallspunkt);
-      logg.setTidspunktKastet(LocalDate.now());
-
-      loggService.hivAvfall(logg);
-      return ResponseEntity.ok("Avfall kastet med suksess.");
+      Avfallspunkt avfallspunkt = avfPunktService.getAvfallspunktById(request.getAvfallspunktId());
+      LocalDateTime currentDateTime = LocalDateTime.now();
+      Resirkuleringslogg logg = new Resirkuleringslogg(
+        avfall,
+        bruker,
+        avfallspunkt,
+        currentDateTime
+      );
+      loggService.saveHivdAvfall(logg);
+      return ResponseEntity.ok("Hivd avfall registrert");
     } catch (Exception e) {
-      return ResponseEntity.status(500).body("Kunne ikke kaste avfall. Prøv igjen senere.");
+      return ResponseEntity.status(500).body(new ErrorResponse("Kunne ikke kaste avfall. Prøv igjen senere."));
     }
   }
 }
