@@ -12,32 +12,9 @@ import { useAppContext } from "../../context/ContextProvider";
 import { useGeolocated } from "react-geolocated";
 import L from "leaflet";
 import MapLoader from "./MapLoader";
-import { useEffect, useMemo } from "react";
-import { CoreContainer } from "../core/CoreContainer";
-import { CoreButton } from "../core/CoreButton";
-import { CoreLoader } from "../core/CoreLoader";
+import { useEffect, useMemo, useState } from "react";
 import { usePostHivAvfall } from "../../hooks/API/usePostHivAvfall";
-import { css } from "styled-components";
-import { AvfallsIcon } from "../iconsAndLogos/AvfallsIcon";
-import { CoreSubheading } from "../core/CoreSubheading";
-
-const IconsContainer = css`
-  flex-direction: row;
-  gap: 10px;
-  flex-wrap: wrap
-`
-
-
-const Buttonstyles = css`
-  width: 230px;
-  max-width: 100%;
-  height: 50px;
-  padding: 10px;
-  font-size: 1.2rem;
-`
-const PopupContainer = css`
-    align-items: flex-start;
-`
+import { AvfallspunktMarker } from "./AvfallspunktMarker";
 
 const markerIcon = new L.Icon({
   iconUrl:
@@ -105,14 +82,16 @@ const findClosestPoint = (coords: any, avfallspunkter: any) => {
 };
 
 export const Map = () => {
-  const {user, scannedAvfallResult} = useAppContext();
+  const { user, scannedAvfallResult } = useAppContext();
+  const [activeAvfallspunkt, setActiveAvfallspunkt] = useState<number | null>(
+    null
+  );
   const defaultLocation = { lat: 61.458982498103865, lng: 5.888914753595201 }; // HVL Førde
-  const {responseData, error, isLoading, postHivAvfall} = usePostHivAvfall();
-
+  const { responseData, error, isLoading, postHivAvfall } = usePostHivAvfall();
 
   const handleHivAvfall = () => {
-    postHivAvfall(user.id, scannedAvfall.id);
-  }
+    postHivAvfall(scannedAvfallResult.avfall.id, activeAvfallspunkt);
+  };
 
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
     useGeolocated({
@@ -134,8 +113,6 @@ export const Map = () => {
     return <div>Kart krever at posisjon deles 😠 </div>;
 
   if (!coords) return <MapLoader />;
-
-  console.log(scannedAvfallResult?.avfallspunkter);
 
   return (
     <MapContainer
@@ -160,28 +137,13 @@ export const Map = () => {
       </Marker>
       <Circle center={[coords?.latitude, coords?.longitude]} radius={100} />
       {scannedAvfallResult?.avfallspunkter?.map((punkt) => (
-        <Marker
-          key={punkt.id}
-          position={[parseFloat(punkt.latitude), parseFloat(punkt.longitude)]}
-          icon={markerIcon}
-        >
-
-          <Popup>
-            <CoreContainer styles={PopupContainer}>
-            <CoreSubheading>
-            {punkt.navn}
-            </CoreSubheading>
-            <CoreContainer styles={IconsContainer}>
-              {punkt.avfallspunktAvfallstyper?.map(type => <AvfallsIcon id={type.avfallstype.id}/>)}
-            </CoreContainer>
-            {isLoading ? <CoreLoader/> :
-            <CoreButton onClick={handleHivAvfall} styles={Buttonstyles}>
-            Hiv Avfall
-            </CoreButton>
-            }
-            </CoreContainer>
-            </Popup>
-        </Marker>
+        <AvfallspunktMarker
+          punkt={punkt}
+          handleHivAvfall={handleHivAvfall}
+          setActiveAvfallspunkt={setActiveAvfallspunkt}
+          isLoading={isLoading}
+          error={error}
+        />
       ))}
       {closestPoint && (
         <Polyline
