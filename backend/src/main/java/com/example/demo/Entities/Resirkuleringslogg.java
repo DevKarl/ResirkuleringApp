@@ -32,9 +32,8 @@ public class Resirkuleringslogg {
   @JoinColumn(name = "avfallspunkt_id")
   private Avfallspunkt avfallspunkt;
 
-  @Column(name = "tidspunktKastet", nullable = false)
+  @Column(name = "tidspunktkastet", nullable = false)
   private LocalDateTime tidspunktKastet;
-
 
 
   public Resirkuleringslogg(){

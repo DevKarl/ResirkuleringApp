@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.example.demo.Controllers.Interfaces.ApiController;
 import com.example.demo.DTO.ErrorResponse;
 import com.example.demo.DTO.HivAvfallRequest;
+import com.example.demo.DTO.SuccessResponse;
 import com.example.demo.Entities.Avfall;
 import com.example.demo.Entities.Avfallspunkt;
 import com.example.demo.Entities.Bruker;
@@ -73,7 +74,8 @@ public class LoggController {
     try {
       Avfall avfall = avfallService.getAvfallById(request.getAvfallsId());
       Bruker bruker = brukerService.findById((Integer)userId);
-      Avfallspunkt avfallspunkt = avfPunktService.getAvfallspunktById(request.getAvfallspunktId());
+      System.out.println(bruker.toString());
+      Avfallspunkt avfallspunkt = avfPunktService.getAvfallspunktById(request.getAvfallsPunktId());
       LocalDateTime currentDateTime = LocalDateTime.now();
       Resirkuleringslogg logg = new Resirkuleringslogg(
         avfall,
@@ -82,7 +84,7 @@ public class LoggController {
         currentDateTime
       );
       loggService.saveHivdAvfall(logg);
-      return ResponseEntity.ok("Hivd avfall registrert");
+      return ResponseEntity.ok(new SuccessResponse("Hivd avfall registrert"));
     } catch (Exception e) {
       return ResponseEntity.status(500).body(new ErrorResponse("Kunne ikke kaste avfall. Prøv igjen senere."));
     }

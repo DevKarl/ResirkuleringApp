@@ -1,18 +1,17 @@
 package com.example.demo.DTO;
-
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class HivAvfallRequest {
 
-  @NotBlank(message = "avfalls ID må oppgis")
+  @NotNull(message = "avfalls ID må oppgis")
   private int avfallsId;
 
-  @NotBlank(message = "avfallspunkt ID må oppgis")
-  private int avfallspunktId;
+  @NotNull(message = "avfallspunkt ID må oppgis")
+  private int avfallsPunktId;
 
-  public HivAvfallRequest(int avfallsId, int avfallspunktId){
+  public HivAvfallRequest(int avfallsId, int avfallsPunktId){
     this.avfallsId = avfallsId;
-    this.avfallspunktId = avfallspunktId;
+    this.avfallsPunktId = avfallsPunktId;
   }
 
   public int getAvfallsId() {
@@ -23,11 +22,11 @@ public class HivAvfallRequest {
     this.avfallsId = avfallsId;
   }
 
-  public int getAvfallspunktId() {
-    return avfallspunktId;
+  public int getAvfallsPunktId() {
+    return avfallsPunktId;
   }
 
-  public void setAvfallspunktId(int avfallspunktId) {
-    this.avfallspunktId = avfallspunktId;
+  public void setAvfallsPunktId(int avfallsPunktId) {
+    this.avfallsPunktId = avfallsPunktId;
   }
 }

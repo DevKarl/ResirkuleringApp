@@ -22,7 +22,6 @@ public class LoggService {
 
   public void saveHivdAvfall(Resirkuleringslogg logg) {
     loggRepo.save(logg);
-    return;
   }
     
 }
