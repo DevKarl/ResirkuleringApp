@@ -21,5 +21,9 @@ public class LoggService {
   public List<Resirkuleringslogg> getLoggerForBrukereSomDelerStatistikk() {
     return loggRepo.findByBruker_DelerstatTrue();
   }
- 
+
+  public void saveHivdAvfall(Resirkuleringslogg logg) {
+    loggRepo.save(logg);
+  }
+    
 }
