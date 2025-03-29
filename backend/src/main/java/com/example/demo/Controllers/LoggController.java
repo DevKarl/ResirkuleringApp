@@ -10,7 +10,7 @@ import com.example.demo.DTO.ErrorResponse;
 import com.example.demo.Entities.Resirkuleringslogg;
 import com.example.demo.Service.LoggService;
 
-import jakarta.servlet.http.HttpSession;
+import javax.servlet.http.HttpSession;
 
 
 @ApiController
