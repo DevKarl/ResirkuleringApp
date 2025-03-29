@@ -15,4 +15,8 @@ public class AvfallService {
   public Avfall getAvfallByStrekkode(String strekkode) {
     return avfallRepo.findByStrekkode(strekkode);
   }  
+
+  public Avfall getAvfallById(int Id){
+    return avfallRepo.findById(Id);
+  }
 }
