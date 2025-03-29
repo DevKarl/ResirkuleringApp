@@ -21,6 +21,13 @@ const Heading = styled.h1`
   text-align: center;
 `;
 
+const ScannedResultHeading = styled.h3`
+  font-size: 20px;
+  color: #333;
+  font-family: Arial, sans-serif;
+  text-align: center;
+`;
+
 const UserWelcome = styled.h3`
   font-size: 25px;
   color: #333;
@@ -32,7 +39,7 @@ const UserWelcome = styled.h3`
 const Hilsen = ({ user }: User) => {
   const getGreeting = () => {
     const hour = new Date().getHours(); // Get current hour
-    if (hour < 12) {
+    if (hour < 12 && hour > 6) {
       return "God morgen"; // Morning
     } else if (hour >= 12 && hour < 18) {
       return "God dag"; // Daytime
@@ -45,7 +52,7 @@ const Hilsen = ({ user }: User) => {
 
   const getEmoji = () => {
     const hour = new Date().getHours();
-    if (hour < 12) {
+    if (hour < 12 && hour > 6) {
       return "☀️";
     } else if (hour >= 12 && hour < 18) {
       return "🌤️";
@@ -72,7 +79,8 @@ const Hilsen = ({ user }: User) => {
 
 export const HomePage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { user } = useAppContext();
+  const { user, scannedAvfallResult } = useAppContext();
+  const scannedAvfall = scannedAvfallResult?.avfall.navn;
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -81,7 +89,13 @@ export const HomePage = () => {
   return (
     <HomePageContainer>
       {user && <Hilsen user={user} />}
-      <Heading>Finn nærmeste avfallspunkt ♻️ </Heading>
+      {scannedAvfall ? (
+        <ScannedResultHeading>
+          Fant punkter for {scannedAvfall}!
+        </ScannedResultHeading>
+      ) : (
+        <Heading>Finn nærmeste avfallspunkt ♻️ </Heading>
+      )}
       <Map />
       <CoreButton onClick={() => setIsModalOpen(true)}>Scann avfall</CoreButton>
       {isModalOpen && (

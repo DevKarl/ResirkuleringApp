@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import { ReactNode } from "react";
 
 type ButtonType = "green" | "white";
@@ -6,7 +6,23 @@ type ButtonType = "green" | "white";
 interface StyledButtonProps {
   $type: ButtonType;
   styles?: any;
+  errorShake: boolean;
 }
+
+const shake = keyframes`
+  0% {
+  margin-left: 0rem;
+  }
+  25% {
+    margin-left: 0.5rem;
+  }
+  75% {
+    margin-left: -0.5rem;
+  }
+  100% {
+    margin-left: 0rem;
+  }
+`;
 
 const StyledButton = styled.button<StyledButtonProps>`
   width: 300px;
@@ -34,6 +50,13 @@ const StyledButton = styled.button<StyledButtonProps>`
     css`
       ${styles}
     `}
+
+  ${({ errorShake }) =>
+    errorShake &&
+    css`
+      border: 2px solid red;
+      animation: ${shake} 0.4s ease;
+    `}
 `;
 
 interface ButtonProps {
@@ -41,6 +64,7 @@ interface ButtonProps {
   onClick?: () => void;
   children?: ReactNode;
   styles?: any;
+  errorShake: boolean;
 }
 
 export const CoreButton = ({
@@ -48,9 +72,15 @@ export const CoreButton = ({
   onClick,
   children,
   styles,
+  errorShake,
 }: ButtonProps) => {
   return (
-    <StyledButton $type={type} onClick={onClick} styles={styles}>
+    <StyledButton
+      $type={type}
+      onClick={onClick}
+      styles={styles}
+      errorShake={errorShake}
+    >
       {children}
     </StyledButton>
   );
