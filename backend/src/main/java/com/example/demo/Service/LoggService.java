@@ -19,5 +19,9 @@ public class LoggService {
     return loggRepo.findByBruker_id(id);
     
   }
+
+  public void saveHivdAvfall(Resirkuleringslogg logg) {
+    loggRepo.save(logg);
+  }
     
 }

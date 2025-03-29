@@ -126,7 +126,7 @@ public class BrukerController {
       Bruker bruker = brukerService.findById((Integer) userId);
       System.out.println(bruker);
       if (bruker == null) {
-          return ResponseEntity.status(404).body(new ErrorResponse("Bruker ikke funnet"));
+          return ResponseEntity.status(404).body(new ErrorResponse("Brukeren finnes ikke lenger i systemet"));
       }
       session.setMaxInactiveInterval(1800); // Refresh session timeout
       return ResponseEntity.ok(new GetUserResponse(

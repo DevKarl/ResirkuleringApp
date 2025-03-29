@@ -12,7 +12,13 @@ import { useAppContext } from "../../context/ContextProvider";
 import { useGeolocated } from "react-geolocated";
 import L from "leaflet";
 import MapLoader from "./MapLoader";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { usePostHivAvfall } from "../../hooks/API/usePostHivAvfall";
+import { AvfallspunktMarker } from "./AvfallspunktMarker";
+import { FitBounds } from "./FitBounds";
+import { findClosestPoint } from "./findClosestPoint";
+import { CoreModal } from "../core/CoreModal";
+import { CoreContainer } from "../core/CoreContainer";
 
 const markerIcon = new L.Icon({
   iconUrl:
@@ -21,67 +27,18 @@ const markerIcon = new L.Icon({
   iconAnchor: [12, 41],
 });
 
-const FitBounds = ({ coords, scannedAvfallResult }: any) => {
-  const map = useMap();
-
-  useEffect(() => {
-    if (!map || !coords) return;
-
-    const bounds = L.latLngBounds([
-      [coords.latitude, coords.longitude],
-      ...(scannedAvfallResult?.avfallspunkter?.map((p: any) => [
-        parseFloat(p.latitude),
-        parseFloat(p.longitude),
-      ]) || []),
-    ]);
-
-    map.flyToBounds(bounds, { padding: [50, 50], duration: 1.5 });
-  }, [map, coords, scannedAvfallResult]);
-
-  return null;
-};
-
-// haversine formel
-const getDistance = (
-  lat1: number,
-  lon1: number,
-  lat2: number,
-  lon2: number
-) => {
-  const toRad = (value: number) => (value * Math.PI) / 180;
-  const R = 6371; // Earth's radius in km
-  const dLat = toRad(lat2 - lat1);
-  const dLon = toRad(lon2 - lon1);
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(toRad(lat1)) *
-      Math.cos(toRad(lat2)) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c; // i km
-};
-
-const findClosestPoint = (coords: any, avfallspunkter: any) => {
-  if (!coords || !avfallspunkter?.length) return null;
-
-  return avfallspunkter.reduce((closest: any, punkt: any) => {
-    const distance = getDistance(
-      coords.latitude,
-      coords.longitude,
-      parseFloat(punkt.latitude),
-      parseFloat(punkt.longitude)
-    );
-
-    return !closest || distance < closest.distance
-      ? { ...punkt, distance }
-      : closest;
-  }, null);
-};
-
 export const Map = () => {
-  const { scannedAvfallResult } = useAppContext();
+  const { user, scannedAvfallResult } = useAppContext();
+  const [activeAvfallspunkt, setActiveAvfallspunkt] = useState<number | null>(
+    null
+  );
   const defaultLocation = { lat: 61.458982498103865, lng: 5.888914753595201 }; // HVL Førde
+  const { error, isLoading, postHivAvfall } = usePostHivAvfall();
+
+  const hivAvfall = () => {
+    //@ts-ignore
+    postHivAvfall(scannedAvfallResult.avfall.id, activeAvfallspunkt);
+  };
 
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
     useGeolocated({
@@ -110,7 +67,6 @@ export const Map = () => {
         coords?.latitude || defaultLocation.lat,
         coords?.longitude || defaultLocation.lng,
       ]}
-      // center={[defaultLocation.lat, defaultLocation.lng]}
       zoom={17}
       style={{ height: "350px", width: "100%" }}
     >
@@ -127,13 +83,15 @@ export const Map = () => {
       </Marker>
       <Circle center={[coords?.latitude, coords?.longitude]} radius={100} />
       {scannedAvfallResult?.avfallspunkter?.map((punkt) => (
-        <Marker
+        <AvfallspunktMarker
           key={punkt.id}
-          position={[parseFloat(punkt.latitude), parseFloat(punkt.longitude)]}
-          icon={markerIcon}
-        >
-          <Popup>{punkt.navn}</Popup>
-        </Marker>
+          punkt={punkt}
+          hivAvfall={hivAvfall}
+          setActiveAvfallspunkt={setActiveAvfallspunkt}
+          isLoading={isLoading}
+          error={error}
+          isLoggedIn={Boolean(user)}
+        />
       ))}
       {closestPoint && (
         <Polyline
