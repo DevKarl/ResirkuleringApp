@@ -6,7 +6,7 @@ type ButtonType = "green" | "white";
 interface StyledButtonProps {
   $type: ButtonType;
   styles?: any;
-  errorShake: boolean;
+  errorShake?: boolean;
 }
 
 const shake = keyframes`
@@ -64,7 +64,7 @@ interface ButtonProps {
   onClick?: () => void;
   children?: ReactNode;
   styles?: any;
-  errorShake: boolean;
+  errorShake?: boolean;
 }
 
 export const CoreButton = ({

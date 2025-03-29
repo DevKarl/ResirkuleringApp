@@ -11,7 +11,7 @@ const HomePageContainer = styled.div`
   flex-direction: column;
   align-items: center;
   background-color: #e2f0e5;
-  gap: 10px;
+  gap: 20px;
 `;
 
 const Heading = styled.h1`
@@ -22,10 +22,13 @@ const Heading = styled.h1`
 `;
 
 const ScannedResultHeading = styled.h3`
-  font-size: 20px;
+  font-size: 18px;
   color: #333;
   font-family: Arial, sans-serif;
   text-align: center;
+  width: 50%;
+  margin: 0 5px;
+  margin-top: 10px;
 `;
 
 const UserWelcome = styled.h3`
@@ -91,7 +94,7 @@ export const HomePage = () => {
       {user && <Hilsen user={user} />}
       {scannedAvfall ? (
         <ScannedResultHeading>
-          Fant punkter for {scannedAvfall}!
+          Viser avfallspunkter for {scannedAvfall} ⤵️
         </ScannedResultHeading>
       ) : (
         <Heading>Finn nærmeste avfallspunkt ♻️ </Heading>

@@ -33,7 +33,7 @@ export const Map = () => {
     null
   );
   const defaultLocation = { lat: 61.458982498103865, lng: 5.888914753595201 }; // HVL Førde
-  const { responseData, error, isLoading, postHivAvfall } = usePostHivAvfall();
+  const { error, isLoading, postHivAvfall } = usePostHivAvfall();
 
   const hivAvfall = () => {
     postHivAvfall(scannedAvfallResult.avfall.id, activeAvfallspunkt);

@@ -5,7 +5,7 @@ import { User } from "../types/userTypes";
 interface AppContextType {
   user: User | null;
   scannedAvfallResult: ScanAvfallResponse | null;
-  setScannedAvfallResult: (response: ScanAvfallResponse) => void;
+  setScannedAvfallResult: (response: ScanAvfallResponse | null) => void;
   setUser: (reponse: User) => void;
 }
 

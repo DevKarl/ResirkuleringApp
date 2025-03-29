@@ -10,7 +10,7 @@ interface HivAvfallData {
 export const usePostHivAvfall = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [responseData, setResponseData] = useState<string | null>(null);
+  const {setScannedAvfallResult} = useAppContext();
 
   const postHivAvfall = async (avfallsId: number, avfallsPunktId: number) => {
     setIsLoading(true);
@@ -29,7 +29,7 @@ export const usePostHivAvfall = () => {
         setError(data);
         return;
       }
-      setResponseData(data);
+      setScannedAvfallResult(null);
     } catch (error) {
       setError(
         error instanceof Error ? error.message : "Unknown error occurred"
@@ -39,5 +39,5 @@ export const usePostHivAvfall = () => {
     }
   };
 
-  return { isLoading, error, responseData, postHivAvfall };
+  return { isLoading, error, postHivAvfall };
 };
