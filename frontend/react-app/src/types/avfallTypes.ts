@@ -11,14 +11,22 @@ export type Avfall = {
   strekkode: string;
 };
 
+export type AvfallspunktAvfallstyper = {
+  avfallstype: {
+    id: number;
+    type: string;
+  };
+};
+
 export type Avfallspunkt = {
   id: number;
   navn: string;
   latitude: string;
   longitude: string;
+  avfallspunktAvfallstyper: AvfallspunktAvfallstyper[];
 };
 
 export type ScanAvfallResponse = {
   avfall: Avfall;
   avfallspunkter: Avfallspunkt[];
-} | null;
+};

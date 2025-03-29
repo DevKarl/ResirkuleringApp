@@ -14,8 +14,10 @@ export interface LoginRequest {
   passord: string;
 }
 
-export interface User {
+export type User = {
   fornavn: string;
   etternavn: string;
   brukernavn: string;
-}
+  isAdmin: boolean;
+  delerStat: boolean;
+} | null;
