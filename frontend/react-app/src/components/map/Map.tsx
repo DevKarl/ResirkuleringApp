@@ -36,6 +36,7 @@ export const Map = () => {
   const { error, isLoading, postHivAvfall } = usePostHivAvfall();
 
   const hivAvfall = () => {
+    //@ts-ignore
     postHivAvfall(scannedAvfallResult.avfall.id, activeAvfallspunkt);
   };
 

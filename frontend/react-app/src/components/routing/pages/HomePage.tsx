@@ -39,7 +39,7 @@ const UserWelcome = styled.h3`
   margin-bottom: 0;
 `;
 
-const Hilsen = ({ user }: User) => {
+const Hilsen = ({ user }: any) => {
   const getGreeting = () => {
     const hour = new Date().getHours(); // Get current hour
     if (hour < 12 && hour > 6) {
@@ -66,7 +66,7 @@ const Hilsen = ({ user }: User) => {
     }
   };
 
-  const capitalizeFirstLetter = (name) => {
+  const capitalizeFirstLetter = ({ name }: any) => {
     if (!name) return "";
     return name.charAt(0).toUpperCase() + name.slice(1);
   };
