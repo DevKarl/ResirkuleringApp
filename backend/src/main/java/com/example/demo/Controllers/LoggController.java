@@ -20,8 +20,8 @@ import com.example.demo.Service.AvfallService;
 import com.example.demo.Service.BrukerService;
 import com.example.demo.Service.LoggService;
 import com.example.demo.Utils.ErrorMsgBuilder;
-import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 @ApiController
 public class LoggController {
