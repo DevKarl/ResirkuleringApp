@@ -50,7 +50,7 @@ export const Login = () => {
       toast.error("Passord må være minst 3 tegn");
     }
     setErrors(newErrors);
-    return newErrors.brukernavn || newErrors.passord;
+    return newErrors.brukernavn === false && newErrors.passord === false;
   };
 
   return (
