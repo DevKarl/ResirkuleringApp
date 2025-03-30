@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.Controllers.Interfaces.ApiController;
+import com.example.demo.DTO.ErrorResponse;
 import com.example.demo.DTO.ScanAvfallResponse;
 import com.example.demo.Entities.Avfall;
 import com.example.demo.Entities.Avfallspunkt;
@@ -23,8 +24,11 @@ public class AvfallScannerController {
   AvfPunktService avfPunktService;
 
   @GetMapping("/scanAvfall")
-  public ResponseEntity<ScanAvfallResponse> scanAvfall(@RequestParam String strekkode) {
+  public ResponseEntity<?> scanAvfall(@RequestParam String strekkode) {
     Avfall avfall = avfallService.getAvfallByStrekkode(strekkode);
+    if(avfall == null) {
+      return ResponseEntity.badRequest().body((new ErrorResponse("Fant ikke avfall med kode: " + strekkode)));
+    }
     List<Avfallspunkt> avfallspunkter = avfPunktService.getAvfallspunkterByAvfallstype_id(avfall.getId());
     return ResponseEntity.ok(new ScanAvfallResponse(avfall, avfallspunkter));
   }
