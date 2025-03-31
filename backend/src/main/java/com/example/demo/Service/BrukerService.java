@@ -1,5 +1,9 @@
 package com.example.demo.Service;
 
+import java.util.Optional;
+
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +18,32 @@ public class BrukerService {
 
   public BrukerService(BrukerRepo brukerRepo) {
     this.brukerRepo = brukerRepo;
+  }
+
+  @Transactional
+  public Boolean activateStatShare(int brukerId) {
+    Optional<Bruker> brukerOptional = Optional.of(brukerRepo.findById(brukerId));
+
+    if (brukerOptional.isPresent()){
+      Bruker bruker = brukerOptional.get();
+      bruker.setDelerStat(true);
+      brukerRepo.save(bruker);
+      return true;
+    }
+    return false;
+  }
+
+  @Transactional
+  public Boolean deactivateStatShare(int brukerId) {
+    Optional<Bruker> brukerOptional = Optional.of(brukerRepo.findById(brukerId));
+
+    if (brukerOptional.isPresent()){
+      Bruker bruker = brukerOptional.get();
+      bruker.setDelerStat(false);
+      brukerRepo.save(bruker);
+      return true;
+    }
+    return false;
   }
 
   public Bruker createNewUser(Bruker bruker) {
