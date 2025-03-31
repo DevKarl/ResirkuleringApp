@@ -29,12 +29,11 @@ export const usePostHivAvfall = () => {
         return;
       }
       const avfallsNavn = scannedAvfallResult?.avfall.navn;
-      const avfallsPlassNavn =
-        scannedAvfallResult?.avfallspunkter.avfallspunktAvfallstyper.find(
-          (punkt) => punkt.id === avfallsPunktId
-        );
+      const avfallsPlassNavn = scannedAvfallResult?.avfallspunkter.find(
+        (punkt) => punkt.id === avfallsPunktId
+      );
       toast.success(
-        avfallsNavn + " er registrert hivd ved " + avfallsPlassNavn
+        avfallsNavn + " er registrert hivd ved " + avfallsPlassNavn.navn
       );
       setScannedAvfallResult(null);
     } catch (error) {

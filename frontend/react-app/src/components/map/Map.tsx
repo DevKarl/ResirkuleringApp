@@ -34,7 +34,7 @@ export const Map = () => {
 
   const hivAvfall = () => {
     //@ts-ignore
-    postHivAvfall(scannedAvfallResult.avfall.id);
+    postHivAvfall(scannedAvfallResult.avfall.id, activeAvfallspunkt);
   };
 
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
