@@ -4,6 +4,7 @@ import { CoreModal } from "../../core/CoreModal";
 import { useAppContext } from "../../../context/ContextProvider";
 import { usePostLogout } from "../../../hooks/API/usePostLogout";
 import { CoreLoader } from "../../core/CoreLoader";
+import { toast } from "sonner";
 
 const ButtonsWrapper = styled.div`
   display: flex;
@@ -67,6 +68,7 @@ export const MobileModalMenu = ({
       postLogout();
       navigate("/");
       toggleHamburgerModal();
+      toast.success("Du er nå logget ut");
     }
   };
 

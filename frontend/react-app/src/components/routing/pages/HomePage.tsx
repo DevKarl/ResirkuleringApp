@@ -66,15 +66,10 @@ const Hilsen = ({ user }: any) => {
     }
   };
 
-  const capitalizeFirstLetter = ({ name }: any) => {
-    if (!name) return "";
-    return name.charAt(0).toUpperCase() + name.slice(1);
-  };
-
   return (
     user && (
       <UserWelcome>
-        {getGreeting()} {capitalizeFirstLetter(user.fornavn)} {getEmoji()}
+        {getGreeting()} {user.fornavn} {getEmoji()}
       </UserWelcome>
     )
   );

@@ -10,7 +10,7 @@ interface HivAvfallData {
 
 export const usePostHivAvfall = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const { setScannedAvfallResult } = useAppContext();
+  const { setScannedAvfallResult, scannedAvfallResult } = useAppContext();
 
   const postHivAvfall = async (avfallsId: number, avfallsPunktId: number) => {
     setIsLoading(true);
@@ -28,6 +28,14 @@ export const usePostHivAvfall = () => {
         toast.error(data.message);
         return;
       }
+      const avfallsNavn = scannedAvfallResult?.avfall.navn;
+      const avfallsPlassNavn =
+        scannedAvfallResult?.avfallspunkter.avfallspunktAvfallstyper.find(
+          (punkt) => punkt.id === avfallsPunktId
+        );
+      toast.success(
+        avfallsNavn + " er registrert hivd ved " + avfallsPlassNavn
+      );
       setScannedAvfallResult(null);
     } catch (error) {
       toast.error(

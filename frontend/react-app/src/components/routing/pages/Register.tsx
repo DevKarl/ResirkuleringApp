@@ -10,11 +10,6 @@ import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
-const SucessText = styled.p`
-  font-size: 1.5rem;
-  color: green;
-`;
-
 const HeaderContainerStyles = css`
   display: flex;
   flex-direction: row;
@@ -74,7 +69,7 @@ export const Registrer = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!hasErrors()) {
+    if (isValid()) {
       postRegister(formData);
     }
   };
@@ -84,7 +79,7 @@ export const Registrer = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const hasErrors = (): boolean => {
+  const isValid = (): boolean => {
     const newErrors = {
       fornavn: false,
       etternavn: false,

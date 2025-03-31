@@ -28,5 +28,7 @@ export type Avfallspunkt = {
 
 export type ScanAvfallResponse = {
   avfall: Avfall;
-  avfallspunkter: Avfallspunkt[];
+  avfallspunkter: {
+    avfallspunktAvfallstyper: Avfallspunkt[];
+  };
 };

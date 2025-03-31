@@ -7,7 +7,6 @@ import { Login } from "./components/routing/pages/Login";
 import { Registrer } from "./components/routing/pages/Register";
 import { useEffect } from "react";
 import { useGetUser } from "./hooks/API/useGetUser";
-import { toast } from "sonner";
 import { CustomToaster } from "./toast/CustomToaster";
 
 const MainContent = styled.main`

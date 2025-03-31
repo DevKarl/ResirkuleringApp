@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { useAppContext } from "../../../context/ContextProvider";
 
 const DesktopNavContainer = styled.nav`
   display: flex;
@@ -20,9 +21,14 @@ const HeaderButton = styled(Link)`
   }
 `;
 
-export const DesktopNav = () => (
-  <DesktopNavContainer>
-    <HeaderButton to="/">Hjem</HeaderButton>
-    <HeaderButton to="/minside">Min Side</HeaderButton>
-  </DesktopNavContainer>
-);
+export const DesktopNav = () => {
+  const { user } = useAppContext();
+
+  return (
+    <DesktopNavContainer>
+      <HeaderButton to="/">Hjem</HeaderButton>
+      {!user && <HeaderButton to="/logginn">Logg inn</HeaderButton>}
+      {user && <HeaderButton to="/minside">Min Side</HeaderButton>}
+    </DesktopNavContainer>
+  );
+};
