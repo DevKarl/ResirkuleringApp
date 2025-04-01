@@ -16,6 +16,7 @@ import { usePostHivAvfall } from "../../hooks/API/usePostHivAvfall";
 import { AvfallspunktMarker } from "./AvfallspunktMarker";
 import { FitBounds } from "./FitBounds";
 import { findClosestPoint } from "./findClosestPoint";
+import useBreakpoints from "../../hooks/useBreakpoints";
 
 const markerIcon = new L.Icon({
   iconUrl:
@@ -29,9 +30,13 @@ export const Map = () => {
   const [activeAvfallspunkt, setActiveAvfallspunkt] = useState<number | null>(
     null
   );
+  const screenSize = useBreakpoints();
   const defaultLocation = { lat: 61.458982498103865, lng: 5.888914753595201 }; // HVL Førde
   const { isLoading, postHivAvfall } = usePostHivAvfall();
 
+  const isDesktop = screenSize === "large";
+
+  console.log({ isDesktop });
   const hivAvfall = () => {
     //@ts-ignore
     postHivAvfall(scannedAvfallResult.avfall.id, activeAvfallspunkt);
@@ -65,7 +70,7 @@ export const Map = () => {
         coords?.longitude || defaultLocation.lng,
       ]}
       zoom={17}
-      style={{ height: "350px", width: "100%" }}
+      style={{ height: isDesktop ? "600px" : "350px", width: "100%" }}
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
