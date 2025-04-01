@@ -8,6 +8,7 @@ import styled, { css, keyframes } from "styled-components";
 import L from "leaflet";
 import trashBin from "../../assets/other/trash-bin.png";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const Buttonstyles = css`
   width: 230px;
@@ -46,7 +47,6 @@ export const AvfallspunktMarker = ({
   setActiveAvfallspunkt,
   isLoading,
   isLoggedIn,
-  error,
 }: any) => {
   const [showLoginReminder, setShowLoginReminder] = useState(false);
 
@@ -54,6 +54,7 @@ export const AvfallspunktMarker = ({
     if (!isLoggedIn) {
       setShowLoginReminder(true);
       setTimeout(() => setShowLoginReminder(false), 10000); // Hide after 10x
+      toast.error("Du må logge inn for å registrere avfall");
       return;
     }
     hivAvfall();
@@ -80,21 +81,13 @@ export const AvfallspunktMarker = ({
           {isLoading ? (
             <CoreLoader />
           ) : (
-            <>
-              <CoreButton
-                styles={Buttonstyles}
-                onClick={handleHivAvfall}
-                errorShake={showLoginReminder}
-              >
-                Hiv Avfall
-              </CoreButton>
-              {showLoginReminder && (
-                <ReminderText>
-                  Du må logge inn for å registrere avfall
-                </ReminderText>
-              )}
-              {error && <ReminderText>{error.message}</ReminderText>}
-            </>
+            <CoreButton
+              styles={Buttonstyles}
+              onClick={handleHivAvfall}
+              errorShake={showLoginReminder}
+            >
+              Hiv Avfall
+            </CoreButton>
           )}
         </CoreContainer>
       </Popup>

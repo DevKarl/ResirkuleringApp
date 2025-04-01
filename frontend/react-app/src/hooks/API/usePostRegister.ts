@@ -1,15 +1,11 @@
 import { useState } from "react";
 import { RegisterRequest, RegisterResponse } from "../../types/userTypes";
+import { toast } from "sonner";
 
 export const usePostRegister = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [successResponse, setSuccessResponse] =
-    useState<RegisterResponse>(null);
-  const [error, setError] = useState<string | null>(null);
-
   const postRegister = async (formData: RegisterRequest) => {
     setIsLoading(true);
-    setError(null);
     try {
       const response = await fetch("/api/register", {
         method: "POST",
@@ -19,19 +15,18 @@ export const usePostRegister = () => {
         body: JSON.stringify(formData),
       });
 
+      const data = await response?.json();
       if (!response.ok) {
-        setError(response.message);
+        toast.error(data.message);
         return;
       }
-      setSuccessResponse("Bruker registrert! ✅");
+      toast.success("Bruker registrert!");
     } catch (error) {
-      setError(
-        error instanceof Error ? error.message : "Unknown error occurred"
-      );
+      toast.error("Kan ikke registrere bruker akkurat nå. Prøv igjen senere.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  return { isLoading, error, successResponse, postRegister };
+  return { isLoading, postRegister };
 };
