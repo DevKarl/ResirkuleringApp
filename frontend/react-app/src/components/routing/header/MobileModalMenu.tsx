@@ -92,6 +92,7 @@ export const MobileModalMenu = ({
             Logg inn
           </HeaderLink>
         )}
+        {user?.isAdmin && <HeaderLink to="/admin">Admin Dashbord</HeaderLink>}
       </ButtonsWrapper>
     </CoreModal>
   );

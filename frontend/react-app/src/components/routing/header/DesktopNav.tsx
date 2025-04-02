@@ -24,6 +24,19 @@ const HeaderButton = styled(Link)`
   }
 `;
 
+const AdminBtn = styled(Link)`
+  padding: 10px 20px;
+  font-size: 30px;
+  color: ${({ theme }) => theme.colors.white};
+  text-decoration: none;
+  background-color: ${({ theme }) => theme.colors.greenDark};
+  border: 2px solid #f1f1f1;
+  border-radius: 5px;
+  &:hover {
+    background-color: #2f4b33;
+  }
+`;
+
 const LogOutButton = styled.button`
   background-color: ${({ theme }) => theme.colors.greenDark};
   border: 1px solid ${({ theme }) => theme.colors.white};
@@ -67,6 +80,7 @@ export const DesktopNav = () => {
           )}
         </>
       )}
+      {user?.isAdmin && <AdminBtn to="/admin">Admin Dashbord</AdminBtn>}
     </DesktopNavContainer>
   );
 };
