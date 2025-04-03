@@ -1,12 +1,17 @@
 package com.example.demo.Controllers;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
 import com.example.demo.Controllers.Interfaces.ApiController;
 import com.example.demo.DTO.ErrorResponse;
 import com.example.demo.DTO.HivAvfallRequest;
@@ -20,8 +25,6 @@ import com.example.demo.Service.AvfallService;
 import com.example.demo.Service.BrukerService;
 import com.example.demo.Service.LoggService;
 import com.example.demo.Utils.ErrorMsgBuilder;
-import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 
 @ApiController
 public class LoggController {
@@ -45,13 +48,13 @@ public class LoggController {
     }
     Object userId = session.getAttribute("userId");
     if (userId == null) {
-      return ResponseEntity.status(401).body("Ingen bruker logget inn");
+      return ResponseEntity.status(401).body(new ErrorResponse("Brukeren er ikke logget inn"));
     }
     try {
       List<Resirkuleringslogg> logger = loggService.getAlleLoggerForBrukerMedId((Integer) userId);
       return ResponseEntity.ok(logger);
     } catch (Exception e) {
-      return ResponseEntity.status(500).body("Ops! Noe feil skjedde.");
+      return ResponseEntity.status(500).body(new ErrorResponse("Ops! Noe feil skjedde."));
     }
   }
 
