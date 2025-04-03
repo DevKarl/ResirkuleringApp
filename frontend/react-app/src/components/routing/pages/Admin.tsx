@@ -1,24 +1,36 @@
 import { useNavigate } from "react-router-dom";
-import { GivenWarnings, useAppContext } from "../../../context/ContextProvider";
+import { useAppContext } from "../../../context/ContextProvider";
 import { CoreContainer } from "../../core/CoreContainer";
 import { CoreHeading } from "../../core/CoreHeading";
 import { toast } from "sonner";
-import { useRef, useState } from "react";
+import { useState } from "react";
+import { CoreSelect } from "../../core/CoreSelect";
+
+const adminOptions = ["Avfall", "Brukere", "Tilganger"];
 
 export const AdminPage = () => {
-  const { user, givenWarnings, setGivenWarnings } = useAppContext();
-  console.log({ givenWarnings });
+  //const { user } = useAppContext();
   const navigate = useNavigate();
+  const [selected, setSelected] = useState(adminOptions[0]);
+
+  const user = {
+    isAdmin: true,
+  };
+
   if (!user?.isAdmin) {
     navigate("/");
-    if (givenWarnings) return;
-    setGivenWarnings((prev) => ({ ...prev, admin: true }));
     toast.error("Bruker har ikke admin-tilgang");
   }
 
   return (
     <CoreContainer>
       <CoreHeading>Admin Dashbord</CoreHeading>
+      <CoreSelect
+        options={adminOptions}
+        title="Velg adminhandling"
+        value={selected}
+        handleChange={(event) => setSelected(event.target.value)}
+      />
     </CoreContainer>
   );
 };
