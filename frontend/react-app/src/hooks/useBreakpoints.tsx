@@ -6,8 +6,8 @@ const BREAKPOINTS = {
   // large: 1024, // desktop
 };
 
-const useBreakpoints = () => {
-  const [screenSize, setScreenSize] = useState("large");
+const useBreakpoints = (): string => {
+  const [screenSize, setScreenSize] = useState<string>("large");
 
   const handleResize = () => {
     const width = window.innerWidth;

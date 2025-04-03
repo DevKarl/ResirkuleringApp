@@ -8,17 +8,7 @@ import { usePostRegister } from "../../../hooks/API/usePostRegister";
 import { CoreLoader } from "../../core/CoreLoader";
 import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
-import { theme } from "../../core/theme/theme";
-
-const ErrorText = styled.p`
-  font-size: 1.5rem;
-  color: red;
-`;
-
-const SucessText = styled.p`
-  font-size: 1.5rem;
-  color: green;
-`;
+import { toast } from "sonner";
 
 const HeaderContainerStyles = css`
   display: flex;
@@ -26,27 +16,6 @@ const HeaderContainerStyles = css`
   gap: 20px;
   width: 100%;
 `;
-
-// const NavigateBack = () => {
-//   return (
-//     <Link
-//       to="/logginn"
-//       style={{ display: "flex", alignItems: "center", textDecoration: "none" }}
-//     >
-//       <svg
-//         xmlns="http://www.w3.org/2000/svg"
-//         xmlnsXlink="http://www.w3.org/1999/xlink"
-//         viewBox="0 0 512 512"
-//         style={{ width: "40px", height: "40px", marginRight: "8px" }}
-//       >
-//         <polygon
-//           points="352,128.4 319.7,96 160,256 160,256 160,256 319.7,416 352,383.6 224.7,256"
-//           fill=""
-//         />
-//       </svg>
-//     </Link>
-//   );
-// };
 
 const StyledLink = styled(Link)`
   display: flex;
@@ -90,17 +59,17 @@ export const Registrer = () => {
     passord: "",
   });
   const [errors, setErrors] = useState({
-    fornavn: "",
-    etternavn: "",
-    brukernavn: "",
-    passord: "",
+    fornavn: false,
+    etternavn: false,
+    brukernavn: false,
+    passord: false,
   });
 
-  const { isLoading, error, successResponse, postRegister } = usePostRegister();
+  const { isLoading, postRegister } = usePostRegister();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!hasErrors()) {
+    if (isValid()) {
       postRegister(formData);
     }
   };
@@ -110,27 +79,48 @@ export const Registrer = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const hasErrors = (): boolean => {
-    const newErrors: typeof errors = {
-      fornavn: "",
-      etternavn: "",
-      brukernavn: "",
-      passord: "",
+  const isValid = (): boolean => {
+    const newErrors = {
+      fornavn: false,
+      etternavn: false,
+      brukernavn: false,
+      passord: false,
     };
-    if (formData.fornavn.length < 3) {
-      newErrors.brukernavn = "Brukernavn må være minst 6 tegn";
+    if (
+      formData.fornavn.trim().length < 1 ||
+      formData.fornavn.trim().length > 20
+    ) {
+      newErrors.fornavn = true;
+      toast.error("Fornavn må være mellom 1 og 20 tegn");
     }
-    if (formData.etternavn.length < 3) {
-      newErrors.brukernavn = "Brukernavn må være minst 6 tegn";
+    if (
+      formData.etternavn.trim().length < 1 ||
+      formData.etternavn.trim().length > 20
+    ) {
+      newErrors.etternavn = true;
+      toast.error("Etternavn må være mellom 1 og 20 tegn");
     }
-    if (formData.brukernavn.length < 3) {
-      newErrors.brukernavn = "Brukernavn må være minst 6 tegn";
+    if (
+      formData.brukernavn.trim().length < 5 ||
+      formData.brukernavn.trim().length > 20
+    ) {
+      newErrors.brukernavn = true;
+      toast.error("Brukernavn må være mellom 5 og 20 tegn");
     }
-    if (formData.passord.length < 3) {
-      newErrors.passord = "Passord må være minst 3 tegn";
+    if (
+      formData.passord.trim().length < 5 ||
+      formData.passord.trim().length > 20
+    ) {
+      newErrors.passord = true;
+      toast.error("Passord må være mellom 5 og 20 tegn");
     }
     setErrors(newErrors);
-    return Object.values(newErrors).some((item) => item.trim().length > 0);
+    return (
+      newErrors.brukernavn === false &&
+      newErrors.passord === false &&
+      newErrors.fornavn === false &&
+      newErrors.etternavn === false
+    );
   };
 
   return (
@@ -140,8 +130,6 @@ export const Registrer = () => {
         <CoreHeading>Registrer</CoreHeading>
       </CoreContainer>
       <CoreForm onSubmit={handleSubmit} title="Registrer en bruker hos oss">
-        {error && <ErrorText>{error}</ErrorText>}
-        {successResponse && <SucessText>{successResponse}</SucessText>}
         <CoreInput
           value={formData.fornavn}
           onChange={handleChange}
@@ -149,7 +137,7 @@ export const Registrer = () => {
           name="fornavn"
           placeholder="Ditt fornavn"
           required
-          error={errors.fornavn}
+          hasError={errors.fornavn}
         />
         <CoreInput
           value={formData.etternavn}
@@ -158,7 +146,7 @@ export const Registrer = () => {
           name="etternavn"
           placeholder="Ditt etternavn"
           required
-          error={errors.etternavn}
+          hasError={errors.etternavn}
         />
         <CoreInput
           value={formData.brukernavn}
@@ -167,7 +155,7 @@ export const Registrer = () => {
           name="brukernavn"
           placeholder="Ditt brukernavn"
           required
-          error={errors.brukernavn}
+          hasError={errors.brukernavn}
         />
         <CoreInput
           value={formData.passord}
@@ -177,7 +165,7 @@ export const Registrer = () => {
           type="password"
           placeholder="Ditt passord"
           required
-          error={errors.passord}
+          hasError={errors.passord}
         />
         {isLoading ? <CoreLoader /> : <CoreButton>Registrer</CoreButton>}
       </CoreForm>

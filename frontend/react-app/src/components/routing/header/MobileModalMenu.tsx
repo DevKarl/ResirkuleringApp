@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { CoreModal } from "../../core/CoreModal";
 import { useAppContext } from "../../../context/ContextProvider";
+import { usePostLogout } from "../../../hooks/API/usePostLogout";
+import { CoreLoader } from "../../core/CoreLoader";
 
 const ButtonsWrapper = styled.div`
   display: flex;
@@ -56,11 +58,13 @@ export const MobileModalMenu = ({
 }: MobileNavProps) => {
   const navigate = useNavigate();
   const { user } = useAppContext();
+  const { isLoading, postLogout } = usePostLogout();
   if (!hamburgerModalOpen) return null;
 
   const handleLogout = () => {
     const result = window.confirm("Er du sikker på at du vil logge ut?");
     if (result) {
+      postLogout();
       navigate("/");
       toggleHamburgerModal();
     }
@@ -72,11 +76,17 @@ export const MobileModalMenu = ({
         <HeaderLink to="/" onClick={toggleHamburgerModal}>
           Hjem
         </HeaderLink>
-        <HeaderLink to="/minside" onClick={toggleHamburgerModal}>
-          Min Side
-        </HeaderLink>
+        {user && (
+          <HeaderLink to="/minside" onClick={toggleHamburgerModal}>
+            Min Side
+          </HeaderLink>
+        )}
         {user !== null ? (
-          <LogOutButton onClick={handleLogout}>Logg ut</LogOutButton>
+          isLoading ? (
+            <CoreLoader />
+          ) : (
+            <LogOutButton onClick={handleLogout}>Logg ut</LogOutButton>
+          )
         ) : (
           <HeaderLink to="/logginn" onClick={toggleHamburgerModal}>
             Logg inn

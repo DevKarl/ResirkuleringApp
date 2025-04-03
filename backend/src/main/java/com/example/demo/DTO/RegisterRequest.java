@@ -1,19 +1,21 @@
 package com.example.demo.DTO;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 public class RegisterRequest {
 
   @NotBlank(message = "Fornavn må oppgis")
+  @Size(min = 1, max = 20, message = "Fornavn må være mellom 1 og 20 tegn")
   private String fornavn;
   @NotBlank(message = "Etternavn må oppgis")
+  @Size(min = 1, max = 20, message = "Etternavn må være mellom 1 og 20 tegn")
   private String etternavn;
   @NotBlank(message = "Brukernavn må oppgis")
   @Size(min = 5, max = 20, message = "Brukernavn må være mellom 5 og 20 tegn")
   private String brukernavn;
   @NotBlank(message = "Passord må oppgis")
-  @Size(min = 8, message = "Passord må være minst 8 tegn langt")
+  @Size(min = 5, max = 20, message = "Passord må være mellom 5 og 20 tegn")
   private String passord;
 
   public RegisterRequest(String fornavn, String etternavn, String brukernavn, String passord, boolean adminrettigheter) {

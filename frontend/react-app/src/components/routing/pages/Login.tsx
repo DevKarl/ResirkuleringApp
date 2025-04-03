@@ -8,35 +8,28 @@ import { CoreLink } from "../../core/CoreLink";
 import { useAppContext } from "../../../context/ContextProvider";
 import { useNavigate } from "react-router-dom";
 import { usePostLogin } from "../../../hooks/API/usePostLogin";
-import styled from "styled-components";
 import { CoreLoader } from "../../core/CoreLoader";
-
-const ErrorText = styled.p`
-  font-size: 1.5rem;
-  color: red;
-`;
+import { toast } from "sonner";
 
 export const Login = () => {
   const { user } = useAppContext();
   const navigate = useNavigate();
-  const { isLoading, error, postLogin } = usePostLogin();
-  // useEffect(() => {
-  //   if (user) {
-  //     navigate("/");
-  //   }
-  // }, [user, navigate]);
-
-  console.log(user);
+  const { isLoading, postLogin } = usePostLogin();
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
   const [formData, setFormData] = useState({ brukernavn: "", passord: "" });
   const [errors, setErrors] = useState({
-    brukernavn: "",
-    passord: "",
+    brukernavn: false,
+    passord: false,
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (validate()) {
+    if (isValid()) {
       postLogin(formData);
     }
   };
@@ -46,24 +39,23 @@ export const Login = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const validate = () => {
-    // SETT ERRORS I FØLGE BACKEND RESPONSE HER:
-
-    const newErrors: typeof errors = { brukernavn: "", passord: "" };
-    if (formData.brukernavn.length < 3) {
-      newErrors.brukernavn = "Brukernavn må være minst 3 tegn";
+  const isValid = () => {
+    const newErrors = { brukernavn: false, passord: false };
+    if (formData.brukernavn.trim().length < 3) {
+      newErrors.brukernavn = true;
+      toast.error("Brukernavn må være minst 3 tegn");
     }
-    if (formData.passord.length < 3) {
-      newErrors.passord = "Passord må være minst 3 tegn";
+    if (formData.passord.trim().length < 3) {
+      newErrors.passord = true;
+      toast.error("Passord må være minst 3 tegn");
     }
     setErrors(newErrors);
-    return Object.values(newErrors).every((err) => err === "");
+    return newErrors.brukernavn === false && newErrors.passord === false;
   };
 
   return (
     <CoreContainer>
       <CoreHeading>Logg inn</CoreHeading>
-      {error && <ErrorText>{error}</ErrorText>}
       <CoreForm onSubmit={handleSubmit} title="Logg inn på brukerkontoen din">
         <CoreInput
           value={formData.brukernavn}
@@ -72,7 +64,7 @@ export const Login = () => {
           name="brukernavn"
           placeholder="Ditt brukernavn"
           required
-          error={errors.brukernavn}
+          hasError={errors.brukernavn}
         />
         <CoreInput
           value={formData.passord}
@@ -81,7 +73,8 @@ export const Login = () => {
           name="passord"
           placeholder="Ditt passord"
           required
-          error={errors.passord}
+          hasError={errors.passord}
+          type="password"
         />
         {isLoading ? <CoreLoader /> : <CoreButton>Logg inn</CoreButton>}
         <CoreLink to="/registrer">
