@@ -3,6 +3,9 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,20 +15,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.demo.Controllers.Interfaces.ApiController;
-import com.example.demo.DTO.RegisterRequest;
-import com.example.demo.DTO.RegisterResponse;
-import com.example.demo.DTO.ResponseMessage;
 import com.example.demo.DTO.ErrorResponse;
 import com.example.demo.DTO.GetUserResponse;
 import com.example.demo.DTO.LoginRequest;
 import com.example.demo.DTO.LoginResponse;
+import com.example.demo.DTO.RegisterRequest;
+import com.example.demo.DTO.RegisterResponse;
+import com.example.demo.DTO.ResponseMessage;
 import com.example.demo.Entities.Bruker;
 import com.example.demo.Service.BrukerService;
 import com.example.demo.Service.PassordService;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
+import net.bytebuddy.implementation.bytecode.Throw;
 
 @ApiController
 public class BrukerController {
@@ -138,6 +139,50 @@ public class BrukerController {
         ));
     } catch (Exception e) {
         return ResponseEntity.status(500).body(new ErrorResponse("En feil oppstod under henting av brukerdata"));
+    }
+  }
+
+  @PostMapping("postActivateStatShare")
+  public ResponseEntity<?> activateStatShare(HttpSession session){
+    if (session == null) {
+      return ResponseEntity.badRequest().body(new ErrorResponse("Sesjonen er utløpt, vennligst logg inn på nytt."));
+    }
+
+    Object userId = session.getAttribute("userId");
+    if (userId == null) {
+      return ResponseEntity.status(401).body(new ErrorResponse("Brukeren er ikke logget inn"));
+    }
+
+    try {
+      if (brukerService.activateStatShare((Integer)userId)){
+        return ResponseEntity.ok().body("bruker deler stats");
+      }
+      return ResponseEntity.status(500).body(new ErrorResponse("Brukeren finst ikkje"));
+    } catch (Exception e) {
+      
+      return ResponseEntity.status(500).body(new ErrorResponse("En feil oppstod"));
+    }
+  }
+
+  @PostMapping("postDeactivateStatShare")
+  public ResponseEntity<?> deactivateStatShare(HttpSession session){
+    if (session == null) {
+      return ResponseEntity.badRequest().body(new ErrorResponse("Sesjonen er utløpt, vennligst logg inn på nytt."));
+    }
+
+    Object userId = session.getAttribute("userId");
+    if (userId == null) {
+      return ResponseEntity.status(401).body(new ErrorResponse("Brukeren er ikke logget inn"));
+    }
+
+    try {
+      if (brukerService.deactivateStatShare((Integer)userId)){
+        return ResponseEntity.ok().body("bruker deler ikkje stats");
+      }
+      return ResponseEntity.status(500).body(new ErrorResponse("Brukeren finst ikkje"));
+    } catch (Exception e) {
+      
+      return ResponseEntity.status(500).body(new ErrorResponse("En feil oppstod "));
     }
   }
 
