@@ -19,70 +19,11 @@ import { FitBounds } from "./FitBounds";
 import { findClosestPoint } from "./findClosestPoint";
 import useBreakpoints from "../../hooks/useBreakpoints";
 
-
 const userIcon = new L.Icon({
   iconUrl: ikon,
   iconSize: [50, 67],
   iconAnchor: [25, 61],
 });
-
-const FitBounds = ({ coords, scannedAvfallResult }: any) => {
-  const map = useMap();
-
-  useEffect(() => {
-    if (!map || !coords) return;
-
-    const bounds = L.latLngBounds([
-      [coords.latitude, coords.longitude],
-      ...(scannedAvfallResult?.avfallspunkter?.map((p: any) => [
-        parseFloat(p.latitude),
-        parseFloat(p.longitude),
-      ]) || []),
-    ]);
-
-    map.flyToBounds(bounds, { padding: [50, 50], duration: 1.5 });
-  }, [map, coords, scannedAvfallResult]);
-
-  return null;
-};
-
-// haversine formel
-const getDistance = (
-  lat1: number,
-  lon1: number,
-  lat2: number,
-  lon2: number
-) => {
-  const toRad = (value: number) => (value * Math.PI) / 180;
-  const R = 6371; // Earth's radius in km
-  const dLat = toRad(lat2 - lat1);
-  const dLon = toRad(lon2 - lon1);
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(toRad(lat1)) *
-      Math.cos(toRad(lat2)) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c; // i km
-};
-
-const findClosestPoint = (coords: any, avfallspunkter: any) => {
-  if (!coords || !avfallspunkter?.length) return null;
-
-  return avfallspunkter.reduce((closest: any, punkt: any) => {
-    const distance = getDistance(
-      coords.latitude,
-      coords.longitude,
-      parseFloat(punkt.latitude),
-      parseFloat(punkt.longitude)
-    );
-
-    return !closest || distance < closest.distance
-      ? { ...punkt, distance }
-      : closest;
-  }, null);
-};
 
 export const Map = () => {
   const { user, scannedAvfallResult } = useAppContext();
