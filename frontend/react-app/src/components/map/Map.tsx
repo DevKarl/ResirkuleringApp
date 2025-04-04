@@ -35,8 +35,6 @@ export const Map = () => {
   const { isLoading, postHivAvfall } = usePostHivAvfall();
 
   const isDesktop = screenSize === "large";
-
-  console.log({ isDesktop });
   const hivAvfall = () => {
     //@ts-ignore
     postHivAvfall(scannedAvfallResult.avfall.id, activeAvfallspunkt);
