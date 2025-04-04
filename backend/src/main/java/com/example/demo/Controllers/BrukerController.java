@@ -3,6 +3,9 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,20 +15,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.demo.Controllers.Interfaces.ApiController;
-import com.example.demo.DTO.RegisterRequest;
-import com.example.demo.DTO.RegisterResponse;
-import com.example.demo.DTO.ResponseMessage;
 import com.example.demo.DTO.ErrorResponse;
 import com.example.demo.DTO.GetUserResponse;
 import com.example.demo.DTO.LoginRequest;
 import com.example.demo.DTO.LoginResponse;
+import com.example.demo.DTO.RegisterRequest;
+import com.example.demo.DTO.RegisterResponse;
+import com.example.demo.DTO.ResponseMessage;
 import com.example.demo.Entities.Bruker;
 import com.example.demo.Service.BrukerService;
 import com.example.demo.Service.PassordService;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 
 @ApiController
 public class BrukerController {
