@@ -21,6 +21,7 @@ import com.example.demo.DTO.LoginRequest;
 import com.example.demo.DTO.LoginResponse;
 import com.example.demo.Entities.Bruker;
 import com.example.demo.Service.BrukerService;
+import com.example.demo.Service.CookieService;
 import com.example.demo.Service.PassordService;
 
 import javax.servlet.http.HttpServletResponse;
@@ -34,6 +35,8 @@ public class BrukerController {
   BrukerService brukerService;
   @Autowired
   PassordService passordService;
+  @Autowired
+  CookieService cookieService;
 
   @PostMapping("/register")
   public ResponseEntity<RegisterResponse> register(@RequestBody @Valid RegisterRequest request, BindingResult bindResult) {
@@ -113,14 +116,17 @@ public class BrukerController {
   @GetMapping("/getUser")
   public ResponseEntity<?> getUser(HttpServletRequest request) {
     HttpSession session = request.getSession(false); // Prevent new session creation
-    if (session == null) {
+    if (cookieService.checkIfSessionNull(session)) {
       return ResponseEntity.badRequest().body(new ErrorResponse("Sesjonen er utløpt, vennligst logg inn på nytt."));
     }
 
-    Object userId = session.getAttribute("userId");
-    if (userId == null) {
+    
+    if (cookieService.checkLoggedIn(session)) {
       return ResponseEntity.status(401).body(new ErrorResponse("Ingen bruker logget inn"));
     }
+
+    Object userId = session.getAttribute("userId");
+    
 
     try {
       Bruker bruker = brukerService.findById((Integer) userId);
