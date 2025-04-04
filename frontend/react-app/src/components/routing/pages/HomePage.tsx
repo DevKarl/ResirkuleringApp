@@ -11,7 +11,7 @@ const HomePageContainer = styled.div`
   flex-direction: column;
   align-items: center;
   background-color: #e2f0e5;
-  gap: 10px;
+  gap: 20px;
 `;
 
 const Heading = styled.h1`
@@ -19,6 +19,16 @@ const Heading = styled.h1`
   color: #333;
   font-family: Arial, sans-serif;
   text-align: center;
+`;
+
+const ScannedResultHeading = styled.h3`
+  font-size: 18px;
+  color: #333;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  width: 50%;
+  margin: 0 5px;
+  margin-top: 10px;
 `;
 
 const UserWelcome = styled.h3`
@@ -29,10 +39,10 @@ const UserWelcome = styled.h3`
   margin-bottom: 0;
 `;
 
-const Hilsen = ({ user }: User) => {
+const Hilsen = ({ user }: any) => {
   const getGreeting = () => {
     const hour = new Date().getHours(); // Get current hour
-    if (hour < 12) {
+    if (hour < 12 && hour > 6) {
       return "God morgen"; // Morning
     } else if (hour >= 12 && hour < 18) {
       return "God dag"; // Daytime
@@ -45,7 +55,7 @@ const Hilsen = ({ user }: User) => {
 
   const getEmoji = () => {
     const hour = new Date().getHours();
-    if (hour < 12) {
+    if (hour < 12 && hour > 6) {
       return "☀️";
     } else if (hour >= 12 && hour < 18) {
       return "🌤️";
@@ -56,15 +66,10 @@ const Hilsen = ({ user }: User) => {
     }
   };
 
-  const capitalizeFirstLetter = (name) => {
-    if (!name) return "";
-    return name.charAt(0).toUpperCase() + name.slice(1);
-  };
-
   return (
     user && (
       <UserWelcome>
-        {getGreeting()} {capitalizeFirstLetter(user.fornavn)} {getEmoji()}
+        {getGreeting()} {user.fornavn} {getEmoji()}
       </UserWelcome>
     )
   );
@@ -72,18 +77,23 @@ const Hilsen = ({ user }: User) => {
 
 export const HomePage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { user } = useAppContext();
+  const { user, scannedAvfallResult } = useAppContext();
+  const scannedAvfall = scannedAvfallResult?.avfall.navn;
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  console.log(user);
-
   return (
     <HomePageContainer>
       {user && <Hilsen user={user} />}
-      <Heading>Finn nærmeste avfallspunkt ♻️ </Heading>
+      {scannedAvfall ? (
+        <ScannedResultHeading>
+          Viser avfallspunkter for {scannedAvfall} ⤵️
+        </ScannedResultHeading>
+      ) : (
+        <Heading>Finn nærmeste avfallspunkt ♻️ </Heading>
+      )}
       <Map />
       <CoreButton onClick={() => setIsModalOpen(true)}>Scann avfall</CoreButton>
       {isModalOpen && (

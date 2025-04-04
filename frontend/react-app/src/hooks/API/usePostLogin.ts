@@ -1,15 +1,14 @@
 import { useState } from "react";
 import { LoginRequest } from "../../types/userTypes";
 import { useAppContext } from "../../context/ContextProvider";
+import { toast } from "sonner";
 
 export const usePostLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const { setUser } = useAppContext();
 
   const postLogin = async (formData: LoginRequest) => {
     setIsLoading(true);
-    setError(null);
     try {
       const response = await fetch("/api/login", {
         method: "POST",
@@ -20,18 +19,17 @@ export const usePostLogin = () => {
       });
       const data = await response?.json();
       if (!response.ok) {
-        setError(data.message);
+        toast.error(data.message);
         return;
       }
       setUser(data);
+      toast.success("Du har logget inn!");
     } catch (error) {
-      setError(
-        error instanceof Error ? error.message : "Unknown error occurred"
-      );
+      toast.error("Kan ikke logge inn akkurat nå. Prøv igjen senere");
     } finally {
       setIsLoading(false);
     }
   };
 
-  return { isLoading, error, postLogin };
+  return { isLoading, postLogin };
 };

@@ -4,7 +4,6 @@ import {
   Marker,
   Circle,
   Popup,
-  useMap,
   Polyline,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
@@ -12,7 +11,12 @@ import { useAppContext } from "../../context/ContextProvider";
 import { useGeolocated } from "react-geolocated";
 import L from "leaflet";
 import MapLoader from "./MapLoader";
-import { useEffect, useMemo } from "react";
+import { useMemo, useState } from "react";
+import { usePostHivAvfall } from "../../hooks/API/usePostHivAvfall";
+import { AvfallspunktMarker } from "./AvfallspunktMarker";
+import { FitBounds } from "./FitBounds";
+import { findClosestPoint } from "./findClosestPoint";
+import useBreakpoints from "../../hooks/useBreakpoints";
 import ikon from "../../assets/map/Sven-ol-AI.png";
 
 const markerIcon = new L.Icon({
@@ -87,8 +91,21 @@ const findClosestPoint = (coords: any, avfallspunkter: any) => {
 };
 
 export const Map = () => {
-  const { scannedAvfallResult } = useAppContext();
+  const { user, scannedAvfallResult } = useAppContext();
+  const [activeAvfallspunkt, setActiveAvfallspunkt] = useState<number | null>(
+    null
+  );
+  const screenSize = useBreakpoints();
   const defaultLocation = { lat: 61.458982498103865, lng: 5.888914753595201 }; // HVL Førde
+  const { isLoading, postHivAvfall } = usePostHivAvfall();
+
+  const isDesktop = screenSize === "large";
+
+  console.log({ isDesktop });
+  const hivAvfall = () => {
+    //@ts-ignore
+    postHivAvfall(scannedAvfallResult.avfall.id, activeAvfallspunkt);
+  };
 
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
     useGeolocated({
@@ -117,9 +134,8 @@ export const Map = () => {
         coords?.latitude || defaultLocation.lat,
         coords?.longitude || defaultLocation.lng,
       ]}
-      // center={[defaultLocation.lat, defaultLocation.lng]}
       zoom={17}
-      style={{ height: "350px", width: "100%" }}
+      style={{ height: isDesktop ? "600px" : "350px", width: "100%" }}
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -131,13 +147,14 @@ export const Map = () => {
       </Marker>
       <Circle center={[coords?.latitude, coords?.longitude]} radius={100} />
       {scannedAvfallResult?.avfallspunkter?.map((punkt) => (
-        <Marker
+        <AvfallspunktMarker
           key={punkt.id}
-          position={[parseFloat(punkt.latitude), parseFloat(punkt.longitude)]}
-          icon={markerIcon}
-        >
-          <Popup>{punkt.navn}</Popup>
-        </Marker>
+          punkt={punkt}
+          hivAvfall={hivAvfall}
+          setActiveAvfallspunkt={setActiveAvfallspunkt}
+          isLoading={isLoading}
+          isLoggedIn={Boolean(user)}
+        />
       ))}
       {closestPoint && (
         <Polyline
