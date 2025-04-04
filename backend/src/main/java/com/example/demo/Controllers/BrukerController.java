@@ -1,8 +1,8 @@
 package com.example.demo.Controllers;
 import java.util.stream.Collectors;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +23,9 @@ import com.example.demo.Entities.Bruker;
 import com.example.demo.Service.BrukerService;
 import com.example.demo.Service.PassordService;
 
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 @ApiController
 public class BrukerController {
@@ -42,7 +42,7 @@ public class BrukerController {
       return ResponseEntity.badRequest().body(new RegisterResponse(buildErrorString(bindResult)));
     }
     if (brukerService.brukernavnIsTaken(request.getBrukernavn())) {
-      return ResponseEntity.badRequest().body(new RegisterResponse("Brukernavn er allerede i bruk. ❌"));
+      return ResponseEntity.badRequest().body(new RegisterResponse("Brukernavn er allerede i bruk."));
     }
 
     String salt = passordService.genererSalt();
@@ -69,7 +69,7 @@ public class BrukerController {
     {
 
     if (session.getAttribute("userId") != null) {
-      return ResponseEntity.badRequest().body(new ErrorResponse("Brukeren er allerede logged inn! ❌"));
+      return ResponseEntity.badRequest().body(new ErrorResponse("Brukeren er allerede logged inn!"));
     }
 
     if(bindResult.hasErrors()) {
@@ -79,12 +79,12 @@ public class BrukerController {
     Bruker bruker = brukerService.findByBrukernavn(request.getBrukernavn().trim());
 
     if (bruker == null || !passordService.erKorrektPassord(request.getPassord(), bruker.getSalt(), bruker.getHash())) {
-      return ResponseEntity.badRequest().body(new ErrorResponse("Feil brukernavn eller passord ❌")); 
+      return ResponseEntity.badRequest().body(new ErrorResponse("Feil brukernavn eller passord")); 
     }
 
     session.setAttribute("userId", bruker.getId());
     session.setMaxInactiveInterval(1800); // 30min
-    String message = bruker.getFornavn() + " ble logget inn! ✅";
+    String message = bruker.getFornavn() + " ble logget inn!";
     LoginResponse loginResponse = new LoginResponse(
       message,
       bruker.getFornavn(),
@@ -99,7 +99,7 @@ public class BrukerController {
   @PostMapping("/logout")
   public ResponseEntity<?> logout(HttpSession session, HttpServletResponse response) {
     if (session == null) {
-      return ResponseEntity.badRequest().body(new ErrorResponse("Brukeren er allerede logget ut! ❌"));
+      return ResponseEntity.badRequest().body(new ErrorResponse("Brukeren er allerede logget ut!"));
     }
     session.invalidate();
     Cookie cookie = new Cookie("JSESSIONID", null);

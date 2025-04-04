@@ -1,38 +1,37 @@
 import { useState, useCallback } from "react";
 import { ScanAvfallResponse } from "../../types";
 import { useAppContext } from "../../context/ContextProvider";
+import { toast } from "sonner";
 
 export const useGetCoordsByBarcode = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  // const [error, setError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const { setScannedAvfallResult } = useAppContext();
 
   const getCoordsByBarcode = useCallback(async (barcode: string) => {
     setIsLoading(true);
-    setError(null);
+    // setError(null);
     try {
       const response = await fetch(`/api/scanAvfall?strekkode=${barcode}`, {
         method: "GET",
         headers: { Accept: "application/json" },
       });
 
+      const data: ScanAvfallResponse = await response.json();
       if (!response.ok) {
-        setError(`HTTP error! Status: ${response.status}`);
+        toast.error(data.message);
         return;
       }
-
-      const data: ScanAvfallResponse = await response.json();
       setScannedAvfallResult(data);
       setIsSuccess(true);
+      toast.success("Fant avfall: " + data.avfall.navn);
     } catch (error) {
-      setError(
-        error instanceof Error ? error.message : "Unknown error occurred"
-      );
+      toast.error("Noe gikk galt med scanning, prøv igjen senere.");
     } finally {
       setIsLoading(false);
     }
   }, []);
 
-  return { isLoading, error, isSuccess, getCoordsByBarcode };
+  return { isLoading, isSuccess, getCoordsByBarcode };
 };
