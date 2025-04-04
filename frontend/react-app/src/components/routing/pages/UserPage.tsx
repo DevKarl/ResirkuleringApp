@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { usePostLogin } from "../../../hooks/API/usePostLogin";
 import { CoreButton } from "../../core/CoreButton";
+import { CoreForm } from "../../core/CoreForm";
 
 const Container = styled.div`
   display: flex;
@@ -92,6 +93,7 @@ export const UserPage = () => {
       </StatsContainer> */}
 
       <CoreButton>Del min statistikk</CoreButton>
+      
     </Container>
   );
 };
