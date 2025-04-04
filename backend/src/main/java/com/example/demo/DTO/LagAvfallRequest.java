@@ -1,6 +1,7 @@
 package com.example.demo.DTO;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class LagAvfallRequest {
@@ -15,6 +16,7 @@ public class LagAvfallRequest {
   @Size(min = 0, max = 400)
   private String beskrivelse;
 
+  @NotNull(message = "må velge avfallstype")
   private Integer avfallstypeId;
 
   
