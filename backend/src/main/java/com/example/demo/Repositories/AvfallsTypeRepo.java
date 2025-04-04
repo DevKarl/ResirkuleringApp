@@ -10,4 +10,6 @@ import com.example.demo.Entities.AvfallsType;
 @Repository
 public interface AvfallsTypeRepo extends JpaRepository<AvfallsType, Integer> {
   List<AvfallsType> findByAvfallspunktAvfallstyper_Avfallspunkt_Id(int avfallsPunktId);
+
+  AvfallsType findById(int id);
 }

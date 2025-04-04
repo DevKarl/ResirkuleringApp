@@ -19,4 +19,8 @@ public class AvfallService {
   public Avfall getAvfallById(int Id){
     return avfallRepo.findById(Id);
   }
+
+  public void createNewAvfall(Avfall newAvfall) {
+    avfallRepo.save(newAvfall);
+  }
 }
