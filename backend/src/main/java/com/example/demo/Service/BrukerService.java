@@ -22,28 +22,21 @@ public class BrukerService {
 
   @Transactional
   public Boolean activateStatShare(int brukerId) {
-    Optional<Bruker> brukerOptional = Optional.of(brukerRepo.findById(brukerId));
-
-    if (brukerOptional.isPresent()){
-      Bruker bruker = brukerOptional.get();
-      bruker.setDelerStat(true);
-      brukerRepo.save(bruker);
-      return true;
-    }
-    return false;
+    return updateStatShare(brukerId, true);
   }
 
   @Transactional
   public Boolean deactivateStatShare(int brukerId) {
-    Optional<Bruker> brukerOptional = Optional.of(brukerRepo.findById(brukerId));
+    return updateStatShare(brukerId, false);
+  }
 
-    if (brukerOptional.isPresent()){
-      Bruker bruker = brukerOptional.get();
-      bruker.setDelerStat(false);
-      brukerRepo.save(bruker);
-      return true;
-    }
-    return false;
+  private Boolean updateStatShare(int brukerId, boolean statShareValue) {
+    Optional<Bruker> brukerOptional = brukerRepo.findById(brukerId);
+    return brukerOptional.map(bruker -> {
+        bruker.setDelerStat(statShareValue);
+        brukerRepo.save(bruker);
+        return true;
+    }).orElse(false);
   }
 
   public Bruker createNewUser(Bruker bruker) {

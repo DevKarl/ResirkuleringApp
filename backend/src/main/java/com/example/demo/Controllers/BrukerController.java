@@ -22,11 +22,10 @@ import com.example.demo.DTO.LoginResponse;
 import com.example.demo.DTO.RegisterRequest;
 import com.example.demo.DTO.RegisterResponse;
 import com.example.demo.DTO.ResponseMessage;
+import com.example.demo.DTO.SuccessResponse;
 import com.example.demo.Entities.Bruker;
 import com.example.demo.Service.BrukerService;
 import com.example.demo.Service.PassordService;
-
-import net.bytebuddy.implementation.bytecode.Throw;
 
 @ApiController
 public class BrukerController {
@@ -155,7 +154,7 @@ public class BrukerController {
 
     try {
       if (brukerService.activateStatShare((Integer)userId)){
-        return ResponseEntity.ok().body("bruker deler stats");
+        return ResponseEntity.ok().body(new SuccessResponse("bruker deler stats"));
       }
       return ResponseEntity.status(500).body(new ErrorResponse("Brukeren finst ikkje"));
     } catch (Exception e) {
