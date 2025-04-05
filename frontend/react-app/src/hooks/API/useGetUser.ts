@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useAppContext } from "../../context/ContextProvider";
 import { toast } from "sonner";
 
@@ -6,8 +6,11 @@ export const useGetUser = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { setUser } = useAppContext();
+  const hasFetched = useRef(false);
 
   const getUser = async () => {
+    if (hasFetched.current) return;
+    hasFetched.current = true;
     setIsLoading(true);
     setError(null);
     try {

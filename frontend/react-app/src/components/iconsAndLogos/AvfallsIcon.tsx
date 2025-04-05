@@ -10,7 +10,7 @@ import treverk from "../../assets/avfall/Treverk.png";
 import metall from "../../assets/avfall/Metall.png";
 import styled from "styled-components";
 
-const iconMap: Record<number, string> = {
+export const iconMap: Record<number, string> = {
   1: plast,
   2: metall,
   3: restavfall,
