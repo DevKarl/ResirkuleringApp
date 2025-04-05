@@ -1,8 +1,8 @@
 import { AvfallsIcon } from "../../iconsAndLogos/AvfallsIcon";
 import { useAppContext } from "../../../context/ContextProvider";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CoreButton } from "../../core/CoreButton";
-import { useGetStats } from "../../../hooks/API/useGetStats";
+import { useGetMainUserStats } from "../../../hooks/API/useGetMainUserStats";
 import { CoreContainer } from "../../core/CoreContainer";
 import { CoreHeading } from "../../core/CoreHeading";
 import { CoreSubheading } from "../../core/CoreSubheading";
@@ -13,6 +13,9 @@ import { CoreLoader } from "../../core/CoreLoader";
 import { CoinIcon } from "../../iconsAndLogos/Points";
 import { CoreModal } from "../../core/CoreModal";
 import { SearchUsersModal } from "../../userpage/SearchUsersModal";
+import { User } from "../../../types/userTypes";
+import { Avfall, Avfallspunkt } from "../../../types";
+import { Stat } from "../../../types/statTypes";
 
 const MainContainerStyles = css`
   margin-bottom: 15px;
@@ -39,6 +42,13 @@ const StyledTable = styled.table`
   border: 2px solid ${({ theme }) => theme.colors.green};
 `;
 
+const PointsText = styled.p`
+  font-size: 20px;
+  border-bottom: 2px solid ${({ theme }) => theme.colors.greenBright};
+  color: ${({ theme }) => theme.colors.darkGrey};
+  margin: 0;
+`;
+
 const TableHeader = styled.th`
   background-color: ${({ theme }) => theme.colors.greenWhite};
   color: ${({ theme }) => theme.colors.darkGrey};
@@ -54,8 +64,8 @@ const TableRow = styled.tr`
   }
 `;
 
-const InfoText = styled.p`
-  margin-bottom: 15px;
+const StyledCaption = styled.caption`
+  margin-bottom: 5px;
   text-align: center;
   font-size: 20px;
   color: ${({ theme }) => theme.colors.darkGrey};
@@ -63,7 +73,8 @@ const InfoText = styled.p`
 `;
 
 const TableData = styled.td`
-  padding: 0.75rem;
+  padding: 10px;
+  font-size: 20px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.greenBright};
   color: ${({ theme }) => theme.colors.darkGrey};
 `;
@@ -71,27 +82,75 @@ const disableStatBtn = css`
   background-color: ${({ theme }) => theme.colors.danger};
 `;
 
+const PointsWrapper = css`
+  gap: 0px;
+`;
+
+const ShowOtherUsersBtn = css`
+  margin-bottom: 15px;
+`;
+
+type BuiltStats = {
+  id: number;
+  name: string;
+  count: number;
+};
+
+interface ActiveUserStats {
+  builtStats: BuiltStats[];
+  user: User;
+}
+
 export const UserPage = () => {
   const { user } = useAppContext();
-  const { isLoading: statsLoading, data: stats, getStats } = useGetStats();
+  const {
+    isLoading: mainUserLoading,
+    mainUserStats,
+    getMainUserStats,
+  } = useGetMainUserStats();
   const [searchModalOpen, setSearchModalOpen] = useState(false);
+  const [activeUserStats, setActiveUserStats] = useState<ActiveUserStats>({
+    builtStats: [],
+    user: null,
+  });
 
   useEffect(() => {
-    getStats();
+    getMainUserStats();
   }, []);
 
-  const typeOccurences = countOccurrences(
-    stats,
-    (stat) => stat.avfall.avfallsType.id
-  );
+  useEffect(() => {
+    // When mainUserStats is updated, set activeUserStats
+    if (mainUserStats.length > 0) {
+      setActiveUserStats(getBuiltActiveUserStats(mainUserStats, user));
+    }
+  }, [mainUserStats, user]);
 
-  const tableStats = Object.entries(iconMap).map(([id, src]) => ({
-    id: id,
-    name: src.split("/").pop()?.split(".")[0] ?? "Ukjent",
-    count: typeOccurences[id] ?? 0,
-  }));
+  console.log({ mainUserStats });
 
-  const getPoints = () => tableStats.reduce((sum, item) => sum + item.count, 0);
+  const getBuiltActiveUserStats = (
+    stats: Stat[],
+    user: User
+  ): ActiveUserStats => {
+    const typeOccurences = countOccurrences(
+      stats,
+      (stat): Stat => stat.avfall.avfallsType.id
+    );
+
+    console.log({ typeOccurences });
+    const builtStats = Object.entries(iconMap).map(([id, src]) => ({
+      id: Number(id),
+      name: src.split("/").pop()?.split(".")[0] ?? "Ukjent",
+      count: typeOccurences[id] ?? 0,
+    }));
+    return { builtStats, user };
+  };
+
+  const handleChangeActiveUserStats = (stats: Stat[], user: User) => {
+    setActiveUserStats(getBuiltActiveUserStats(stats, user));
+  };
+
+  const getPoints = () =>
+    activeUserStats?.builtStats?.reduce((sum, item) => sum + item.count, 0);
 
   const toggleModal = () => {
     setSearchModalOpen(!searchModalOpen);
@@ -104,24 +163,21 @@ export const UserPage = () => {
   return (
     <CoreContainer styles={MainContainerStyles}>
       <CoreHeading>Min Side</CoreHeading>
-      {user && (
-        <CoreContainer styles={TopHeaderStyles}>
-          <CoreSubheading>{`${user?.fornavn} ${user?.etternavn}`}</CoreSubheading>
-          <CoreContainer>
-            <CoreSubheading>Poeng</CoreSubheading>
-            <CoinIcon points={getPoints()} />
-          </CoreContainer>
-        </CoreContainer>
+      {activeUserStats?.user && (
+        <CoreSubheading>{`${activeUserStats?.user?.fornavn} ${activeUserStats?.user?.etternavn}`}</CoreSubheading>
       )}
-      {statsLoading ? (
+      {mainUserLoading ? (
         <CoreLoader />
       ) : (
         <>
-          <InfoText>
-            Din statistikk over antall avfall hivd for alle avfallstyper
-          </InfoText>
-          <CoreButton onClick={toggleModal}>Søk etter andre brukere</CoreButton>
+          <CoreContainer>
+            <CoreContainer styles={PointsWrapper}>
+              <PointsText>Poeng</PointsText>
+              <CoinIcon points={getPoints()} />
+            </CoreContainer>
+          </CoreContainer>
           <StyledTable>
+            <StyledCaption>Statistikk over all avfall hivd</StyledCaption>
             <thead>
               <tr>
                 <TableHeader></TableHeader>
@@ -130,10 +186,10 @@ export const UserPage = () => {
               </tr>
             </thead>
             <tbody>
-              {tableStats?.map((stat) => (
+              {activeUserStats?.builtStats?.map((stat) => (
                 <TableRow key={stat.id}>
                   <TableData>
-                    <AvfallsIcon id={stat.id} />
+                    <AvfallsIcon id={stat.id} width="30px" height="30px" />
                   </TableData>
                   <TableData>{stat.name}</TableData>
                   <TableData>{stat.count}</TableData>
@@ -142,6 +198,13 @@ export const UserPage = () => {
             </tbody>
           </StyledTable>
         </>
+      )}
+      {user?.id === activeUserStats?.user?.id ? (
+        <CoreButton styles={ShowOtherUsersBtn} onClick={toggleModal}>
+          Vis andre brukere
+        </CoreButton>
+      ) : (
+        <CoreButton>Vis min statistikk</CoreButton>
       )}
       {user?.delerStat ? (
         <CoreButton onClick={handleEnableStatShare} styles={disableStatBtn}>
@@ -152,7 +215,12 @@ export const UserPage = () => {
           Publiser statistikk
         </CoreButton>
       )}
-      {searchModalOpen && <SearchUsersModal toggleModal={toggleModal} />}
+      {searchModalOpen && (
+        <SearchUsersModal
+          toggleModal={toggleModal}
+          handleChangeActiveUserStats={handleChangeActiveUserStats}
+        />
+      )}
     </CoreContainer>
   );
 };

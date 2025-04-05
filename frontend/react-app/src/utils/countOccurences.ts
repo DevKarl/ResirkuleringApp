@@ -1,5 +1,5 @@
 export const countOccurrences = <T>(
-  data: T[] | undefined,
+  data: any[],
   getKey: (item: T) => string
 ): Record<string, number> =>
   (data || []).reduce((counts, item) => {
