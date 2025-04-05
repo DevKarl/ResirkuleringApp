@@ -176,7 +176,7 @@ public class BrukerController {
 
     try {
       if (brukerService.deactivateStatShare((Integer)userId)){
-        return ResponseEntity.ok().body(new SuccessResponse("Din statistikk er nå ikke lenger synlig offentlig"));
+        return ResponseEntity.ok().body(new SuccessResponse("Din statistikk er nå skjult"));
       }
       return ResponseEntity.status(500).body(new ErrorResponse("Brukeren finst ikkje"));
     } catch (Exception e) {
