@@ -154,7 +154,7 @@ public class BrukerController {
 
     try {
       if (brukerService.activateStatShare((Integer)userId)){
-        return ResponseEntity.ok().body(new SuccessResponse("bruker deler stats"));
+        return ResponseEntity.ok().body(new SuccessResponse("Din statistikk er nå offentliggjort"));
       }
       return ResponseEntity.status(500).body(new ErrorResponse("Brukeren finst ikkje"));
     } catch (Exception e) {
@@ -176,7 +176,7 @@ public class BrukerController {
 
     try {
       if (brukerService.deactivateStatShare((Integer)userId)){
-        return ResponseEntity.ok().body("bruker deler ikkje stats");
+        return ResponseEntity.ok().body(new SuccessResponse("Din statistikk er nå ikke lenger synlig offentlig"));
       }
       return ResponseEntity.status(500).body(new ErrorResponse("Brukeren finst ikkje"));
     } catch (Exception e) {
