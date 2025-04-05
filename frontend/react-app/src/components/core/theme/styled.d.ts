@@ -10,6 +10,8 @@ declare module "styled-components" {
       white: string;
       greenWhiteHover: string;
       darkGrey: string;
+      danger: string;
     };
+    fontFamily: string;
   }
 }
