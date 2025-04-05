@@ -1,6 +1,6 @@
 import { AvfallsIcon } from "../../iconsAndLogos/AvfallsIcon";
 import { useAppContext } from "../../../context/ContextProvider";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { CoreButton } from "../../core/CoreButton";
 import { useGetMainUserStats } from "../../../hooks/API/useGetMainUserStats";
 import { CoreContainer } from "../../core/CoreContainer";
@@ -11,10 +11,8 @@ import { iconMap } from "../../iconsAndLogos/AvfallsIcon";
 import styled, { css } from "styled-components";
 import { CoreLoader } from "../../core/CoreLoader";
 import { CoinIcon } from "../../iconsAndLogos/Points";
-import { CoreModal } from "../../core/CoreModal";
 import { SearchUsersModal } from "../../userpage/SearchUsersModal";
 import { User } from "../../../types/userTypes";
-import { Avfall, Avfallspunkt } from "../../../types";
 import { Stat } from "../../../types/statTypes";
 
 const MainContainerStyles = css`
@@ -119,13 +117,10 @@ export const UserPage = () => {
   }, []);
 
   useEffect(() => {
-    // When mainUserStats is updated, set activeUserStats
     if (mainUserStats.length > 0) {
       setActiveUserStats(getBuiltActiveUserStats(mainUserStats, user));
     }
   }, [mainUserStats, user]);
-
-  console.log({ mainUserStats });
 
   const getBuiltActiveUserStats = (
     stats: Stat[],
@@ -135,8 +130,6 @@ export const UserPage = () => {
       stats,
       (stat): Stat => stat.avfall.avfallsType.id
     );
-
-    console.log({ typeOccurences });
     const builtStats = Object.entries(iconMap).map(([id, src]) => ({
       id: Number(id),
       name: src.split("/").pop()?.split(".")[0] ?? "Ukjent",
