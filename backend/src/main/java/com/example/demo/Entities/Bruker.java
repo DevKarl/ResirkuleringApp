@@ -32,8 +32,7 @@ public class Bruker {
 
     }
 
-  public Bruker(int id, String fornavn, String etternavn,String brukernavn,String hash, String salt) {
-    this.id = id;
+  public Bruker(String fornavn, String etternavn,String brukernavn,String hash, String salt) {
     this.fornavn = fornavn;
     this.etternavn = etternavn;
     this.brukernavn = brukernavn;
@@ -51,11 +50,11 @@ public class Bruker {
     this.delerstat = delerstat;
   }
 
-  public int getId() {
+  public Integer getId() {
     return this.id;
   }
 
-  public void setId(int id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -106,6 +105,5 @@ public class Bruker {
   public void setAdminrettigheter(boolean adminrettigheter) {
     this.adminrettigheter = adminrettigheter;
   }
-
     
 }

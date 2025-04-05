@@ -58,7 +58,7 @@ export const MobileModalMenu = ({
 }: MobileNavProps) => {
   const navigate = useNavigate();
   const { user } = useAppContext();
-  const { isLoading, error, postLogout } = usePostLogout();
+  const { isLoading, postLogout } = usePostLogout();
   if (!hamburgerModalOpen) return null;
 
   const handleLogout = () => {

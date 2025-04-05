@@ -7,6 +7,7 @@ import { CoreLoader } from "../core/CoreLoader";
 import { CoreButton } from "../core/CoreButton";
 import { CoreInput } from "../core/CoreInput";
 import { CoreContainer } from "../core/CoreContainer";
+import { toast } from "sonner";
 
 const ErrorText = styled.p`
   font-size: 1.5rem;
@@ -38,28 +39,33 @@ const CameraScannerContainer = css`
 `;
 
 export const BarcodeScannerModal = ({ toggleModal }: any) => {
-  const { error, isLoading, isSuccess, getCoordsByBarcode } =
-    useGetCoordsByBarcode();
+  const {
+    // error,
+    isLoading,
+    isSuccess,
+    getCoordsByBarcode,
+  } = useGetCoordsByBarcode();
   const barcodeScanned = useRef<string>(null);
   const [option, setOption] = useState<"manuell" | "kamera" | null>(null);
   const [barcodeInput, setBarcodeInput] = useState("");
-  const [inputError, setInputError] = useState<string | null>(null);
+  const [hasInputError, setHasInputError] = useState<boolean>(false);
 
   if (isSuccess) toggleModal();
 
   const handleScanClick = () => {
     if (!barcodeInput.trim()) {
-      setInputError("Strekkode kan ikke være tom.");
+      setHasInputError(true);
+      toast.error("Strekkoden kan ikke være tom.");
       return;
     }
-    setInputError(null);
+    setHasInputError(false);
     getCoordsByBarcode(barcodeInput);
   };
 
   return (
     <CoreModal onClose={toggleModal}>
       <CoreContainer styles={MainContainer}>
-        {error && <ErrorText>{error}</ErrorText>}
+        {/* {error && <ErrorText>{error}</ErrorText>} */}
         <CoreContainer styles={OptionContainer}>
           <CoreButton
             type="white"
@@ -86,7 +92,7 @@ export const BarcodeScannerModal = ({ toggleModal }: any) => {
               value={barcodeInput}
               onChange={(e) => setBarcodeInput(e.target.value)}
               placeholder="ingen mellomrom/spesialtegn)"
-              error={inputError || ""}
+              hasError={hasInputError}
               required
             />
             {isLoading ? (

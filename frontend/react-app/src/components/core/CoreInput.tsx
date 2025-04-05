@@ -41,11 +41,11 @@ const Input = styled.input<InputProps>`
   }
 `;
 
-const ErrorMessage = styled.p`
-  color: tomato;
-  font-size: 0.875rem;
-  margin-top: 0.25rem;
-`;
+// const ErrorMessage = styled.p`
+//   color: tomato;
+//   font-size: 0.875rem;
+//   margin-top: 0.25rem;
+// `;
 
 const RequiredMark = styled.span`
   color: tomato;
@@ -56,11 +56,12 @@ interface CoreInputProps {
   label: string;
   name: string;
   type?: string;
+  hasError: boolean;
   value: string;
   version?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
-  error?: string;
+  // error?: string;
   required?: boolean;
 }
 
@@ -72,7 +73,8 @@ export const CoreInput = ({
   value,
   onChange,
   placeholder,
-  error,
+  // error,
+  hasError,
   required = false,
 }: CoreInputProps) => {
   const id = useId();
@@ -98,12 +100,12 @@ export const CoreInput = ({
         onChange={onChange}
         placeholder={placeholder}
         required={required}
-        hasError={!!error}
-        aria-invalid={!!error}
-        aria-describedby={error ? `${id}-error` : undefined}
+        hasError={hasError}
+        aria-invalid={hasError}
+        aria-describedby={hasError ? `${id}-error` : undefined}
         onBlur={handleFocus}
       />
-      {error && <ErrorMessage id={`${id}-error`}>{error}</ErrorMessage>}
+      {/* {error && <ErrorMessage id={`${id}-error`}>{error}</ErrorMessage>} */}
     </FieldWrapper>
   );
 };

@@ -4,7 +4,6 @@ import {
   Marker,
   Circle,
   Popup,
-  useMap,
   Polyline,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
@@ -12,19 +11,18 @@ import { useAppContext } from "../../context/ContextProvider";
 import { useGeolocated } from "react-geolocated";
 import L from "leaflet";
 import MapLoader from "./MapLoader";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
+import ikon from "../../assets/map/Sven-ol-AI.png";
 import { usePostHivAvfall } from "../../hooks/API/usePostHivAvfall";
 import { AvfallspunktMarker } from "./AvfallspunktMarker";
 import { FitBounds } from "./FitBounds";
 import { findClosestPoint } from "./findClosestPoint";
-import { CoreModal } from "../core/CoreModal";
-import { CoreContainer } from "../core/CoreContainer";
+import useBreakpoints from "../../hooks/useBreakpoints";
 
-const markerIcon = new L.Icon({
-  iconUrl:
-    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
+const userIcon = new L.Icon({
+  iconUrl: ikon,
+  iconSize: [50, 67],
+  iconAnchor: [25, 61],
 });
 
 export const Map = () => {
@@ -32,9 +30,11 @@ export const Map = () => {
   const [activeAvfallspunkt, setActiveAvfallspunkt] = useState<number | null>(
     null
   );
+  const screenSize = useBreakpoints();
   const defaultLocation = { lat: 61.458982498103865, lng: 5.888914753595201 }; // HVL Førde
-  const { error, isLoading, postHivAvfall } = usePostHivAvfall();
+  const { isLoading, postHivAvfall } = usePostHivAvfall();
 
+  const isDesktop = screenSize === "large";
   const hivAvfall = () => {
     //@ts-ignore
     postHivAvfall(scannedAvfallResult.avfall.id, activeAvfallspunkt);
@@ -68,17 +68,14 @@ export const Map = () => {
         coords?.longitude || defaultLocation.lng,
       ]}
       zoom={17}
-      style={{ height: "350px", width: "100%" }}
+      style={{ height: isDesktop ? "600px" : "350px", width: "100%" }}
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution="© OpenStreetMap contributors"
       />
       <FitBounds coords={coords} scannedAvfallResult={scannedAvfallResult} />
-      <Marker
-        position={[coords?.latitude, coords?.longitude]}
-        icon={markerIcon}
-      >
+      <Marker position={[coords?.latitude, coords?.longitude]} icon={userIcon}>
         <Popup>Din posisjon</Popup>
       </Marker>
       <Circle center={[coords?.latitude, coords?.longitude]} radius={100} />
@@ -89,7 +86,6 @@ export const Map = () => {
           hivAvfall={hivAvfall}
           setActiveAvfallspunkt={setActiveAvfallspunkt}
           isLoading={isLoading}
-          error={error}
           isLoggedIn={Boolean(user)}
         />
       ))}
