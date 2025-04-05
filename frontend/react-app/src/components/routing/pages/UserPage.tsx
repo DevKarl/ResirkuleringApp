@@ -14,6 +14,8 @@ import { CoinIcon } from "../../iconsAndLogos/Points";
 import { SearchUsersModal } from "../../userpage/SearchUsersModal";
 import { User } from "../../../types/userTypes";
 import { Stat } from "../../../types/statTypes";
+import { usePostActivateStatShare } from "../../../hooks/API/usePostActivateStatShare";
+import { usePostDeactivateStatShare } from "../../../hooks/API/usePostDeactivateStatShare";
 
 const MainContainerStyles = css`
   margin-bottom: 15px;
@@ -106,6 +108,10 @@ export const UserPage = () => {
     mainUserStats,
     getMainUserStats,
   } = useGetMainUserStats();
+  const { isLoading: activateStatShareLoading, postActivateStatShare } =
+    usePostActivateStatShare();
+  const { isLoading: deactivateStatShareLoading, postDeactivateStatShare } =
+    usePostDeactivateStatShare();
   const [searchModalOpen, setSearchModalOpen] = useState(false);
   const [activeUserStats, setActiveUserStats] = useState<ActiveUserStats>({
     builtStats: [],
@@ -148,10 +154,6 @@ export const UserPage = () => {
   const toggleModal = () => {
     setSearchModalOpen(!searchModalOpen);
   };
-
-  const handleEnableStatShare = () => {};
-
-  const handleDisableStatShare = () => {};
 
   return (
     <CoreContainer styles={MainContainerStyles}>
@@ -200,11 +202,20 @@ export const UserPage = () => {
         <CoreButton>Vis min statistikk</CoreButton>
       )}
       {user?.delerStat ? (
-        <CoreButton onClick={handleEnableStatShare} styles={disableStatBtn}>
-          Skjul statistikk
-        </CoreButton>
+        deactivateStatShareLoading ? (
+          <CoreLoader />
+        ) : (
+          <CoreButton
+            onClick={() => postDeactivateStatShare()}
+            styles={disableStatBtn}
+          >
+            Skjul statistikk
+          </CoreButton>
+        )
+      ) : activateStatShareLoading ? (
+        <CoreLoader />
       ) : (
-        <CoreButton onClick={handleDisableStatShare}>
+        <CoreButton onClick={() => postActivateStatShare()}>
           Publiser statistikk
         </CoreButton>
       )}
