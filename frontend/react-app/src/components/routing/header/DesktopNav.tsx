@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppContext } from "../../../context/ContextProvider";
 import { usePostLogout } from "../../../hooks/API/usePostLogout";
-import { toast } from "sonner";
 import { CoreLoader } from "../../core/CoreLoader";
 
 const DesktopNavContainer = styled.nav`
@@ -59,11 +58,8 @@ export const DesktopNav = () => {
   const { isLoading: logoutLoading, postLogout } = usePostLogout();
   const navigate = useNavigate();
   const handleLogout = () => {
-    const result = window.confirm("Er du sikker på at du vil logge ut?");
-    if (result) {
-      postLogout();
-      navigate("/");
-    }
+    postLogout();
+    navigate("/");
   };
 
   return (

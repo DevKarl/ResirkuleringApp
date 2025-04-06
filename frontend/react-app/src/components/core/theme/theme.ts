@@ -7,5 +7,8 @@ export const theme = {
     greenWhiteHover: "#b3cfb3",
     white: "#fff",
     darkGrey: "#4d4c4c",
+    danger: "#c9555e",
+    dangerHover: "#ab3a42",
   },
+  fontFamily: "Arial",
 };

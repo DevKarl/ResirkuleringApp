@@ -1,5 +1,15 @@
 import { Toaster } from "sonner";
+import useBreakpoints from "../hooks/useBreakpoints";
 
 export const CustomToaster = () => {
-  return <Toaster position="top-center" richColors expand closeButton />;
+  const { isDesktop } = useBreakpoints();
+
+  console.log({ isDesktop });
+  return (
+    <Toaster
+      position={isDesktop ? "top-center" : "top-center"}
+      richColors
+      expand
+    />
+  );
 };
