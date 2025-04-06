@@ -63,11 +63,11 @@ const StyledButton = styled.button<StyledButtonProps>`
   color: ${({ $type, theme }) => getButtonStyles($type, theme).color};
   border: none;
   border-radius: 15px;
-  cursor: pointer;
 
   &:hover {
     background-color: ${({ $type, theme }) =>
       getButtonStyles($type, theme).hoverBackgroundColor};
+    cursor: pointer;
   }
 
   ${({ styles }) =>

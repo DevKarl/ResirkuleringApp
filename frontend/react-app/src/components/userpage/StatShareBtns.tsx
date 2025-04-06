@@ -5,6 +5,8 @@ import { User } from "../../types";
 import { CoreButton } from "../core/CoreButton";
 import { CoreLoader } from "../core/CoreLoader";
 import { ActiveUserStats } from "../../types/statTypes";
+import { ShareStatButton } from "./ShareStatBtn";
+import { HideStatButton } from "./HideStatBtn";
 
 const disableStatBtn = css`
   background-color: ${({ theme }) => theme.colors.danger};
@@ -30,19 +32,16 @@ export const StatShareBtns = ({
         deactivateStatShareLoading ? (
           <CoreLoader />
         ) : (
-          <CoreButton
-            onClick={() => postDeactivateStatShare()}
-            styles={disableStatBtn}
-          >
-            Skjul statistikk
-          </CoreButton>
+          <HideStatButton
+            postDeactivateStatShare={() => postDeactivateStatShare()}
+          />
         )
       ) : activateStatShareLoading ? (
         <CoreLoader />
       ) : (
-        <CoreButton onClick={() => postActivateStatShare()}>
-          Publiser statistikk
-        </CoreButton>
+        <ShareStatButton
+          postActivateStatShare={() => postActivateStatShare()}
+        />
       )}
     </>
   );
