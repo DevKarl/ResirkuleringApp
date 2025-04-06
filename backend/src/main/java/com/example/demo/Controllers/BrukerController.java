@@ -86,12 +86,13 @@ public class BrukerController {
     session.setMaxInactiveInterval(1800); // 30min
     String message = bruker.getFornavn() + " ble logget inn!";
     LoginResponse loginResponse = new LoginResponse(
+      bruker.getId(),
       message,
       bruker.getFornavn(),
       bruker.getEtternavn(),
       bruker.getBrukernavn(),
-      bruker.getAdminrettigheter(),
-      bruker.getDelerStat()
+      bruker.isAdminrettigheter(),
+      bruker.isDelerstat()
     );
     return ResponseEntity.ok(loginResponse);
   }
@@ -130,11 +131,12 @@ public class BrukerController {
       }
       session.setMaxInactiveInterval(1800); // Refresh session timeout
       return ResponseEntity.ok(new GetUserResponse(
+        bruker.getId(),
         bruker.getFornavn(), 
         bruker.getEtternavn(), 
         bruker.getBrukernavn(), 
-        bruker.getAdminrettigheter(), 
-        bruker.getDelerStat()
+        bruker.isAdminrettigheter(), 
+        bruker.isDelerstat()
         ));
     } catch (Exception e) {
         return ResponseEntity.status(500).body(new ErrorResponse("En feil oppstod under henting av brukerdata"));

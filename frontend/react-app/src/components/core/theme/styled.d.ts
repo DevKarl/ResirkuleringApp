@@ -11,6 +11,7 @@ declare module "styled-components" {
       greenWhiteHover: string;
       darkGrey: string;
       danger: string;
+      dangerHover: string;
     };
     fontFamily: string;
   }

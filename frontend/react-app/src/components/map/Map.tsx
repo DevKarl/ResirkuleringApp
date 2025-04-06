@@ -30,11 +30,10 @@ export const Map = () => {
   const [activeAvfallspunkt, setActiveAvfallspunkt] = useState<number | null>(
     null
   );
-  const screenSize = useBreakpoints();
+  const { isDesktop } = useBreakpoints();
   const defaultLocation = { lat: 61.458982498103865, lng: 5.888914753595201 }; // HVL Førde
   const { isLoading, postHivAvfall } = usePostHivAvfall();
 
-  const isDesktop = screenSize === "large";
   const hivAvfall = () => {
     //@ts-ignore
     postHivAvfall(scannedAvfallResult.avfall.id, activeAvfallspunkt);
