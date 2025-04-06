@@ -6,13 +6,12 @@ import { useGetSharedUsersStats } from "../../hooks/API/useGetAllSharedStats";
 import { Stat } from "../../types/statTypes";
 import { User } from "../../types";
 import { CoreLoader } from "../core/CoreLoader";
-import { CoreSubheading } from "../core/CoreSubheading";
 import { CoreButton } from "../core/CoreButton";
-import styled, { css } from "styled-components";
+import { css } from "styled-components";
 
 interface SearchUserModalInterface {
   toggleModal: () => void;
-  setSearchModalOpen: () => void;
+  setSearchModalOpen: (prev: boolean) => void;
   handleChangeActiveUserStats: (stats: Stat[], user: User) => void;
   mainUser: User;
 }
@@ -55,7 +54,6 @@ export const SearchUsersModal = ({
   const filterByFullName = (user: User) => {
     const searchTerms = searchInput.trim().toLowerCase().split(" ");
     const searchEntries = [user?.fornavn, user?.etternavn];
-    console.log({ searchEntries });
     return searchTerms.every((term) =>
       searchEntries.some((entry) =>
         entry?.trim().toLowerCase().includes(term.toLowerCase())
@@ -63,18 +61,18 @@ export const SearchUsersModal = ({
     );
   };
 
-  const filterBySameUser = (user: User) => {
+  const filterAwayMainUser = (user: User) => {
     return mainUser?.id !== user?.id;
   };
 
   const getFilteredStats = () =>
     stats?.filter(
       (stat: Stat) =>
-        filterByFullName(stat.bruker) && filterBySameUser(stat.bruker)
+        filterByFullName(stat.bruker) && filterAwayMainUser(stat.bruker)
     );
 
   const handlePickedUser = (stat: any) => {
-    handleChangeActiveUserStats(stat.avfallsLogg, stat.bruker);
+    handleChangeActiveUserStats(stat.avfallslogg, stat.bruker);
     setSearchModalOpen(false);
   };
 
@@ -88,7 +86,6 @@ export const SearchUsersModal = ({
         value={searchInput}
         onChange={handleSearch}
         placeholder="Skriv navn på brukeren"
-        hasError={hasInputError}
       />
       <CoreContainer styles={UsersContainer}>
         {isLoading ? (

@@ -8,6 +8,7 @@ export const theme = {
     white: "#fff",
     darkGrey: "#4d4c4c",
     danger: "#c9555e",
+    dangerHover: "#c9555e",
   },
   fontFamily: "Arial",
 };

@@ -1,7 +1,11 @@
 import styled, { css, keyframes } from "styled-components";
 import { ReactNode } from "react";
 
-type ButtonType = "green" | "white";
+export enum ButtonType {
+  Green = "green",
+  White = "white",
+  Danger = "danger",
+}
 
 interface StyledButtonProps {
   $type: ButtonType;
@@ -11,7 +15,7 @@ interface StyledButtonProps {
 
 const shake = keyframes`
   0% {
-  margin-left: 0rem;
+    margin-left: 0rem;
   }
   25% {
     margin-left: 0.5rem;
@@ -24,6 +28,30 @@ const shake = keyframes`
   }
 `;
 
+const getButtonStyles = (type: ButtonType, theme: any) => {
+  switch (type) {
+    case ButtonType.White:
+      return {
+        backgroundColor: theme.colors.greenWhite,
+        color: theme.colors.greenDark,
+        hoverBackgroundColor: theme.colors.greenWhiteHover,
+      };
+    case ButtonType.Danger:
+      return {
+        backgroundColor: theme.colors.danger,
+        color: theme.colors.white,
+        hoverBackgroundColor: theme.colors.dangerHover,
+      };
+    case ButtonType.Green:
+    default:
+      return {
+        backgroundColor: theme.colors.green,
+        color: theme.colors.white,
+        hoverBackgroundColor: theme.colors.greenDark,
+      };
+  }
+};
+
 const StyledButton = styled.button<StyledButtonProps>`
   width: 300px;
   max-width: 100%;
@@ -31,18 +59,15 @@ const StyledButton = styled.button<StyledButtonProps>`
   padding: 10px;
   font-size: 1.2rem;
   background-color: ${({ $type, theme }) =>
-    $type === "white" ? theme.colors.greenWhite : theme.colors.green};
-  color: ${({ theme, $type }) =>
-    $type === "white" ? theme.colors.greenDark : theme.colors.white};
+    getButtonStyles($type, theme).backgroundColor};
+  color: ${({ $type, theme }) => getButtonStyles($type, theme).color};
   border: none;
   border-radius: 15px;
   cursor: pointer;
 
   &:hover {
     background-color: ${({ $type, theme }) =>
-      $type === "white"
-        ? theme.colors.greenWhiteHover
-        : theme.colors.greenDark};
+      getButtonStyles($type, theme).hoverBackgroundColor};
   }
 
   ${({ styles }) =>
@@ -68,7 +93,7 @@ interface ButtonProps {
 }
 
 export const CoreButton = ({
-  type = "green",
+  type = ButtonType.Green,
   onClick,
   children,
   styles,

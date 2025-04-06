@@ -8,3 +8,14 @@ export type Stat = {
   id: number;
   tidspunktKastet: string;
 };
+
+export type BuiltStats = {
+  id: number;
+  name: string;
+  count: number;
+};
+
+export interface ActiveUserStats {
+  builtStats: BuiltStats[];
+  user: User;
+}
