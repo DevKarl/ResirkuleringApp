@@ -23,6 +23,7 @@ const UsersContainer = css`
 
 const UserEntry = css`
   flex-direction: row;
+  width: 100%;
 `;
 
 const ButtonStyles = css`
@@ -36,7 +37,6 @@ export const SearchUsersModal = ({
   setSearchModalOpen,
 }: SearchUserModalInterface) => {
   const [searchInput, setSearchInput] = useState("");
-  const [hasInputError, setHasInputError] = useState<boolean>(false);
   const {
     data: stats,
     isLoading,
@@ -91,7 +91,7 @@ export const SearchUsersModal = ({
         {isLoading ? (
           <CoreLoader />
         ) : (
-          getFilteredStats()?.map((stat) => (
+          getFilteredStats()?.map((stat: any) => (
             <CoreContainer key={stat.bruker.id} styles={UserEntry}>
               <CoreButton
                 type="white"

@@ -15,8 +15,8 @@ import { ActiveUserStats, Stat } from "../../../types/statTypes";
 import { toast } from "sonner";
 import { StatsTable } from "../../userpage/StatsTable";
 import { StatShareBtns } from "../../userpage/StatShareBtns";
-import { ResetIcon } from "../../iconsAndLogos/ResetIcon";
 import { ShowOwnStatsButton } from "../../userpage/ShowOwnStatsBtn";
+import { SearchUsersButton } from "../../userpage/SearchUsersBtn";
 
 const MainContainerStyles = css`
   margin-bottom: 15px;
@@ -30,14 +30,6 @@ const MainContainerStyles = css`
 
 const BtnStyles = css`
   margin-bottom: 15px;
-`;
-
-const resetToOwnStatsContainer = css`
-  margin-bottom: 15px;
-  height: 100%;
-  justify-content: center;
-  text-align: center;
-  flex-direction: row;
 `;
 
 export const UserPage = () => {
@@ -93,7 +85,7 @@ export const UserPage = () => {
     toast.info("Viser nå egen statistikk");
   };
 
-  const isMainUser = () => mainUser?.id === activeUserStats?.user?.id;
+  const activeUserIsMainUser = () => mainUser?.id === activeUserStats?.user?.id;
 
   return (
     <CoreContainer styles={MainContainerStyles}>
@@ -108,13 +100,11 @@ export const UserPage = () => {
       ) : (
         <StatsTable activeUserStats={activeUserStats} />
       )}
-      {!isMainUser() && (
+      {!activeUserIsMainUser() && (
         <ShowOwnStatsButton handleResetStats={handleResetStats} />
       )}
-      <CoreButton styles={BtnStyles} onClick={toggleModal}>
-        Vis andre brukere
-      </CoreButton>
-      <StatShareBtns mainUser={mainUser} activeUserStats={activeUserStats} />
+      <SearchUsersButton onClick={toggleModal} />
+      {activeUserIsMainUser() && <StatShareBtns mainUser={mainUser} />}
       {searchModalOpen && (
         <SearchUsersModal
           toggleModal={toggleModal}

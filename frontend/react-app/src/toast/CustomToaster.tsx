@@ -3,9 +3,11 @@ import useBreakpoints from "../hooks/useBreakpoints";
 
 export const CustomToaster = () => {
   const { isDesktop } = useBreakpoints();
+
+  console.log({ isDesktop });
   return (
     <Toaster
-      position={isDesktop ? "bottom-center" : "top-center"}
+      position={isDesktop ? "top-center" : "top-center"}
       richColors
       expand
     />

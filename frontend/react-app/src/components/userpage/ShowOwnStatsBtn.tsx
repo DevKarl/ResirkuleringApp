@@ -1,11 +1,10 @@
 import { css } from "styled-components";
-import { CoreButton } from "../core/CoreButton";
+import { ButtonType, CoreButton } from "../core/CoreButton";
 import { CoreContainer } from "../core/CoreContainer";
 import { ResetIcon } from "../iconsAndLogos/ResetIcon";
 
 const ShowOwnStatsBtn = css`
   margin-bottom: 15px;
-  background-color: ${({ theme }) => theme.colors.danger};
 `;
 
 const ShowOwnStatsInnerContainer = css`
@@ -22,9 +21,13 @@ export const ShowOwnStatsButton = ({
   handleResetStats,
 }: ShowOwnStatsButtonInterface) => {
   return (
-    <CoreButton styles={ShowOwnStatsBtn} onClick={handleResetStats}>
+    <CoreButton
+      type={ButtonType.Danger}
+      onClick={handleResetStats}
+      styles={ShowOwnStatsBtn}
+    >
       <CoreContainer styles={ShowOwnStatsInnerContainer}>
-        <p>Vis min statistikk</p>
+        <p>Tilbake til min statistikk</p>
         <ResetIcon width="40px" height="40px" />
       </CoreContainer>
     </CoreButton>
