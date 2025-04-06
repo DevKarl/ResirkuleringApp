@@ -123,9 +123,7 @@ export const UserPage = () => {
   }, []);
 
   useEffect(() => {
-    if (mainUserStats.length > 0) {
-      setActiveUserStats(getBuiltActiveUserStats(mainUserStats, user));
-    }
+    setActiveUserStats(getBuiltActiveUserStats(mainUserStats, user));
   }, [mainUserStats, user]);
 
   const getBuiltActiveUserStats = (
@@ -143,6 +141,8 @@ export const UserPage = () => {
     }));
     return { builtStats, user };
   };
+
+  console.log({ activeUserStats });
 
   const handleChangeActiveUserStats = (stats: Stat[], user: User) => {
     setActiveUserStats(getBuiltActiveUserStats(stats, user));
