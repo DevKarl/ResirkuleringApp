@@ -15,6 +15,7 @@ export interface LoginRequest {
 }
 
 export type User = {
+  id: number;
   fornavn: string;
   etternavn: string;
   brukernavn: string;

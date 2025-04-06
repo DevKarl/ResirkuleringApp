@@ -1,5 +1,7 @@
 import { useRef, useState } from "react";
 import { toast } from "sonner";
+import { Stat } from "../../types/statTypes";
+import { User } from "../../types";
 
 export const useGetSharedUsersStats = () => {
   const [isLoading, setIsLoading] = useState(false);

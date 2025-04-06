@@ -155,6 +155,10 @@ export const UserPage = () => {
     setSearchModalOpen(!searchModalOpen);
   };
 
+  const handleResetStats = () => {
+    setActiveUserStats(getBuiltActiveUserStats(mainUserStats, user));
+  };
+
   return (
     <CoreContainer styles={MainContainerStyles}>
       <CoreHeading>Min Side</CoreHeading>
@@ -199,7 +203,7 @@ export const UserPage = () => {
           Vis andre brukere
         </CoreButton>
       ) : (
-        <CoreButton>Vis min statistikk</CoreButton>
+        <CoreButton onClick={handleResetStats}>Vis min statistikk</CoreButton>
       )}
       {user?.delerStat ? (
         deactivateStatShareLoading ? (
@@ -222,7 +226,9 @@ export const UserPage = () => {
       {searchModalOpen && (
         <SearchUsersModal
           toggleModal={toggleModal}
+          mainUser={user}
           handleChangeActiveUserStats={handleChangeActiveUserStats}
+          setSearchModalOpen={setSearchModalOpen}
         />
       )}
     </CoreContainer>
