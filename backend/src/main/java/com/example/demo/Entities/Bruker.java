@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(schema = "resirkulering")
 public class Bruker {
@@ -21,7 +23,9 @@ public class Bruker {
     @Column(nullable = false, unique = true)
     private String brukernavn;
 
+    @JsonIgnore
     private String hash;
+    @JsonIgnore
     private String salt;
 
     private boolean adminrettigheter;
@@ -82,18 +86,22 @@ public class Bruker {
     this.brukernavn = brukernavn;
   }
 
+  @JsonIgnore
   public String getHash() {
     return this.hash;
   }
 
+  @JsonIgnore
   public void setHash(String hash) {
     this.hash = hash;
   }
 
+  @JsonIgnore
   public String getSalt() {
     return this.salt;
   }
 
+  @JsonIgnore
   public void setSalt(String salt) {
     this.salt = salt;
   }
