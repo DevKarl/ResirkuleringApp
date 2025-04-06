@@ -31,7 +31,6 @@ public class Bruker {
     private boolean adminrettigheter;
     private boolean delerstat;
 
-
     public Bruker() {
 
     }
@@ -46,7 +45,7 @@ public class Bruker {
     this.delerstat = false;
   }
 
-  public boolean getDelerStat() {
+  public boolean isDelerstat() {
     return delerstat;
   }
 
@@ -106,8 +105,8 @@ public class Bruker {
     this.salt = salt;
   }
 
-  public boolean getAdminrettigheter() {
-    return this.adminrettigheter;
+  public boolean isAdminrettigheter() {
+    return adminrettigheter;
   }
 
   public void setAdminrettigheter(boolean adminrettigheter) {

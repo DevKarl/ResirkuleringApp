@@ -90,8 +90,8 @@ public class BrukerController {
       bruker.getFornavn(),
       bruker.getEtternavn(),
       bruker.getBrukernavn(),
-      bruker.getAdminrettigheter(),
-      bruker.getDelerStat()
+      bruker.isAdminrettigheter(),
+      bruker.isDelerstat()
     );
     return ResponseEntity.ok(loginResponse);
   }
@@ -133,8 +133,8 @@ public class BrukerController {
         bruker.getFornavn(), 
         bruker.getEtternavn(), 
         bruker.getBrukernavn(), 
-        bruker.getAdminrettigheter(), 
-        bruker.getDelerStat()
+        bruker.isAdminrettigheter(), 
+        bruker.isDelerstat()
         ));
     } catch (Exception e) {
         return ResponseEntity.status(500).body(new ErrorResponse("En feil oppstod under henting av brukerdata"));

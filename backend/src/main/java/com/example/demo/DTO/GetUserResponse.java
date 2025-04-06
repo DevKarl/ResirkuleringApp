@@ -4,13 +4,15 @@ public class GetUserResponse {
   private String fornavn;
   private String etternavn;
   private String brukernavn;
-  private Boolean isAdmin;
-  private Boolean delerStat;
+  private boolean isAdmin;
+  private boolean delerStat;
 
-  public GetUserResponse(String fornavn, String etternavn, String brukernavn, Boolean isAdmin, Boolean delerStat) {
+  public GetUserResponse(String fornavn, String etternavn, String brukernavn, boolean isAdmin, boolean delerStat) {
     this.fornavn = fornavn;
     this.etternavn = etternavn;
     this.brukernavn = brukernavn;
+    this.isAdmin = isAdmin;
+    this.delerStat = delerStat;
   }
 
   public String getFornavn() {
@@ -37,19 +39,19 @@ public class GetUserResponse {
       this.brukernavn = brukernavn;
   }  
 
-  public Boolean getIsAdmin() {
+  public boolean getIsAdmin() {
     return isAdmin;
   }
 
-  public void setIsAdmin(Boolean isAdmin) {
+  public void setIsAdmin(boolean isAdmin) {
     this.isAdmin = isAdmin;
   }
 
-  public Boolean getDelerStat() {
+  public boolean getDelerStat() {
     return delerStat;
   }
 
-  public void setDelerStat(Boolean delerStat) {
+  public void setDelerStat(boolean delerStat) {
     this.delerStat = delerStat;
   }
 }
