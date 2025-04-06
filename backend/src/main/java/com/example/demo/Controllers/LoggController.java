@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.example.demo.Controllers.Interfaces.ApiController;
 import com.example.demo.DTO.ErrorResponse;
 import com.example.demo.DTO.HivAvfallRequest;
+import com.example.demo.DTO.SharedStatsResponse;
 import com.example.demo.DTO.SuccessResponse;
 import com.example.demo.Entities.Avfall;
 import com.example.demo.Entities.Avfallspunkt;
@@ -90,20 +91,20 @@ public class LoggController {
     }
   }
 
-  @GetMapping("/getSharedStat")
-  public ResponseEntity<?> getSharedStat(HttpSession session) {
+  @GetMapping("/getSharedUsersStats")
+  public ResponseEntity<?> getSharedUsersStats(HttpSession session) {
     if (session == null) {
       return ResponseEntity.badRequest().body(new ErrorResponse("Sesjonen er utløpt, vennligst logg inn på nytt."));
     }
     Object userId = session.getAttribute("userId");
     if(userId == null) {
-      return ResponseEntity.status(401).body("Ingen bruker logget inn");
+      return ResponseEntity.status(401).body(new ErrorResponse("Ingen bruker logget inn"));
     }
     try {
-      List<Resirkuleringslogg> logger = loggService.getLoggerForBrukereSomDelerStatistikk();
+      List<SharedStatsResponse> logger = loggService.getSharedUsersStats();
       return ResponseEntity.ok(logger);
     } catch (Exception e) {
-      return ResponseEntity.status(500).body("Ops! Noe feil skjedde.");
+      return ResponseEntity.status(500).body(new ErrorResponse("Kan ikke hente offentlig statistikk akkurat nå. Prøv igjen senere"));
     } 
   }
 }
