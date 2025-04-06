@@ -86,6 +86,7 @@ public class BrukerController {
     session.setMaxInactiveInterval(1800); // 30min
     String message = bruker.getFornavn() + " ble logget inn!";
     LoginResponse loginResponse = new LoginResponse(
+      bruker.getId(),
       message,
       bruker.getFornavn(),
       bruker.getEtternavn(),
