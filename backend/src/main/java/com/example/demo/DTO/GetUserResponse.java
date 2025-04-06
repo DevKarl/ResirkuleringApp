@@ -1,18 +1,28 @@
 package com.example.demo.DTO;
 
 public class GetUserResponse {
+  private int id;
   private String fornavn;
   private String etternavn;
   private String brukernavn;
   private boolean isAdmin;
   private boolean delerStat;
 
-  public GetUserResponse(String fornavn, String etternavn, String brukernavn, boolean isAdmin, boolean delerStat) {
+  public GetUserResponse(int id, String fornavn, String etternavn, String brukernavn, boolean isAdmin, boolean delerStat) {
+    this.id = id;
     this.fornavn = fornavn;
     this.etternavn = etternavn;
     this.brukernavn = brukernavn;
     this.isAdmin = isAdmin;
     this.delerStat = delerStat;
+  }
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
   }
 
   public String getFornavn() {

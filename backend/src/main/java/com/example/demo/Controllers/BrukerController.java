@@ -130,6 +130,7 @@ public class BrukerController {
       }
       session.setMaxInactiveInterval(1800); // Refresh session timeout
       return ResponseEntity.ok(new GetUserResponse(
+        bruker.getId(),
         bruker.getFornavn(), 
         bruker.getEtternavn(), 
         bruker.getBrukernavn(), 
