@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,7 @@ import com.example.demo.Entities.Bruker;
 import com.example.demo.Service.AvfTypeService;
 import com.example.demo.Service.AvfallService;
 import com.example.demo.Service.BrukerService;
+import com.example.demo.Utils.ErrorMsgBuilder;
 
 
 
@@ -42,7 +44,7 @@ public class AvfallController {
 
   
   @PostMapping("/createNewAvfall")
-  public ResponseEntity<?> leggTilAvfall(HttpSession session, @RequestBody @Valid LagAvfallRequest request){
+  public ResponseEntity<?> leggTilAvfall(HttpSession session, @RequestBody @Valid LagAvfallRequest request, BindingResult br){
 
     if (session == null) {
       return ResponseEntity.badRequest().body(new ErrorResponse("Brukeren er allerede logget ut!"));
@@ -51,10 +53,14 @@ public class AvfallController {
     if (session.getAttribute("userId") == null) {
       return ResponseEntity.badRequest().body(new ErrorResponse("Brukeren er allerede logged inn!"));
     }
+    if (br.hasErrors()){
+      String returnMessage = ErrorMsgBuilder.buildError((BindingResult)br.getAllErrors());
+      return ResponseEntity.badRequest().body(new RegisterResponse(returnMessage));
+    }
 
     Object id = session.getAttribute("userId");
     Bruker bruker = brukerService.findById((Integer)id);
-    if(!bruker.getAdminrettigheter()){
+    if(!bruker.isAdminrettigheter()){
       return ResponseEntity.badRequest().body(new ErrorResponse("Du har ikke adminrettigheter."));
     }
 
@@ -66,7 +72,6 @@ public class AvfallController {
     newAvfall.setBeskrivelse(request.getBeskrivelse());
     newAvfall.setAvfallsType(type);
 
-    
     avfallService.createNewAvfall(newAvfall);
 
     return ResponseEntity.ok(new RegisterResponse("Avfall registrert!"));

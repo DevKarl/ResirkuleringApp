@@ -6,7 +6,7 @@ const BREAKPOINTS = {
   // large: 1024, // desktop
 };
 
-const useBreakpoints = (): string => {
+const useBreakpoints = (): any => {
   const [screenSize, setScreenSize] = useState<string>("large");
 
   const handleResize = () => {
@@ -27,7 +27,9 @@ const useBreakpoints = (): string => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  return screenSize;
+  const isDesktop = screenSize === "large";
+
+  return { screenSize, isDesktop };
 };
 
 export default useBreakpoints;

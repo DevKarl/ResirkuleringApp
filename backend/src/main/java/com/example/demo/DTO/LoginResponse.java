@@ -1,6 +1,7 @@
 package com.example.demo.DTO;
 
 public class LoginResponse {
+  private int id;
   private String fornavn;
   private String etternavn;
   private String brukernavn;
@@ -9,13 +10,22 @@ public class LoginResponse {
 
   private String message;
 
-  public LoginResponse(String message, String fornavn, String etternavn, String brukernavn, Boolean isAdmin, Boolean delerStat) {
+  public LoginResponse(int id, String message, String fornavn, String etternavn, String brukernavn, Boolean isAdmin, Boolean delerStat) {
+    this.id = id;
     this.fornavn = fornavn;
     this.etternavn = etternavn;
     this.brukernavn = brukernavn;
     this.message = message;
     this.isAdmin = isAdmin;
     this.delerStat = delerStat;
+  }
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
   }
 
   public String getFornavn() {

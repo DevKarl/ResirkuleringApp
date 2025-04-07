@@ -25,7 +25,7 @@ interface AppProviderProps {
 }
 
 export const AppProvider = ({ children }: AppProviderProps) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User>(null);
   const [scannedAvfallResult, setScannedAvfallResult] = useState(null);
 
   const contextValue = {

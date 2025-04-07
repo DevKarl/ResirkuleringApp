@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { RegisterRequest, RegisterResponse } from "../../types/userTypes";
 import { toast } from "sonner";
+import { RegisterRequest } from "../../types/userTypes";
 
 export const usePostRegister = () => {
   const [isLoading, setIsLoading] = useState(false);

@@ -56,7 +56,7 @@ interface CoreInputProps {
   label: string;
   name: string;
   type?: string;
-  hasError: boolean;
+  hasError?: boolean;
   value: string;
   version?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
