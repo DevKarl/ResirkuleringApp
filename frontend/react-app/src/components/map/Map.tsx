@@ -12,17 +12,17 @@ import { useGeolocated } from "react-geolocated";
 import L from "leaflet";
 import MapLoader from "./MapLoader";
 import { useMemo, useState } from "react";
+import ikon from "../../assets/map/Sven-ol-AI.png";
 import { usePostHivAvfall } from "../../hooks/API/usePostHivAvfall";
 import { AvfallspunktMarker } from "./AvfallspunktMarker";
 import { FitBounds } from "./FitBounds";
 import { findClosestPoint } from "./findClosestPoint";
 import useBreakpoints from "../../hooks/useBreakpoints";
 
-const markerIcon = new L.Icon({
-  iconUrl:
-    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
+const userIcon = new L.Icon({
+  iconUrl: ikon,
+  iconSize: [50, 67],
+  iconAnchor: [25, 61],
 });
 
 export const Map = () => {
@@ -30,13 +30,10 @@ export const Map = () => {
   const [activeAvfallspunkt, setActiveAvfallspunkt] = useState<number | null>(
     null
   );
-  const screenSize = useBreakpoints();
+  const { isDesktop } = useBreakpoints();
   const defaultLocation = { lat: 61.458982498103865, lng: 5.888914753595201 }; // HVL Førde
   const { isLoading, postHivAvfall } = usePostHivAvfall();
 
-  const isDesktop = screenSize === "large";
-
-  console.log({ isDesktop });
   const hivAvfall = () => {
     //@ts-ignore
     postHivAvfall(scannedAvfallResult.avfall.id, activeAvfallspunkt);
@@ -77,10 +74,7 @@ export const Map = () => {
         attribution="© OpenStreetMap contributors"
       />
       <FitBounds coords={coords} scannedAvfallResult={scannedAvfallResult} />
-      <Marker
-        position={[coords?.latitude, coords?.longitude]}
-        icon={markerIcon}
-      >
+      <Marker position={[coords?.latitude, coords?.longitude]} icon={userIcon}>
         <Popup>Din posisjon</Popup>
       </Marker>
       <Circle center={[coords?.latitude, coords?.longitude]} radius={100} />

@@ -62,12 +62,9 @@ export const MobileModalMenu = ({
   if (!hamburgerModalOpen) return null;
 
   const handleLogout = () => {
-    const result = window.confirm("Er du sikker på at du vil logge ut?");
-    if (result) {
-      postLogout();
-      navigate("/");
-      toggleHamburgerModal();
-    }
+    postLogout();
+    navigate("/");
+    toggleHamburgerModal();
   };
 
   return (

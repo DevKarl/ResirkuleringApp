@@ -1,15 +1,21 @@
 package com.example.demo.Controllers;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
 import com.example.demo.Controllers.Interfaces.ApiController;
 import com.example.demo.DTO.ErrorResponse;
 import com.example.demo.DTO.HivAvfallRequest;
+import com.example.demo.DTO.SharedStatsResponse;
 import com.example.demo.DTO.SuccessResponse;
 import com.example.demo.Entities.Avfall;
 import com.example.demo.Entities.Avfallspunkt;
@@ -18,10 +24,9 @@ import com.example.demo.Entities.Resirkuleringslogg;
 import com.example.demo.Service.AvfPunktService;
 import com.example.demo.Service.AvfallService;
 import com.example.demo.Service.BrukerService;
+import com.example.demo.Service.CookieService;
 import com.example.demo.Service.LoggService;
 import com.example.demo.Utils.ErrorMsgBuilder;
-import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 
 @ApiController
 public class LoggController {
@@ -38,15 +43,19 @@ public class LoggController {
   @Autowired
   private AvfPunktService avfPunktService;
 
+  @Autowired
+  private CookieService cookieService;
+
   @GetMapping("/getAvfallsLogg")
   public ResponseEntity<?> getAvfallsLogg(HttpSession session) {
-    if (session == null) {
-      return ResponseEntity.badRequest().body(new ErrorResponse("Sesjonen er utløpt, vennligst logg inn på nytt."));
+
+    //Ikke testet badRequest enda i postman....
+    ResponseEntity<?> badRequest = cookieService.checkIfSessionNullorNoLoggedInUser(session);
+    if (badRequest != null){
+      return badRequest;
     }
+
     Object userId = session.getAttribute("userId");
-    if (userId == null) {
-      return ResponseEntity.status(401).body("Ingen bruker logget inn");
-    }
     try {
       List<Resirkuleringslogg> logger = loggService.getAlleLoggerForBrukerMedId((Integer) userId);
       return ResponseEntity.ok(logger);
@@ -88,5 +97,22 @@ public class LoggController {
     } catch (Exception e) {
       return ResponseEntity.status(500).body(new ErrorResponse("Kunne ikke kaste avfall. Prøv igjen senere."));
     }
+  }
+
+  @GetMapping("/getSharedUsersStats")
+  public ResponseEntity<?> getSharedUsersStats(HttpSession session) {
+    if (session == null) {
+      return ResponseEntity.badRequest().body(new ErrorResponse("Sesjonen er utløpt, vennligst logg inn på nytt."));
+    }
+    Object userId = session.getAttribute("userId");
+    if(userId == null) {
+      return ResponseEntity.status(401).body(new ErrorResponse("Ingen bruker logget inn"));
+    }
+    try {
+      List<SharedStatsResponse> logger = loggService.getSharedUsersStats();
+      return ResponseEntity.ok(logger);
+    } catch (Exception e) {
+      return ResponseEntity.status(500).body(new ErrorResponse("Kan ikke hente offentlig statistikk akkurat nå. Prøv igjen senere"));
+    } 
   }
 }

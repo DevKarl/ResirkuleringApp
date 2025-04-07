@@ -1,39 +1,118 @@
-import styled from "styled-components";
-import { AvfallsIcon } from "../../iconsAndLogos/AvfallsIcon";
 import { useAppContext } from "../../../context/ContextProvider";
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { CoreButton } from "../../core/CoreButton";
+import { useGetMainUserStats } from "../../../hooks/API/useGetMainUserStats";
+import { CoreContainer } from "../../core/CoreContainer";
+import { CoreHeading } from "../../core/CoreHeading";
+import { CoreSubheading } from "../../core/CoreSubheading";
+import { countOccurrences } from "../../../utils/countOccurences";
+import { iconMap } from "../../iconsAndLogos/AvfallsIcon";
+import { css } from "styled-components";
+import { CoreLoader } from "../../core/CoreLoader";
+import { SearchUsersModal } from "../../userpage/SearchUsersModal";
+import { User } from "../../../types/userTypes";
+import { ActiveUserStats, Stat } from "../../../types/statTypes";
+import { toast } from "sonner";
+import { StatsTable } from "../../userpage/StatsTable";
+import { StatShareBtns } from "../../userpage/StatShareBtns";
+import { ShowOwnStatsButton } from "../../userpage/ShowOwnStatsBtn";
+import { SearchUsersButton } from "../../userpage/SearchUsersBtn";
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+const MainContainerStyles = css`
+  margin-bottom: 15px;
+  max-width: 700px;
   align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  padding-right: 20px;
+  padding-left: 20px;
 `;
 
-const Heading = styled.h1`
-  font-size: 3rem;
-  color: #333;
-  font-family: Arial, sans-serif;
-  text-align: center;
+const BtnStyles = css`
+  margin-bottom: 15px;
 `;
 
 export const UserPage = () => {
-  const { user } = useAppContext();
+  const { user: mainUser } = useAppContext();
+  const {
+    isLoading: mainUserLoading,
+    mainUserStats,
+    getMainUserStats,
+  } = useGetMainUserStats();
+  const [searchModalOpen, setSearchModalOpen] = useState<boolean>(false);
+  const [activeUserStats, setActiveUserStats] = useState<ActiveUserStats>({
+    builtStats: [],
+    user: null,
+  });
 
-  // map over user.statistikk (eller hva vi får fra back)
-  // for hver return <AvfallsIcon id={avfall.id} />
+  useEffect(() => {
+    getMainUserStats();
+  }, []);
+
+  useEffect(() => {
+    setActiveUserStats(getBuiltActiveUserStats(mainUserStats, mainUser));
+  }, [mainUserStats, mainUser]);
+
+  const getBuiltActiveUserStats = (
+    stats: Stat[],
+    user: User
+  ): ActiveUserStats => {
+    const typeOccurences = countOccurrences(
+      stats,
+      (stat): Stat => stat.avfall.avfallsType.id
+    );
+    const builtStats = Object.entries(iconMap).map(([id, src]) => ({
+      id: Number(id),
+      name: src.split("/").pop()?.split(".")[0] ?? "Ukjent",
+      count: typeOccurences[id] ?? 0,
+    }));
+    return { builtStats, user };
+  };
+
+  const handleChangeActiveUserStats = (stats: Stat[], user: User) => {
+    setActiveUserStats(getBuiltActiveUserStats(stats, user));
+    toast.info(
+      "Du ser nå statistikken til " + user?.fornavn + " " + user?.etternavn
+    );
+  };
+
+  const toggleModal = () => {
+    setSearchModalOpen(!searchModalOpen);
+  };
+
+  const handleResetStats = () => {
+    setActiveUserStats(getBuiltActiveUserStats(mainUserStats, mainUser));
+    toast.info("Viser nå egen statistikk");
+  };
+
+  const activeUserIsMainUser = () => mainUser?.id === activeUserStats?.user?.id;
 
   return (
-    <Container>
-      <Heading>Min Side</Heading>
-      <h3>Masse info om kunden bla bla bla</h3>
-      <AvfallsIcon id={1} />
-      <AvfallsIcon id={2} />
-      <AvfallsIcon id={3} />
-      <h3>Statistikk bla bla</h3>
-      <h3>knapper for å endre kundedata ..</h3>
-      <h3>hva mer? ..</h3>
-    </Container>
+    <CoreContainer styles={MainContainerStyles}>
+      <CoreHeading>Min Side</CoreHeading>
+      {activeUserStats?.user && (
+        <>
+          <CoreSubheading>{`${activeUserStats?.user?.fornavn} ${activeUserStats?.user?.etternavn}`}</CoreSubheading>
+        </>
+      )}
+      {mainUserLoading ? (
+        <CoreLoader />
+      ) : (
+        <StatsTable activeUserStats={activeUserStats} />
+      )}
+      {!activeUserIsMainUser() && (
+        <ShowOwnStatsButton handleResetStats={handleResetStats} />
+      )}
+      <SearchUsersButton onClick={toggleModal} />
+      {activeUserIsMainUser() && <StatShareBtns mainUser={mainUser} />}
+      {searchModalOpen && (
+        <SearchUsersModal
+          toggleModal={toggleModal}
+          mainUser={mainUser}
+          handleChangeActiveUserStats={handleChangeActiveUserStats}
+          setSearchModalOpen={setSearchModalOpen}
+        />
+      )}
+    </CoreContainer>
   );
 };

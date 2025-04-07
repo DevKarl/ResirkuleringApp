@@ -45,7 +45,7 @@ const LogoWrapper = styled.div`
 `;
 
 export const Header = () => {
-  const screenSize = useBreakpoints();
+  const { isDesktop } = useBreakpoints();
   const [hamburgerModalOpen, setHamburgerModalOpen] = useState(false);
 
   const toggleHamburgerModal = () =>
@@ -57,7 +57,7 @@ export const Header = () => {
         <AppLogo />
         <Heading>ResirkulerApp</Heading>
       </LogoWrapper>
-      {screenSize === "small" || screenSize === "medium" ? (
+      {!isDesktop ? (
         <>
           <Hamburger onClick={toggleHamburgerModal}>&#9776;</Hamburger>
           <MobileModalMenu
