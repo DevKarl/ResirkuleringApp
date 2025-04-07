@@ -47,7 +47,7 @@ const ButtonLinkWrapper = css`
   display: flex;
   flex-direction: row;
   height: 100%;
-  justify-content: space-between;
+  justify-content: center;
   margin: 0 10px;
 `;
 

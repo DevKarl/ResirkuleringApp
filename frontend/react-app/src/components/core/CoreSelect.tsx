@@ -3,14 +3,15 @@ import { CoreContainer } from "./CoreContainer";
 
 const Title = styled.h3`
   color: ${({ theme }) => theme.colors.greenDark};
-  font-size: 20px;
+  font-size: 25px;
 `;
 
 const Select = styled.select`
   padding: 8px 12px;
   border: 1px solid ${({ theme }) => theme.colors.greenWhiteHover};
-  border-radius: 4px;
+  border-radius: 10px;
   font-size: 24px;
+  width: 100%;
   background-color: ${({ theme }) => theme.colors.white};
   cursor: pointer;
   color: ${({ theme }) => theme.colors.greenDark};
@@ -26,7 +27,8 @@ const Option = styled.option`
 `;
 
 const Container = css`
-  flex-direction: row;
+  flex-direction: column;
+  gap: 0;
 `;
 
 interface CoreSelectProps {

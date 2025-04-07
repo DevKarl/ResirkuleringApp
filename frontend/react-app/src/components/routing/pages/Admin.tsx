@@ -5,22 +5,31 @@ import { CoreHeading } from "../../core/CoreHeading";
 import { toast } from "sonner";
 import { useState } from "react";
 import { CoreSelect } from "../../core/CoreSelect";
+import { AvfallContent } from "../../admin/AvfallContent";
+import { UsersContent } from "../../admin/UsersContent";
+import { AvfallPointsContent } from "../../admin/AvfallPointsContent";
 
-const adminOptions = ["Avfall", "Brukere", "Tilganger"];
+const adminOptions = ["Avfall", "Brukere", "Avfallspunkter"];
 
 export const AdminPage = () => {
-  //const { user } = useAppContext();
+  const { user } = useAppContext();
   const navigate = useNavigate();
-  const [selected, setSelected] = useState(adminOptions[0]);
-
-  const user = {
-    isAdmin: true,
-  };
+  const [adminAction, setAdminAction] = useState(adminOptions[0]);
 
   if (!user?.isAdmin) {
     navigate("/");
     toast.error("Bruker har ikke admin-tilgang");
   }
+
+  const getAdminActionPage = () => {
+    if (adminAction === "Avfall") return <AvfallContent />;
+    if (adminAction === "Brukere") return <UsersContent />;
+    return <AvfallPointsContent />;
+  };
+
+  //getAllAvfallspunkter
+  //getAllAvfall
+  //getAllUsers
 
   return (
     <CoreContainer>
@@ -28,9 +37,10 @@ export const AdminPage = () => {
       <CoreSelect
         options={adminOptions}
         title="Velg adminhandling"
-        value={selected}
-        handleChange={(event) => setSelected(event.target.value)}
+        value={adminAction}
+        handleChange={(event) => setAdminAction(event.target.value)}
       />
+      {getAdminActionPage()}
     </CoreContainer>
   );
 };
