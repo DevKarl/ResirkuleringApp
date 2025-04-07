@@ -6,7 +6,7 @@ import { useGetSharedUsersStats } from "../../hooks/API/useGetAllSharedStats";
 import { Stat } from "../../types/statTypes";
 import { User } from "../../types";
 import { CoreLoader } from "../core/CoreLoader";
-import { CoreButton } from "../core/CoreButton";
+import { ButtonType, CoreButton } from "../core/CoreButton";
 import { css } from "styled-components";
 
 interface SearchUserModalInterface {
@@ -94,7 +94,7 @@ export const SearchUsersModal = ({
           getFilteredStats()?.map((stat: any) => (
             <CoreContainer key={stat.bruker.id} styles={UserEntry}>
               <CoreButton
-                type="white"
+                type={ButtonType.White}
                 styles={ButtonStyles}
                 onClick={() => handlePickedUser(stat)}
               >

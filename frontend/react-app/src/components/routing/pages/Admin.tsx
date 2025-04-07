@@ -3,7 +3,7 @@ import { useAppContext } from "../../../context/ContextProvider";
 import { CoreContainer } from "../../core/CoreContainer";
 import { CoreHeading } from "../../core/CoreHeading";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CoreSelect } from "../../core/CoreSelect";
 import { AvfallContent } from "../../admin/AvfallContent";
 import { UsersContent } from "../../admin/UsersContent";
@@ -16,10 +16,13 @@ export const AdminPage = () => {
   const navigate = useNavigate();
   const [adminAction, setAdminAction] = useState(adminOptions[0]);
 
-  if (!user?.isAdmin) {
-    navigate("/");
-    toast.error("Bruker har ikke admin-tilgang");
-  }
+  useEffect(() => {
+    if (!user) return;
+    if (!user?.isAdmin) {
+      navigate("/");
+      toast.error("Bruker har ikke admin-tilgang");
+    }
+  }, [user]);
 
   const getAdminActionPage = () => {
     if (adminAction === "Avfall") return <AvfallContent />;

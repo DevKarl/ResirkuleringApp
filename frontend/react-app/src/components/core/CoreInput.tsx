@@ -53,7 +53,7 @@ const RequiredMark = styled.span`
 `;
 
 interface CoreInputProps {
-  label: string;
+  label?: string;
   name: string;
   type?: string;
   hasError?: boolean;
@@ -89,7 +89,7 @@ export const CoreInput = ({
   return (
     <FieldWrapper>
       <Label htmlFor={id} version={version}>
-        {label.toUpperCase()}
+        {label?.toUpperCase()}
         {touched && isEmpty && required && <RequiredMark>*</RequiredMark>}
       </Label>
       <Input
