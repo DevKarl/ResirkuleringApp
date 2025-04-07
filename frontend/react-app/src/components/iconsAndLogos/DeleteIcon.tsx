@@ -9,8 +9,8 @@ const DeleteIconSvg = styled.svg`
 `;
 
 export const DeleteIcon = ({
-  height = "35px",
-  width = "35px",
+  height = "25px",
+  width = "25px",
 }: {
   height?: string;
   width?: string;

@@ -8,7 +8,7 @@ import { AppLogo } from "../../iconsAndLogos/AppLogo";
 const HeaderContainer = styled.header`
   background-color: #628867;
   padding: 20px;
-  height: 60px;
+  height: 40px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -16,7 +16,7 @@ const HeaderContainer = styled.header`
 `;
 
 const Heading = styled.h1`
-  font-size: 30px;
+  font-size: 20px;
   color: #fff;
   font-family: Arial, sans-serif;
   text-align: left;
@@ -55,7 +55,7 @@ export const Header = () => {
     <HeaderContainer>
       <LogoWrapper>
         <AppLogo />
-        <Heading>ResirkulerApp</Heading>
+        <Heading>Resirkuler App</Heading>
       </LogoWrapper>
       {!isDesktop ? (
         <>

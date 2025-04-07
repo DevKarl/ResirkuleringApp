@@ -77,7 +77,10 @@ export const Map = () => {
         coords?.longitude || defaultLocation.lng,
       ]}
       zoom={17}
-      style={{ height: isDesktop ? "600px" : "350px", width: "100%" }}
+      style={{
+        height: isDesktop ? "500px" : "350px",
+        width: "80%",
+      }}
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

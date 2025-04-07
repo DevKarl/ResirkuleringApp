@@ -9,8 +9,8 @@ const StyledHomeIcon = styled.svg`
 `;
 
 export const HomeIcon = ({
-  height = "35px",
-  width = "35px",
+  height = "25px",
+  width = "25px",
 }: {
   height?: string;
   width?: string;

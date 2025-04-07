@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
+import { CoreContainer } from "./CoreContainer";
 
 interface CoreModalProps {
   children: ReactNode;
@@ -10,30 +11,41 @@ interface CoreModalProps {
 const ModalOverlay = styled.div<{
   styles?: React.CSSProperties;
 }>`
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   background: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1200;
+  max-height: 100vh;
+`;
+
+const CloseBtnContainer = css`
+  width: 100%;
+  display: flex;
+  justify-content: end;
+  align-items: end;
 `;
 
 const ModalContainer = styled.div<{
   styles?: React.CSSProperties;
 }>`
   background-color: ${({ theme }) => theme.colors.green};
-  max-width: 70vw;
-  padding: 100px 40px;
   display: flex;
+  padding: 10px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  position: relative;
+  position: absolute;
   border-radius: 15px;
+  z-index: 1500;
   border: 1.5px solid ${({ theme }) => theme.colors.greenBright};
   ${({ styles }) => styles && { ...styles }};
 `;
@@ -54,19 +66,13 @@ const CloseIcon = () => (
 const CloseButton = styled.button<{
   styles?: React.CSSProperties;
 }>`
-  position: absolute;
-  top: 20px;
-  right: 20px;
   background-color: transparent;
   border: none;
   cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  margin-bottom: 10px;
+  padding: 0;
 
   svg {
-    width: 100%;
-    height: 100%;
     fill: ${({ theme }) => theme.colors.white};
   }
 
@@ -77,13 +83,16 @@ const CloseButton = styled.button<{
 
 export const CoreModal = ({ children, onClose, styles }: CoreModalProps) => {
   return (
-    <ModalOverlay onClick={onClose}>
+    <>
       <ModalContainer styles={styles} onClick={(e) => e.stopPropagation()}>
-        <CloseButton onClick={onClose}>
-          <CloseIcon />
-        </CloseButton>
+        <CoreContainer styles={CloseBtnContainer}>
+          <CloseButton onClick={onClose}>
+            <CloseIcon />
+          </CloseButton>
+        </CoreContainer>
         {children}
       </ModalContainer>
-    </ModalOverlay>
+      <ModalOverlay onClick={onClose} />
+    </>
   );
 };

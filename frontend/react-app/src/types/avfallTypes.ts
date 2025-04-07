@@ -8,7 +8,7 @@ export type Avfall = {
   navn: string;
   beskrivelse: string;
   avfallsType: AvfallsType;
-  strekkode: string;
+  strekKode: string;
 };
 
 export type AvfallspunktAvfallstyper = {

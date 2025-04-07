@@ -18,12 +18,11 @@ const DesktopNavContainer = styled.nav`
 `;
 
 const HeaderButton = styled(Link)`
-  font-size: 30px;
+  font-size: 20px;
   color: white;
   text-decoration: none;
   background-color: #628867;
   border-radius: 15px;
-  padding: 10px 20px;
 
   &:hover {
     background-color: #46694a;
@@ -31,12 +30,11 @@ const HeaderButton = styled(Link)`
 `;
 
 const AdminBtn = styled(Link)`
-  padding: 10px 20px;
-  font-size: 30px;
-  color: ${({ theme }) => theme.colors.white};
+  font-size: 20px;
+  color: ${({ theme }) => theme.colors.greenWhite};
   text-decoration: none;
   background-color: ${({ theme }) => theme.colors.greenDark};
-  border: 2px solid #f1f1f1;
+  border: 1px solid ${({ theme }) => theme.colors.white};
   border-radius: 15px;
   &:hover {
     background-color: #2f4b33;
@@ -49,19 +47,18 @@ const ButtonLinkWrapper = css`
   height: 100%;
   justify-content: center;
   margin: 0 10px;
+  font-size: 20px;
 `;
 
 const LogOutButton = styled.button`
   background-color: ${({ theme }) => theme.colors.greenDark};
   border: 1px solid ${({ theme }) => theme.colors.white};
   color: ${({ theme }) => theme.colors.greenWhite};
-  font-size: 25px;
+  font-size: 20px;
   text-decoration: none;
   border-radius: 15px;
-  width: 212px;
   align-content: center;
   text-align: center;
-  padding: 5px;
   &:hover {
     background-color: #2f4b33;
     cursor: pointer;

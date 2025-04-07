@@ -5,9 +5,15 @@ import { CoreHeading } from "../../core/CoreHeading";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { CoreSelect } from "../../core/CoreSelect";
-import { AvfallContent } from "../../admin/AvfallContent";
+import { AvfallContent } from "../../admin/avfall/AvfallContent";
 import { UsersContent } from "../../admin/UsersContent";
 import { AvfallPointsContent } from "../../admin/AvfallPointsContent";
+import { css } from "styled-components";
+
+const AdminContainer = css`
+  width: fit-content;
+  margin: 0 auto;
+`;
 
 const adminOptions = ["Avfall", "Brukere", "Avfallspunkter"];
 
@@ -35,7 +41,7 @@ export const AdminPage = () => {
   //getAllUsers
 
   return (
-    <CoreContainer>
+    <CoreContainer styles={AdminContainer}>
       <CoreHeading>Admin Dashbord</CoreHeading>
       <CoreSelect
         options={adminOptions}

@@ -9,8 +9,8 @@ const AdminIconSvg = styled.svg`
 `;
 
 export const AdminIcon = ({
-  height = "35px",
-  width = "35px",
+  height = "25px",
+  width = "25px",
 }: {
   height?: string;
   width?: string;

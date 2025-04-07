@@ -12,6 +12,7 @@ const HomePageContainer = styled.div`
   align-items: center;
   background-color: #e2f0e5;
   gap: 20px;
+  margin-bottom: 20px;
 `;
 
 const Heading = styled.h1`
