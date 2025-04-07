@@ -19,4 +19,12 @@ public class AvfallService {
   public Avfall getAvfallById(int Id){
     return avfallRepo.findById(Id);
   }
+
+  public boolean updateAvfall(Avfall avfall) {
+    if (avfall == null || (Integer)avfall.getId() == null){
+      return false;
+    }
+    avfallRepo.save(avfall);
+    return true;
+  }
 }
