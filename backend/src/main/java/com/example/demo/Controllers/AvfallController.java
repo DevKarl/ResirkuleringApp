@@ -63,8 +63,8 @@ public class AvfallController {
     }
   }
   
-  @PostMapping("/createNewAvfall")
-  public ResponseEntity<?> leggTilAvfall(HttpSession session, @RequestBody @Valid LagAvfallRequest request, BindingResult br){
+  @PostMapping("/addNewAvfall")
+  public ResponseEntity<?> addNewAvfall(HttpSession session, @RequestBody @Valid LagAvfallRequest request, BindingResult bindingResult){
 
     if (session == null) {
       return ResponseEntity.badRequest().body(new ErrorResponse("Brukeren er allerede logget ut!"));
@@ -73,18 +73,23 @@ public class AvfallController {
     if (session.getAttribute("userId") == null) {
       return ResponseEntity.badRequest().body(new ErrorResponse("Brukeren er allerede logged inn!"));
     }
-    if (br.hasErrors()){
-      String returnMessage = ErrorMsgBuilder.buildError((BindingResult)br.getAllErrors());
+
+    if (bindingResult.hasErrors()){
+      String returnMessage = ErrorMsgBuilder.buildError((BindingResult)bindingResult.getAllErrors());
       return ResponseEntity.badRequest().body(new RegisterResponse(returnMessage));
     }
 
     Object id = session.getAttribute("userId");
     Bruker bruker = brukerService.findById((Integer)id);
     if(!bruker.isAdminrettigheter()){
-      return ResponseEntity.badRequest().body(new ErrorResponse("Du har ikke adminrettigheter."));
+      return ResponseEntity.badRequest().body(new ErrorResponse("Uautorisert tilgang: Denne handlingen krever admintilgang."));
     }
 
-    AvfallsType type = avfTypeService.getAvfTypeById(request.getAvfallstypeId());
+    if(avfallService.strekkodeAlreadyExists(request.getStrekkode())) {
+      return ResponseEntity.badRequest().body(new ErrorResponse("Strekkoden finnes allerede fra før av. Vennligst bruk en annen."));
+    }
+
+    AvfallsType type = avfTypeService.getAvfTypeById(request.getAvfallsTypeId());
     
     Avfall newAvfall = new Avfall();
     newAvfall.setNavn(request.getNavn());
