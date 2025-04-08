@@ -1,17 +1,17 @@
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 
-export const useGetSharedUsersStats = () => {
+export const useGetAllAvfall = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState(null);
   const hasFetched = useRef(false);
 
-  const getSharedUsersStats = async () => {
+  const getAllAvfall = async () => {
     if (hasFetched.current) return;
     hasFetched.current = true;
     setIsLoading(true);
     try {
-      const response = await fetch("/api/getSharedUsersStats", {
+      const response = await fetch("/api/getAllAvfall", {
         method: "GET",
         headers: { Accept: "application/json" },
       });
@@ -22,13 +22,11 @@ export const useGetSharedUsersStats = () => {
       }
       setData(data);
     } catch (error) {
-      toast.error(
-        "Kan ikke hente statistikk over offentlig avfallsdata akkurat nå"
-      );
+      toast.error("Kan ikke hente avfallsdata akkurat nå. Prøv igjen senere.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  return { isLoading, data, getSharedUsersStats };
+  return { isLoading, data, getAllAvfall };
 };

@@ -1,5 +1,7 @@
 package com.example.demo.Service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,10 @@ public class AvfallService {
 
   public Avfall getAvfallById(int Id){
     return avfallRepo.findById(Id);
+  }
+
+  public List<Avfall> getAllAvfall() {
+    return avfallRepo.findAll();
   }
 
   public void createNewAvfall(Avfall newAvfall) {

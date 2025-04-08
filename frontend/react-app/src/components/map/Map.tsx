@@ -18,6 +18,7 @@ import { AvfallspunktMarker } from "./AvfallspunktMarker";
 import { FitBounds } from "./FitBounds";
 import { findClosestPoint } from "./findClosestPoint";
 import useBreakpoints from "../../hooks/useBreakpoints";
+import { toast } from "sonner";
 
 const userIcon = new L.Icon({
   iconUrl: ikon,
@@ -33,6 +34,10 @@ export const Map = () => {
   const { isDesktop } = useBreakpoints();
   const defaultLocation = { lat: 61.458982498103865, lng: 5.888914753595201 }; // HVL Førde
   const { isLoading, postHivAvfall } = usePostHivAvfall();
+  const [hasWarnedGeolocationUnavailable, setHasWarnedGeolocationUnavailable] =
+    useState(false);
+  const [hasWarnedGeolocationDisabled, setHasWarnedGeolocationDisabled] =
+    useState(false);
 
   const hivAvfall = () => {
     //@ts-ignore
@@ -52,12 +57,17 @@ export const Map = () => {
     [coords, scannedAvfallResult]
   );
 
-  if (!isGeolocationAvailable)
-    return <div>Enheten din støtter ikke geolokasjon 😢 </div>;
+  if (!isGeolocationAvailable) {
+    if (hasWarnedGeolocationUnavailable) return;
+    toast.error("Enheten din støtter ikke geolokasjon.");
+    setHasWarnedGeolocationUnavailable(true);
+  }
 
-  if (!isGeolocationEnabled)
-    return <div>Kart krever at posisjon deles 😠 </div>;
-
+  if (!isGeolocationEnabled) {
+    if (hasWarnedGeolocationDisabled) return;
+    toast.error("Kart krever at geolokasjon tillates");
+    setHasWarnedGeolocationDisabled(true);
+  }
   if (!coords) return <MapLoader />;
 
   return (
@@ -67,7 +77,10 @@ export const Map = () => {
         coords?.longitude || defaultLocation.lng,
       ]}
       zoom={17}
-      style={{ height: isDesktop ? "600px" : "350px", width: "100%" }}
+      style={{
+        height: isDesktop ? "500px" : "350px",
+        width: "80%",
+      }}
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

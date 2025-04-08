@@ -10,6 +10,12 @@ import { useNavigate } from "react-router-dom";
 import { usePostLogin } from "../../../hooks/API/usePostLogin";
 import { CoreLoader } from "../../core/CoreLoader";
 import { toast } from "sonner";
+import { css } from "styled-components";
+
+const LoginContainer = css`
+  gap: 15px;
+  width: 100%;
+`;
 
 export const Login = () => {
   const { user } = useAppContext();
@@ -57,29 +63,31 @@ export const Login = () => {
     <CoreContainer>
       <CoreHeading>Logg inn</CoreHeading>
       <CoreForm onSubmit={handleSubmit} title="Logg inn på brukerkontoen din">
-        <CoreInput
-          value={formData.brukernavn}
-          onChange={handleChange}
-          label="Brukernavn"
-          name="brukernavn"
-          placeholder="Ditt brukernavn"
-          required
-          hasError={errors.brukernavn}
-        />
-        <CoreInput
-          value={formData.passord}
-          onChange={handleChange}
-          label="Passord"
-          name="passord"
-          placeholder="Ditt passord"
-          required
-          hasError={errors.passord}
-          type="password"
-        />
-        {isLoading ? <CoreLoader /> : <CoreButton>Logg inn</CoreButton>}
-        <CoreLink to="/registrer">
-          Mangler du konto? Klikk her for å registrere
-        </CoreLink>
+        <CoreContainer styles={LoginContainer}>
+          <CoreInput
+            value={formData.brukernavn}
+            onChange={handleChange}
+            label="Brukernavn"
+            name="brukernavn"
+            placeholder="Ditt brukernavn"
+            required
+            hasError={errors.brukernavn}
+          />
+          <CoreInput
+            value={formData.passord}
+            onChange={handleChange}
+            label="Passord"
+            name="passord"
+            placeholder="Ditt passord"
+            required
+            hasError={errors.passord}
+            type="password"
+          />
+          {isLoading ? <CoreLoader /> : <CoreButton>Logg inn</CoreButton>}
+          <CoreLink to="/registrer">
+            Mangler du konto? Klikk her for å registrere
+          </CoreLink>
+        </CoreContainer>
       </CoreForm>
     </CoreContainer>
   );

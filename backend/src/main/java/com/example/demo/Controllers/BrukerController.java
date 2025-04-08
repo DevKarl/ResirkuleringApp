@@ -1,4 +1,5 @@
 package com.example.demo.Controllers;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.Cookie;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.demo.Controllers.Interfaces.ApiController;
 import com.example.demo.DTO.ErrorResponse;
+import com.example.demo.DTO.GetAllUsersResponse;
 import com.example.demo.DTO.GetUserResponse;
 import com.example.demo.DTO.LoginRequest;
 import com.example.demo.DTO.LoginResponse;
@@ -26,6 +28,7 @@ import com.example.demo.DTO.SuccessResponse;
 import com.example.demo.Entities.Bruker;
 import com.example.demo.Service.BrukerService;
 import com.example.demo.Service.PassordService;
+
 
 @ApiController
 public class BrukerController {
@@ -186,6 +189,27 @@ public class BrukerController {
       return ResponseEntity.status(500).body(new ErrorResponse("En feil oppstod "));
     }
   }
+
+  @GetMapping("/getAllUsers")
+  public ResponseEntity<?> getAllUsers(HttpSession session) {
+    if (session == null) {
+      return ResponseEntity.badRequest().body(new ErrorResponse("Sesjonen er utløpt, vennligst logg inn på nytt."));
+    }
+    Object userId = session.getAttribute("userId");
+    if (userId == null) {
+      return ResponseEntity.status(401).body(new ErrorResponse("Brukeren er ikke logget inn"));
+    }
+    if (!brukerService.isAdmin((Integer) userId)) {
+      return ResponseEntity.status(403).body(new ErrorResponse("Uautorisert tilgang: Denne handlingen krever admintilgang."));
+    }
+    try {
+      List<Bruker> brukere = brukerService.getAllUsers();
+      return ResponseEntity.ok().body(new GetAllUsersResponse(brukere));
+    } catch(Exception e) {
+      return ResponseEntity.status(500).body(new ErrorResponse("En feil oppstod under henting av alle brukere"));
+    }
+  }
+  
 
   private String buildErrorString(BindingResult bindResult) {
     return bindResult.getAllErrors()
