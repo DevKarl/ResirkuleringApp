@@ -8,7 +8,18 @@ export type Avfall = {
   navn: string;
   beskrivelse: string;
   avfallsType: AvfallsType;
-  strekKode: string;
+  strekkode: string;
+};
+
+export type NewAvfallPost = {
+  navn: string;
+  beskrivelse: string;
+  avfallsTypeId: number;
+  strekkode: string;
+};
+
+export type DeleteAvfallPost = {
+  id: number;
 };
 
 export type AvfallspunktAvfallstyper = {

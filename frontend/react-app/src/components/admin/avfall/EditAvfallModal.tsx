@@ -10,6 +10,7 @@ import { useGetAllAvfallstyper } from "../../../hooks/API/useGetAllAvfallstyper"
 import { CoreLoader } from "../../core/CoreLoader";
 import { ButtonType, CoreButton } from "../../core/CoreButton";
 import { css } from "styled-components";
+import { toast } from "sonner";
 
 interface EditAvfallModalProps {
   avfall: Avfall | null;
@@ -52,6 +53,44 @@ export const EditAvfallModal = ({
     strekKode: false,
   });
 
+  const isValid = (): boolean => {
+    const newErrors = {
+      navn: false,
+      beskrivelse: false,
+      avfallsType: false,
+      strekKode: false,
+    };
+    if (formData.navn.trim().length < 1 || formData.navn.trim().length > 20) {
+      newErrors.navn = true;
+      toast.error("Navnet på avfallet må være mellom 1 og 20 tegn");
+    }
+    if (
+      formData.beskrivelse.trim().length < 1 ||
+      formData.beskrivelse.trim().length > 200
+    ) {
+      newErrors.beskrivelse = true;
+      toast.error("Beskrivelsen må være mellom 1 og 200 tegn");
+    }
+    if (!formData.avfallsType) {
+      newErrors.avfallsType = true;
+      toast.error("Avfallstype må oppgis");
+    }
+    if (
+      formData.strekKode.trim().length < 5 ||
+      formData.strekKode.trim().length > 30
+    ) {
+      newErrors.strekKode = true;
+      toast.error("Strekkoden må være mellom 5 og 30 tegn");
+    }
+    setErrors(newErrors);
+    return (
+      newErrors.navn === false &&
+      newErrors.beskrivelse === false &&
+      newErrors.avfallsType === false &&
+      newErrors.strekKode === false
+    );
+  };
+
   const avfallsTyperOptions =
     avfallsTyperData?.avfallsTyper.map(
       (avfallsType: AvfallsType) => avfallsType.type
@@ -71,9 +110,13 @@ export const EditAvfallModal = ({
     setFormData((prev) => ({ ...prev, avfallsType: value }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
     toggleModal();
     fetchAvfall();
+    if (isValid()) {
+      // POST REQUEST
+    }
   };
 
   return (
