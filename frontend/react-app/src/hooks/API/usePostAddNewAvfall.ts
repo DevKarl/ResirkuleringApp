@@ -7,7 +7,7 @@ export const usePostAddNewAvfall = () => {
   const postAddNewAvfall = async (formData: NewAvfallPost) => {
     setIsLoading(true);
     try {
-      const response = await fetch("/api/createNewAvfall", {
+      const response = await fetch("/api/addNewAvfall", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
