@@ -1,9 +1,10 @@
 import React, { useId, useState } from "react";
 import styled from "styled-components";
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface TextareaProps
+  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   hasError?: boolean;
-  version?: string;
+  type: string;
 }
 
 const FieldWrapper = styled.div`
@@ -12,24 +13,25 @@ const FieldWrapper = styled.div`
   flex-direction: column;
 `;
 
-const Label = styled.label<InputProps>`
+const Label = styled.label<TextareaProps>`
   font-weight: 500;
   font-size: 15px;
   margin-bottom: 0.25rem;
-  color: ${({ theme, version }) =>
-    version === "primary" ? theme.colors.darkGrey : theme.colors.white};
+  color: ${({ theme, type }) =>
+    type === "primary" ? theme.colors.darkGrey : theme.colors.white};
 `;
 
-const Input = styled.input<InputProps>`
-  height: 45px;
-  padding: 0rem 0.75rem;
+const Textarea = styled.textarea<TextareaProps>`
+  padding: 0.75rem;
   border: 2px solid
     ${({ theme, hasError }) => (hasError ? "tomato" : theme.colors.greenDark)};
   border-radius: 10px;
   background-color: ${({ theme }) => theme.colors.white};
   color: ${({ theme }) => theme.colors.darkGrey};
   font-size: 1rem;
+  resize: vertical;
   transition: border-color 0.2s, background-color 0.2s;
+  font-family: ${({ theme }) => theme.fontFamily};
 
   &:focus {
     outline: none;
@@ -41,61 +43,49 @@ const Input = styled.input<InputProps>`
   }
 `;
 
-// const ErrorMessage = styled.p`
-//   color: tomato;
-//   font-size: 0.875rem;
-//   margin-top: 0.25rem;
-// `;
-
 const RequiredMark = styled.span`
   color: tomato;
   margin-left: 0.25rem;
 `;
 
-interface CoreInputProps {
+interface CoreTextareaProps {
   label?: string;
   name: string;
-  type?: string;
-  hasError?: boolean;
   value: string;
   version?: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   placeholder?: string;
-  // error?: string;
+  hasError?: boolean;
   required?: boolean;
+  type: string;
 }
 
-export const CoreInput = ({
+export const CoreTextarea = ({
   label,
   name,
-  type = "text",
-  version = "primary",
   value,
   onChange,
   placeholder,
-  // error,
   hasError,
   required = false,
-}: CoreInputProps) => {
+  type = "primary",
+}: CoreTextareaProps) => {
   const id = useId();
   const [touched, setTouched] = useState(false);
 
-  const handleFocus = () => {
-    setTouched(true);
-  };
+  const handleFocus = () => setTouched(true);
 
   const isEmpty = value.trim() === "";
 
   return (
     <FieldWrapper>
-      <Label htmlFor={id} version={version}>
+      <Label htmlFor={id} type={type}>
         {label?.toUpperCase()}
         {touched && isEmpty && required && <RequiredMark>*</RequiredMark>}
       </Label>
-      <Input
+      <Textarea
         id={id}
         name={name}
-        type={type}
         value={value}
         onChange={onChange}
         placeholder={placeholder}
@@ -105,7 +95,6 @@ export const CoreInput = ({
         aria-describedby={hasError ? `${id}-error` : undefined}
         onBlur={handleFocus}
       />
-      {/* {error && <ErrorMessage id={`${id}-error`}>{error}</ErrorMessage>} */}
     </FieldWrapper>
   );
 };

@@ -6,7 +6,7 @@ import { useGetSharedUsersStats } from "../../hooks/API/useGetAllSharedStats";
 import { Stat } from "../../types/statTypes";
 import { User } from "../../types";
 import { CoreLoader } from "../core/CoreLoader";
-import { CoreButton } from "../core/CoreButton";
+import { ButtonType, CoreButton } from "../core/CoreButton";
 import { css } from "styled-components";
 
 interface SearchUserModalInterface {
@@ -15,6 +15,10 @@ interface SearchUserModalInterface {
   handleChangeActiveUserStats: (stats: Stat[], user: User) => void;
   mainUser: User;
 }
+
+const SearchUsersModalContainer = css`
+  padding: 10px;
+`;
 
 const UsersContainer = css`
   gap: 15px;
@@ -78,31 +82,33 @@ export const SearchUsersModal = ({
 
   return (
     <CoreModal onClose={toggleModal}>
-      <CoreInput
-        label="Søk etter bruker"
-        name="users"
-        type="text"
-        version="secondary"
-        value={searchInput}
-        onChange={handleSearch}
-        placeholder="Skriv navn på brukeren"
-      />
-      <CoreContainer styles={UsersContainer}>
-        {isLoading ? (
-          <CoreLoader />
-        ) : (
-          getFilteredStats()?.map((stat: any) => (
-            <CoreContainer key={stat.bruker.id} styles={UserEntry}>
-              <CoreButton
-                type="white"
-                styles={ButtonStyles}
-                onClick={() => handlePickedUser(stat)}
-              >
-                {stat.bruker.fornavn + " " + stat.bruker.etternavn}
-              </CoreButton>
-            </CoreContainer>
-          ))
-        )}
+      <CoreContainer styles={SearchUsersModalContainer}>
+        <CoreInput
+          label="Søk etter bruker"
+          name="users"
+          type="text"
+          version="secondary"
+          value={searchInput}
+          onChange={handleSearch}
+          placeholder="Skriv navn på brukeren"
+        />
+        <CoreContainer styles={UsersContainer}>
+          {isLoading ? (
+            <CoreLoader />
+          ) : (
+            getFilteredStats()?.map((stat: any) => (
+              <CoreContainer key={stat.bruker.id} styles={UserEntry}>
+                <CoreButton
+                  type={ButtonType.White}
+                  styles={ButtonStyles}
+                  onClick={() => handlePickedUser(stat)}
+                >
+                  {stat.bruker.fornavn + " " + stat.bruker.etternavn}
+                </CoreButton>
+              </CoreContainer>
+            ))
+          )}
+        </CoreContainer>
       </CoreContainer>
     </CoreModal>
   );

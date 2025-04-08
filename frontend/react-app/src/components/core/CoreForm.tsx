@@ -1,5 +1,9 @@
 import styled from "styled-components";
 
+interface FormTitleProps {
+  type: string;
+}
+
 const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
@@ -13,15 +17,21 @@ const StyledForm = styled.form`
   padding: 20px;
 `;
 
-const StyledFormTitle = styled.p`
+const StyledFormTitle = styled.p<FormTitleProps>`
   font-size: 22px;
-  color: ${({ theme }) => theme.colors.darkGrey};
+  color: ${({ theme, type }) =>
+    type === "primary" ? theme.colors.darkGrey : theme.colors.white};
 `;
 
-export const CoreForm = ({ onSubmit, children, title }: any) => {
+export const CoreForm = ({
+  onSubmit,
+  children,
+  title,
+  type = "primary",
+}: any) => {
   return (
     <StyledForm onSubmit={onSubmit}>
-      <StyledFormTitle>{title}</StyledFormTitle>
+      <StyledFormTitle type={type}>{title}</StyledFormTitle>
       {children}
     </StyledForm>
   );

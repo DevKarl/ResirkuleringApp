@@ -1,5 +1,6 @@
 package com.example.demo.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -53,5 +54,14 @@ public class BrukerService {
 
   public boolean brukernavnIsTaken(String brukernavn) {
     return findByBrukernavn(brukernavn) != null;
+  }
+
+  public List<Bruker> getAllUsers() {
+    return brukerRepo.findAll();
+  }
+
+  public boolean isAdmin(int brukerId) {
+    Optional<Bruker> brukerOptional = brukerRepo.findById(brukerId);
+    return brukerOptional.map(Bruker::isAdminrettigheter).orElse(false);
   }
 }
