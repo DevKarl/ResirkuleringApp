@@ -85,6 +85,10 @@ public class AvfallController {
       return ResponseEntity.badRequest().body(new ErrorResponse("Uautorisert tilgang: Denne handlingen krever admintilgang."));
     }
 
+    if (!request.getStrekkode().trim().matches("\\d+")) {
+      return ResponseEntity.badRequest().body(new ErrorResponse("Strekkoden kan kun inneholde tall (0-9)."));
+    }
+
     if(avfallService.strekkodeAlreadyExists(request.getStrekkode())) {
       return ResponseEntity.badRequest().body(new ErrorResponse("Strekkoden finnes allerede fra før av. Vennligst bruk en annen."));
     }
