@@ -21,4 +21,8 @@ public class AvfTypeService {
   public List<AvfallsType> getAllAvfallstyper() {
     return avfallsTypeRepo.findAll();
   }
+
+  public AvfallsType getAvfTypeById(int id){
+    return avfallsTypeRepo.findById(id);
+  }
 }

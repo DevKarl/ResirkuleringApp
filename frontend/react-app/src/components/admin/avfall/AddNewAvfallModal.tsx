@@ -89,6 +89,10 @@ export const AddNewAvfallModal = ({
       newErrors.strekKode = true;
       toast.error("Strekkoden må være mellom 5 og 30 tegn");
     }
+    if (!/^\d+$/.test(formData.strekKode.trim())) {
+      newErrors.strekKode = true;
+      toast.error("Strekkoden kan kun inneholde tall (0-9)");
+    }
     setErrors(newErrors);
     return (
       newErrors.navn === false &&
@@ -130,10 +134,10 @@ export const AddNewAvfallModal = ({
     console.log(formData);
     if (isValid()) {
       await postAddNewAvfall({
-        navn: formData.navn,
-        beskrivelse: formData.beskrivelse,
+        navn: formData.navn.trim(),
+        beskrivelse: formData.beskrivelse.trim(),
         avfallsTypeId: getIdForAvfallsType(),
-        strekkode: formData.strekKode,
+        strekkode: formData.strekKode.trim(),
       });
       toggleModal();
       fetchAvfall();

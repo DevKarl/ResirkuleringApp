@@ -25,4 +25,12 @@ public class AvfallService {
   public List<Avfall> getAllAvfall() {
     return avfallRepo.findAll();
   }
+
+  public void createNewAvfall(Avfall newAvfall) {
+    avfallRepo.save(newAvfall);
+  }
+
+  public boolean strekkodeAlreadyExists(String strekkode) {
+    return avfallRepo.existsByStrekkode(strekkode);
+  }
 }
