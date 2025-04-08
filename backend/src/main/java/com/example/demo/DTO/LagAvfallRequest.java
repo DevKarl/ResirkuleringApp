@@ -13,23 +13,22 @@ public class LagAvfallRequest {
   @NotBlank(message = "Varenavn mangler")
   private String navn;
 
-  @Size(min = 0, max = 400)
+  @Size(min = 0, max = 200)
   private String beskrivelse;
 
   @NotNull(message = "må velge avfallstype")
-  private Integer avfallstypeId;
+  private Integer avfallsTypeId;
 
-  
 
   public LagAvfallRequest(){
 
   }
 
-  public LagAvfallRequest(String strekkode, String navn, String beskrivelse, Integer avfallstypeId){
+  public LagAvfallRequest(String strekkode, String navn, String beskrivelse, Integer avfallsTypeId){
     this.strekkode = strekkode;
     this.navn = navn;
     this.beskrivelse = beskrivelse;
-    this.avfallstypeId = avfallstypeId;
+    this.avfallsTypeId = avfallsTypeId;
   }
 
 
@@ -57,12 +56,12 @@ public class LagAvfallRequest {
     this.beskrivelse = beskrivelse;
   }
 
-  public Integer getAvfallstypeId() {
-    return this.avfallstypeId;
+  public Integer getAvfallsTypeId() {
+    return this.avfallsTypeId;
   }
 
-  public void setAvfallstypeId(Integer avfallstype) {
-    this.avfallstypeId = avfallstype;
+  public void setAvfallsTypeId(Integer avfallsTypeId) {
+    this.avfallsTypeId = avfallsTypeId;
   }
 
 
