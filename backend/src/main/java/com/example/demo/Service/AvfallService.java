@@ -29,4 +29,8 @@ public class AvfallService {
   public void createNewAvfall(Avfall newAvfall) {
     avfallRepo.save(newAvfall);
   }
+
+  public boolean strekkodeAlreadyExists(String strekkode) {
+    return avfallRepo.existsByStrekkode(strekkode);
+  }
 }
