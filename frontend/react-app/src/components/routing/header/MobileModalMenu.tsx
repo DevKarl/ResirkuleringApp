@@ -17,6 +17,7 @@ const ButtonsWrapper = styled.div`
   justify-content: center;
   align-items: center;
   gap: 30px;
+  padding: 20px;
 `;
 
 const HeaderLink = styled(Link)`
