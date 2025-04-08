@@ -23,7 +23,7 @@ import com.example.demo.Service.AvfTypeService;
 import com.example.demo.Service.AvfallService;
 import com.example.demo.Service.BrukerService;
 import com.example.demo.Utils.ErrorMsgBuilder;
-import com.example.demo.Service.CookieService;
+import com.example.demo.Utils.SessionValidator;
 import com.example.demo.Utils.BadRequestUtils;
 
 
@@ -33,9 +33,6 @@ public class AvfallController {
 
   @Autowired
   AvfallService avfallService;
-
-  @Autowired
-  private CookieService cookieService;
 
   @Autowired
   BrukerService brukerService;
@@ -115,15 +112,15 @@ public class AvfallController {
 
   @PostMapping("postUpdateAvfall")
   public ResponseEntity<?> postUpdateAvfall(HttpSession session,
-  @RequestBody @Valid UpdateAvfallRequest updatedAvfall, BindingResult br){
-
-    ResponseEntity<?> errorMsg = cookieService.checkIfSessionNullorNoLoggedInUser(session);
-    if(errorMsg != null){
-      return errorMsg;
+  @RequestBody @Valid UpdateAvfallRequest updatedAvfall, BindingResult bindingResult){
+    
+    ResponseEntity<?> validationResponse = SessionValidator.validateSession(session);
+    if (validationResponse != null) {
+      return validationResponse;
     }
 
-    if (br.hasErrors()){
-      String returnMessage = ErrorMsgBuilder.buildError((BindingResult)br.getAllErrors());
+    if (bindingResult.hasErrors()){
+      String returnMessage = ErrorMsgBuilder.buildError((BindingResult)bindingResult.getAllErrors());
       return ResponseEntity.badRequest().body(new RegisterResponse(returnMessage));
     }
 
