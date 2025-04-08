@@ -2,6 +2,10 @@ import { createContext, useContext, useState, ReactNode } from "react";
 import { ScanAvfallResponse } from "../types";
 import { User } from "../types/userTypes";
 
+export type GivenWarnings = {
+  admin: boolean;
+};
+
 interface AppContextType {
   user: User | null;
   scannedAvfallResult: ScanAvfallResponse | null;

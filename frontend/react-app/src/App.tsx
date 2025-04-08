@@ -8,6 +8,7 @@ import { Registrer } from "./components/routing/pages/Register";
 import { useEffect } from "react";
 import { useGetUser } from "./hooks/API/useGetUser";
 import { CustomToaster } from "./toast/CustomToaster";
+import { AdminPage } from "./components/routing/pages/Admin";
 
 const MainContent = styled.main`
   background-color: #e2f0e5;
@@ -30,6 +31,7 @@ function App() {
           <Route path="/minside" element={<UserPage />} />
           <Route path="/logginn" element={<Login />} />
           <Route path="/registrer" element={<Registrer />} />
+          <Route path="/admin" element={<AdminPage />} />
         </Routes>
         <CustomToaster />
       </MainContent>
