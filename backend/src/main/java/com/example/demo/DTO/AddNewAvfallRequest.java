@@ -4,7 +4,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-public class LagAvfallRequest {
+public class AddNewAvfallRequest {
   
 
   @NotBlank(message = "Strekkode maa oppgies")
@@ -20,11 +20,11 @@ public class LagAvfallRequest {
   private Integer avfallsTypeId;
 
 
-  public LagAvfallRequest(){
+  public AddNewAvfallRequest(){
 
   }
 
-  public LagAvfallRequest(String strekkode, String navn, String beskrivelse, Integer avfallsTypeId){
+  public AddNewAvfallRequest(String strekkode, String navn, String beskrivelse, Integer avfallsTypeId){
     this.strekkode = strekkode;
     this.navn = navn;
     this.beskrivelse = beskrivelse;

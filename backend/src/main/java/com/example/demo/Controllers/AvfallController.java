@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.demo.Controllers.Interfaces.ApiController;
 import com.example.demo.DTO.ErrorResponse;
 import com.example.demo.DTO.GetAllAvfallResponse;
-import com.example.demo.DTO.LagAvfallRequest;
+import com.example.demo.DTO.AddNewAvfallRequest;
 import com.example.demo.DTO.RegisterResponse;
 import com.example.demo.Entities.Avfall;
 import com.example.demo.Entities.AvfallsType;
@@ -64,7 +64,7 @@ public class AvfallController {
   }
   
   @PostMapping("/addNewAvfall")
-  public ResponseEntity<?> addNewAvfall(HttpSession session, @RequestBody @Valid LagAvfallRequest request, BindingResult bindingResult){
+  public ResponseEntity<?> addNewAvfall(HttpSession session, @RequestBody @Valid AddNewAvfallRequest request, BindingResult bindingResult){
 
     if (session == null) {
       return ResponseEntity.badRequest().body(new ErrorResponse("Brukeren er allerede logget ut!"));
