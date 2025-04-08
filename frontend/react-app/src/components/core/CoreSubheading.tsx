@@ -1,7 +1,8 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 interface StyledSubheadingProps {
   type: string;
+  styles?: any;
 }
 
 const StyledSubheading = styled.h3<StyledSubheadingProps>`
@@ -12,8 +13,18 @@ const StyledSubheading = styled.h3<StyledSubheadingProps>`
     type === "secondary" ? theme.colors.white : theme.colors.greenDark};
   font-family: Arial, sans-serif;
   text-align: left;
+
+  ${({ styles }) =>
+    styles &&
+    css`
+      ${styles}
+    `}
 `;
 
-export const CoreSubheading = ({ children, type = "primary" }: any) => {
-  return <StyledSubheading type={type}>{children}</StyledSubheading>;
+export const CoreSubheading = ({ children, type = "primary", styles }: any) => {
+  return (
+    <StyledSubheading type={type} styles={styles}>
+      {children}
+    </StyledSubheading>
+  );
 };

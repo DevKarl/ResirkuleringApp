@@ -12,7 +12,20 @@ interface DeleteAvfallModalProps {
 }
 
 const DeleteAvfallContainer = css`
-  gap: 10px;
+  width: 250px;
+  align-items: center;
+`;
+
+const ButtonStyles = css`
+  font-size: 18px;
+  width: 200px;
+  margin-bottom: 15px;
+`;
+
+const CoreSubheadingStyles = css`
+  font-size: 18px;
+  text-align: center;
+  margin-bottom: 10px;
 `;
 
 export const DeleteAvfallModal = ({
@@ -29,13 +42,21 @@ export const DeleteAvfallModal = ({
   return (
     <CoreModal onClose={toggleModal}>
       <CoreContainer styles={DeleteAvfallContainer}>
-        <CoreSubheading type="secondary">
+        <CoreSubheading type="secondary" styles={CoreSubheadingStyles}>
           Er du sikker på at du vil slette {avfall?.navn} ?
         </CoreSubheading>
-        <CoreButton type={ButtonType.Danger} onClick={handleDeleteAvfall}>
+        <CoreButton
+          type={ButtonType.Danger}
+          onClick={handleDeleteAvfall}
+          styles={ButtonStyles}
+        >
           Slett
         </CoreButton>
-        <CoreButton type={ButtonType.White} onClick={toggleModal}>
+        <CoreButton
+          type={ButtonType.White}
+          onClick={toggleModal}
+          styles={ButtonStyles}
+        >
           Lukk
         </CoreButton>
       </CoreContainer>
