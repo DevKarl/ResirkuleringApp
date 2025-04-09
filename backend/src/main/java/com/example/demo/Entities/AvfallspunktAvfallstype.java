@@ -11,35 +11,21 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-// @Entity
 @Entity
 @Table(name = "Avfallspunkt_avfallstype", schema = "resirkulering")
 public class AvfallspunktAvfallstype {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private int id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "avfallspunkt_id", nullable = false)
-    private Avfallspunkt avfallspunkt;
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "avfallspunkt_id", nullable = false)
+  private Avfallspunkt avfallspunkt;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JsonManagedReference
-    @JoinColumn(name = "avfallstype_id", nullable = false)
-    private AvfallsType avfallstype;
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JsonManagedReference
+  @JoinColumn(name = "avfallstype_id", nullable = false)
+  private AvfallsType avfallstype;
 
 }
-
-
-
-// @EmbeddedId
-  // private AvfallspunktAvfallstypeId id;
-
-  // @ManyToOne
-  //   @JoinColumn(name = "avfallspunkt_id", insertable = false, updatable = false)
-  //   private Avfallspunkt avfallspunkt;
-
-  //   @ManyToOne
-  //   @JoinColumn(name = "avfallstype_id", insertable = false, updatable = false)
-  //   private AvfallsType avfallstype;
