@@ -1,14 +1,11 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 export const useGetAllAvfall = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState(null);
-  const hasFetched = useRef(false);
 
   const getAllAvfall = async () => {
-    if (hasFetched.current) return;
-    hasFetched.current = true;
     setIsLoading(true);
     try {
       const response = await fetch("/api/getAllAvfall", {
