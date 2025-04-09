@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,13 +13,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.demo.Controllers.Interfaces.ApiController;
 import com.example.demo.DTO.ErrorResponse;
 import com.example.demo.DTO.GetAllAvfallResponse;
-import com.example.demo.DTO.GetAvfallByStrekkodeResponse;
+import com.example.demo.DTO.ScanAvfallResponse;
 import com.example.demo.DTO.AddNewAvfallRequest;
 import com.example.demo.DTO.SuccessResponse;
 import com.example.demo.DTO.UpdateAvfallRequest;
 import com.example.demo.Entities.Avfall;
 import com.example.demo.Entities.AvfallsType;
+import com.example.demo.Entities.Avfallspunkt;
 import com.example.demo.Service.AdminService;
+import com.example.demo.Service.AvfPunktService;
 import com.example.demo.Service.AvfTypeService;
 import com.example.demo.Service.AvfallService;
 import com.example.demo.Service.BrukerService;
@@ -38,17 +41,20 @@ public class AvfallController {
   @Autowired
   AvfTypeService avfTypeService;
 
+  @Autowired 
+  AvfPunktService avfPunktService;
+
   @Autowired
   AdminService adminService;
 
-  @GetMapping("/getAvfallByStrekkode")
-  public ResponseEntity<?> getAvfallByStrekkode(@RequestParam String strekkode) {
-    try {
-      Avfall avfall = avfallService.getAvfallByStrekkode(strekkode);
-      return ResponseEntity.ok(new GetAvfallByStrekkodeResponse(avfall));
-    } catch (Exception e) {
-      return ResponseEntity.status(500).body(new ErrorResponse("En feil oppstod under scanning av strekkode"));
+  @GetMapping("/scanAvfall")
+  public ResponseEntity<?> scanAvfall(@RequestParam String strekkode) {
+    Avfall avfall = avfallService.getAvfallByStrekkode(strekkode);
+    if(avfall == null) {
+      return ResponseEntity.badRequest().body((new ErrorResponse("Fant ikke avfall med kode: " + strekkode)));
     }
+    List<Avfallspunkt> avfallspunkter = avfPunktService.getAvfallspunkterByAvfallstype_id(avfall.getId());
+    return ResponseEntity.ok(new ScanAvfallResponse(avfall, avfallspunkter));
   }
 
   @GetMapping("/getAllAvfall")
@@ -134,6 +140,24 @@ public class AvfallController {
       return ResponseEntity.ok(new SuccessResponse("Avfallet ble oppdatert!"));
     } catch(Exception e) {
       return ResponseEntity.status(500).body(new ErrorResponse("En feil oppstod under oppdateringen av avfallet"));
+    }
+  }
+
+  @DeleteMapping("/deleteAvfall")
+  public ResponseEntity<?> deleteAvfall(HttpSession session, @RequestParam int avfallId) {
+    ResponseEntity<?> sessionInvalidResponse = SessionValidator.validateSession(session);
+    if (sessionInvalidResponse != null) {
+      return sessionInvalidResponse;
+    }
+    ResponseEntity<?> notAdminResponse = adminService.validateAdmin(session);
+    if (notAdminResponse != null) {
+      return notAdminResponse;
+    }
+    try {
+        avfallService.deleteAvfallById(avfallId);
+        return ResponseEntity.ok(new SuccessResponse("Avfallet ble slettet!"));
+    } catch (Exception e) {
+        return ResponseEntity.status(500).body(new ErrorResponse("En feil oppstod under slettingen av avfallet."));
     }
   }
 
