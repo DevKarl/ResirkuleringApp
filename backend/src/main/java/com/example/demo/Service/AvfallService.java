@@ -30,15 +30,15 @@ public class AvfallService {
     avfallRepo.save(newAvfall);
   }
 
-  public boolean strekkodeAlreadyExists(String strekkode) {
+  public boolean strekkodeIsTaken(String strekkode) {
     return avfallRepo.existsByStrekkode(strekkode);
   }
 
-  public boolean updateAvfall(Avfall avfall) {
-    if (avfall == null || (Integer)avfall.getId() == null){
-      return false;
-    }
+  public boolean updatedStrekkodeIsTaken(String newStrekkode, String originalStrekkode) {
+    return strekkodeIsTaken(newStrekkode) && !newStrekkode.equals(originalStrekkode);
+  }
+
+  public void updateAvfall(Avfall avfall) {
     avfallRepo.save(avfall);
-    return true;
   }
 }
