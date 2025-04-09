@@ -1,5 +1,4 @@
 package com.example.demo.Controllers;
-
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +9,10 @@ import com.example.demo.Controllers.Interfaces.ApiController;
 import com.example.demo.DTO.ErrorResponse;
 import com.example.demo.DTO.GetAllAvfallstyperResponse;
 import com.example.demo.Entities.AvfallsType;
+import com.example.demo.Service.AdminService;
 import com.example.demo.Service.AvfTypeService;
 import com.example.demo.Service.BrukerService;
+import com.example.demo.Utils.SessionValidator;
 
 
 @ApiController
@@ -23,6 +24,9 @@ public class AvfallsTypeController {
   @Autowired
   BrukerService brukerService;
 
+  @Autowired
+  AdminService adminService;
+
   @GetMapping("/getAvfTypeByAvfPunktID")
   public List<AvfallsType> getAvfTypeByAvfPunktID(@RequestParam int id) {
       return avfTypeService.getAvfTypeByAvfPunktID(id);
@@ -30,15 +34,13 @@ public class AvfallsTypeController {
 
   @GetMapping("/getAllAvfallstyper")
   public  ResponseEntity<?>  getAllAvfallstyper(HttpSession session) {
-    if (session == null) {
-      return ResponseEntity.badRequest().body(new ErrorResponse("Sesjonen er utløpt, vennligst logg inn på nytt."));
+    ResponseEntity<?> sessionInvalidResponse = SessionValidator.validateSession(session);
+    if (sessionInvalidResponse != null) {
+      return sessionInvalidResponse;
     }
-    Object userId = session.getAttribute("userId");
-    if (userId == null) {
-      return ResponseEntity.status(401).body(new ErrorResponse("Brukeren er ikke logget inn"));
-    }
-    if (!brukerService.isAdmin((Integer) userId)) {
-      return ResponseEntity.status(403).body(new ErrorResponse("Uautorisert tilgang: Denne handlingen krever admintilgang."));
+    ResponseEntity<?> notAdminResponse = adminService.validateAdmin(session);
+    if(notAdminResponse != null) {
+      return notAdminResponse;
     }
     try{
       List<AvfallsType> avfall = avfTypeService.getAllAvfallstyper();
