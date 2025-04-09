@@ -26,10 +26,6 @@ export type UpdateAvfallPost = {
   strekkode: string;
 };
 
-export type DeleteAvfallPost = {
-  id: number;
-};
-
 export type AvfallspunktAvfallstyper = {
   avfallstype: {
     id: number;

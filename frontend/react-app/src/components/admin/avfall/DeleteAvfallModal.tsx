@@ -4,6 +4,8 @@ import { ButtonType, CoreButton } from "../../core/CoreButton";
 import { CoreContainer } from "../../core/CoreContainer";
 import { CoreModal } from "../../core/CoreModal";
 import { CoreSubheading } from "../../core/CoreSubheading";
+import { useDeleteAvfall } from "../../../hooks/API/useDeleteAvfall";
+import { CoreLoader } from "../../core/CoreLoader";
 
 interface DeleteAvfallModalProps {
   avfall: Avfall | null;
@@ -33,8 +35,10 @@ export const DeleteAvfallModal = ({
   toggleModal,
   fetchAvfall,
 }: DeleteAvfallModalProps) => {
-  const handleDeleteAvfall = () => {
-    // POSTDELETAVFALL
+  const { isLoading, deleteAvfall } = useDeleteAvfall();
+
+  const handleDeleteAvfall = async () => {
+    await deleteAvfall(avfall?.id as number);
     toggleModal();
     fetchAvfall();
   };
@@ -45,13 +49,17 @@ export const DeleteAvfallModal = ({
         <CoreSubheading type="secondary" styles={CoreSubheadingStyles}>
           Er du sikker på at du vil slette {avfall?.navn} ?
         </CoreSubheading>
-        <CoreButton
-          type={ButtonType.Danger}
-          onClick={handleDeleteAvfall}
-          styles={ButtonStyles}
-        >
-          Slett
-        </CoreButton>
+        {isLoading ? (
+          <CoreLoader secondary />
+        ) : (
+          <CoreButton
+            type={ButtonType.Danger}
+            onClick={handleDeleteAvfall}
+            styles={ButtonStyles}
+          >
+            Slett
+          </CoreButton>
+        )}
         <CoreButton
           type={ButtonType.White}
           onClick={toggleModal}
