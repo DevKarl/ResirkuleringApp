@@ -8,7 +8,7 @@ import com.example.demo.DTO.ErrorResponse;
 
 public class SessionValidator {
 
-  public static ResponseEntity<?> validateSession(HttpSession session) {
+  public static ResponseEntity<ErrorResponse> validateSession(HttpSession session) {
     if (session == null) {
       return ResponseEntity.badRequest().body(new ErrorResponse("Sesjonen er utløpt, vennligst logg inn på nytt."));
     }
