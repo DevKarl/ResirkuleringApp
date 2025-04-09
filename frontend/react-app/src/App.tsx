@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { useGetUser } from "./hooks/API/useGetUser";
 import { CustomToaster } from "./toast/CustomToaster";
 import { AdminPage } from "./components/routing/pages/Admin";
+import { useAppContext } from "./context/ContextProvider";
 
 const MainContent = styled.main`
   background-color: #e2f0e5;
@@ -18,7 +19,10 @@ const MainContent = styled.main`
 
 function App() {
   const { getUser } = useGetUser();
+  const { setUser } = useAppContext();
+
   useEffect(() => {
+    setUser(null);
     getUser();
   }, []);
 
