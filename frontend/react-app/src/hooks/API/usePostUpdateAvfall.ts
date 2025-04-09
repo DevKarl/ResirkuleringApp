@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { toast } from "sonner";
-import { Avfall } from "../../types";
+import { UpdateAvfallPost } from "../../types";
 
 export const usePostUpdateAvfall = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const postUpdateAvfall = async (formData: Avfall) => {
+  const postUpdateAvfall = async (formData: UpdateAvfallPost) => {
     setIsLoading(true);
     try {
       const response = await fetch("/api/postUpdateAvfall", {

@@ -14,7 +14,15 @@ export type Avfall = {
 export type NewAvfallPost = {
   navn: string;
   beskrivelse: string;
-  avfallsTypeId: number;
+  avfallstypeId: number;
+  strekkode: string;
+};
+
+export type UpdateAvfallPost = {
+  id: number;
+  navn: string;
+  beskrivelse: string;
+  avfallstypeId: number;
   strekkode: string;
 };
 

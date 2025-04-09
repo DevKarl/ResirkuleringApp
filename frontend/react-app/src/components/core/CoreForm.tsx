@@ -10,7 +10,7 @@ const StyledForm = styled.form`
   gap: 20px;
   justify-content: center;
   align-content: center;
-  align-items: flex-start;
+  align-items: center;
   width: 300px;
   border: 2px solid ${({ theme }) => theme.colors.greenBright};
   border-radius: 15px;

@@ -11,6 +11,7 @@ import { CoreLoader } from "../../core/CoreLoader";
 import { ButtonType, CoreButton } from "../../core/CoreButton";
 import { css } from "styled-components";
 import { toast } from "sonner";
+import { usePostUpdateAvfall } from "../../../hooks/API/usePostUpdateAvfall";
 
 interface EditAvfallModalProps {
   avfall: Avfall | null;
@@ -27,30 +28,30 @@ export const EditAvfallModal = ({
   toggleModal,
   fetchAvfall,
 }: EditAvfallModalProps) => {
-  // API get all avfallstyper  --> set i  SELECT
   const {
     isLoading: loadingAvfallsTyper,
     data: avfallsTyperData,
     getAllAvfallstyper,
   } = useGetAllAvfallstyper();
 
+  const { isLoading: isUpdating, postUpdateAvfall } = usePostUpdateAvfall();
+
   useEffect(() => {
     getAllAvfallstyper();
   }, []);
 
   const [formData, setFormData] = useState({
-    id: avfall?.id || 0,
     navn: avfall?.navn || "",
     beskrivelse: avfall?.beskrivelse || "",
     avfallsType: avfall?.avfallsType.type || "",
-    strekKode: avfall?.strekKode || "",
+    strekkode: avfall?.strekKode || "",
   });
 
   const [errors, setErrors] = useState({
     navn: false,
     beskrivelse: false,
     avfallsType: false,
-    strekKode: false,
+    strekkode: false,
   });
 
   const isValid = (): boolean => {
@@ -58,7 +59,7 @@ export const EditAvfallModal = ({
       navn: false,
       beskrivelse: false,
       avfallsType: false,
-      strekKode: false,
+      strekkode: false,
     };
     if (formData.navn.trim().length < 1 || formData.navn.trim().length > 20) {
       newErrors.navn = true;
@@ -76,18 +77,22 @@ export const EditAvfallModal = ({
       toast.error("Avfallstype må oppgis");
     }
     if (
-      formData.strekKode.trim().length < 5 ||
-      formData.strekKode.trim().length > 30
+      formData.strekkode.trim().length < 5 ||
+      formData.strekkode.trim().length > 30
     ) {
-      newErrors.strekKode = true;
+      newErrors.strekkode = true;
       toast.error("Strekkoden må være mellom 5 og 30 tegn");
+    }
+    if (!/^\d+$/.test(formData.strekkode.trim())) {
+      newErrors.strekkode = true;
+      toast.error("strekkoden kan kun inneholde tall (0-9)");
     }
     setErrors(newErrors);
     return (
       newErrors.navn === false &&
       newErrors.beskrivelse === false &&
       newErrors.avfallsType === false &&
-      newErrors.strekKode === false
+      newErrors.strekkode === false
     );
   };
 
@@ -110,12 +115,25 @@ export const EditAvfallModal = ({
     setFormData((prev) => ({ ...prev, avfallsType: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const getIdForAvfallsType = () => {
+    return avfallsTyperData?.avfallsTyper.find(
+      (avfallsType: any) =>
+        avfallsType.type.toLowerCase() === formData.avfallsType.toLowerCase()
+    ).id;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toggleModal();
-    fetchAvfall();
     if (isValid()) {
-      // POST REQUEST
+      await postUpdateAvfall({
+        id: avfall?.id || 0,
+        navn: formData.navn.trim(),
+        beskrivelse: formData.beskrivelse.trim(),
+        avfallstypeId: getIdForAvfallsType(),
+        strekkode: formData.strekkode.trim(),
+      });
+      fetchAvfall();
+      toggleModal();
     }
   };
 
@@ -156,16 +174,20 @@ export const EditAvfallModal = ({
             />
           )}
           <CoreInput
-            value={formData.strekKode}
+            value={formData.strekkode}
             version="secondary"
             onChange={handleChange}
             label="Strekkode"
-            name="strekKode"
+            name="strekkode"
             placeholder="Strekkoden til avfallet"
             required
-            hasError={errors.strekKode}
+            hasError={errors.strekkode}
           />
-          <CoreButton type={ButtonType.White}>Lagre</CoreButton>
+          {isUpdating ? (
+            <CoreLoader secondary />
+          ) : (
+            <CoreButton type={ButtonType.White}>Lagre</CoreButton>
+          )}
         </CoreForm>
       </CoreContainer>
     </CoreModal>

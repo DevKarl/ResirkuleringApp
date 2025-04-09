@@ -32,7 +32,7 @@ export const AddNewAvfallModal = ({
     getAllAvfallstyper,
   } = useGetAllAvfallstyper();
 
-  const { isLoading: loadingPostingNewAvfall, postAddNewAvfall } =
+  const { isLoading: isAddingNewAvfall, postAddNewAvfall } =
     usePostAddNewAvfall();
 
   useEffect(() => {
@@ -50,14 +50,14 @@ export const AddNewAvfallModal = ({
     navn: "",
     beskrivelse: "",
     avfallsType: "",
-    strekKode: "",
+    strekkode: "",
   });
 
   const [errors, setErrors] = useState({
     navn: false,
     beskrivelse: false,
     avfallsType: false,
-    strekKode: false,
+    strekkode: false,
   });
 
   const isValid = (): boolean => {
@@ -65,7 +65,7 @@ export const AddNewAvfallModal = ({
       navn: false,
       beskrivelse: false,
       avfallsType: false,
-      strekKode: false,
+      strekkode: false,
     };
     if (formData.navn.trim().length < 1 || formData.navn.trim().length > 20) {
       newErrors.navn = true;
@@ -83,22 +83,22 @@ export const AddNewAvfallModal = ({
       toast.error("Avfallstype må oppgis");
     }
     if (
-      formData.strekKode.trim().length < 5 ||
-      formData.strekKode.trim().length > 30
+      formData.strekkode.trim().length < 5 ||
+      formData.strekkode.trim().length > 30
     ) {
-      newErrors.strekKode = true;
-      toast.error("Strekkoden må være mellom 5 og 30 tegn");
+      newErrors.strekkode = true;
+      toast.error("strekkoden må være mellom 5 og 30 tegn");
     }
-    if (!/^\d+$/.test(formData.strekKode.trim())) {
-      newErrors.strekKode = true;
-      toast.error("Strekkoden kan kun inneholde tall (0-9)");
+    if (!/^\d+$/.test(formData.strekkode.trim())) {
+      newErrors.strekkode = true;
+      toast.error("strekkoden kan kun inneholde tall (0-9)");
     }
     setErrors(newErrors);
     return (
       newErrors.navn === false &&
       newErrors.beskrivelse === false &&
       newErrors.avfallsType === false &&
-      newErrors.strekKode === false
+      newErrors.strekkode === false
     );
   };
 
@@ -124,23 +124,21 @@ export const AddNewAvfallModal = ({
   const getIdForAvfallsType = () => {
     return avfallsTyperData?.avfallsTyper.find(
       (avfallsType: any) =>
-        avfallsType.type.toLowerCase() ===
-        formData.avfallsType.toLocaleLowerCase()
+        avfallsType.type.toLowerCase() === formData.avfallsType.toLowerCase()
     ).id;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData);
     if (isValid()) {
       await postAddNewAvfall({
         navn: formData.navn.trim(),
         beskrivelse: formData.beskrivelse.trim(),
-        avfallsTypeId: getIdForAvfallsType(),
-        strekkode: formData.strekKode.trim(),
+        avfallstypeId: getIdForAvfallsType(),
+        strekkode: formData.strekkode.trim(),
       });
-      toggleModal();
       fetchAvfall();
+      toggleModal();
     }
   };
 
@@ -185,16 +183,16 @@ export const AddNewAvfallModal = ({
             />
           )}
           <CoreInput
-            value={formData.strekKode}
+            value={formData.strekkode}
             version="secondary"
             onChange={handleChange}
             label="Strekkode"
-            name="strekKode"
+            name="strekkode"
             placeholder="Strekkoden til avfallet"
             required
-            hasError={errors.strekKode}
+            hasError={errors.strekkode}
           />
-          {loadingPostingNewAvfall ? (
+          {isAddingNewAvfall ? (
             <CoreLoader secondary />
           ) : (
             <CoreButton type={ButtonType.White}>Legg til</CoreButton>

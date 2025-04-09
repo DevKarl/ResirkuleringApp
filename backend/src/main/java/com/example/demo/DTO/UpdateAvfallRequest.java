@@ -2,37 +2,44 @@ package com.example.demo.DTO;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
-public class AddNewAvfallRequest {
+public class UpdateAvfallRequest {
   
+  @NotNull(message = "Må ha id")
+  private Integer id;
 
-  @NotBlank(message = "Strekkode maa oppgies")
-  @Pattern(regexp = "\\d+", message = "Strekkoden kan kun inneholde tall (0-9).")
+  @NotBlank(message="Strekkode må oppgies")
   private String strekkode;
 
-  @NotBlank(message = "Varenavn mangler")
+  @NotBlank(message="Varenavn mangler")
   private String navn;
 
-  @Size(min = 0, max = 200)
   private String beskrivelse;
 
   @NotNull(message = "må velge avfallstype")
   private Integer avfallstypeId;
 
 
-  public AddNewAvfallRequest(){
-
+  public UpdateAvfallRequest() {
   }
 
-  public AddNewAvfallRequest(String strekkode, String navn, String beskrivelse, Integer avfallstypeId){
+
+  public UpdateAvfallRequest(Integer id, String strekkode, String navn, String beskrivelse, Integer avfallstypeId) {
+    this.id = id;
     this.strekkode = strekkode;
     this.navn = navn;
     this.beskrivelse = beskrivelse;
     this.avfallstypeId = avfallstypeId;
   }
 
+
+  public Integer getId() {
+    return this.id;
+  }
+
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
   public String getStrekkode() {
     return this.strekkode;
@@ -65,5 +72,10 @@ public class AddNewAvfallRequest {
   public void setAvfallstypeId(Integer avfallstypeId) {
     this.avfallstypeId = avfallstypeId;
   }
-  
+
+
+
+
+
+
 }

@@ -26,8 +26,10 @@ import com.example.demo.DTO.RegisterResponse;
 import com.example.demo.DTO.ResponseMessage;
 import com.example.demo.DTO.SuccessResponse;
 import com.example.demo.Entities.Bruker;
+import com.example.demo.Service.AdminService;
 import com.example.demo.Service.BrukerService;
 import com.example.demo.Service.PassordService;
+import com.example.demo.Utils.SessionValidator;
 
 
 @ApiController
@@ -37,6 +39,9 @@ public class BrukerController {
   BrukerService brukerService;
   @Autowired
   PassordService passordService;
+
+  @Autowired
+  AdminService adminService;
 
   @PostMapping("/register")
   public ResponseEntity<RegisterResponse> register(@RequestBody @Valid RegisterRequest request, BindingResult bindResult) {
@@ -117,16 +122,12 @@ public class BrukerController {
   @GetMapping("/getUser")
   public ResponseEntity<?> getUser(HttpServletRequest request) {
     HttpSession session = request.getSession(false); // Prevent new session creation
-    if (session == null) {
-      return ResponseEntity.badRequest().body(new ErrorResponse("Sesjonen er utløpt, vennligst logg inn på nytt."));
+    ResponseEntity<?> sessionInvalidResponse = SessionValidator.validateSession(session);
+    if (sessionInvalidResponse != null) {
+      return sessionInvalidResponse;
     }
-
-    Object userId = session.getAttribute("userId");
-    if (userId == null) {
-      return ResponseEntity.status(401).body(new ErrorResponse("Ingen bruker logget inn"));
-    }
-
     try {
+      Object userId = session.getAttribute("userId");
       Bruker bruker = brukerService.findById((Integer) userId);
       System.out.println(bruker);
       if (bruker == null) {
@@ -148,59 +149,43 @@ public class BrukerController {
 
   @PostMapping("postActivateStatShare")
   public ResponseEntity<?> activateStatShare(HttpSession session){
-    if (session == null) {
-      return ResponseEntity.badRequest().body(new ErrorResponse("Sesjonen er utløpt, vennligst logg inn på nytt."));
+    ResponseEntity<?> sessionInvalidResponse = SessionValidator.validateSession(session);
+    if (sessionInvalidResponse != null) {
+      return sessionInvalidResponse;
     }
-
-    Object userId = session.getAttribute("userId");
-    if (userId == null) {
-      return ResponseEntity.status(401).body(new ErrorResponse("Brukeren er ikke logget inn"));
-    }
-
     try {
-      if (brukerService.activateStatShare((Integer)userId)){
-        return ResponseEntity.ok().body(new SuccessResponse("Din statistikk er nå offentliggjort"));
-      }
-      return ResponseEntity.status(500).body(new ErrorResponse("Brukeren finst ikkje"));
+      Object userId = session.getAttribute("userId");
+      brukerService.activateStatShare((Integer)userId);
+      return ResponseEntity.ok().body(new SuccessResponse("Din statistikk er nå offentliggjort"));
     } catch (Exception e) {
-      
-      return ResponseEntity.status(500).body(new ErrorResponse("En feil oppstod"));
+      return ResponseEntity.status(500).body(new ErrorResponse("En feil oppstod under publisering av brukerstatistikk"));
     }
   }
 
   @PostMapping("postDeactivateStatShare")
   public ResponseEntity<?> deactivateStatShare(HttpSession session){
-    if (session == null) {
-      return ResponseEntity.badRequest().body(new ErrorResponse("Sesjonen er utløpt, vennligst logg inn på nytt."));
+    ResponseEntity<?> sessionInvalidResponse = SessionValidator.validateSession(session);
+    if (sessionInvalidResponse != null) {
+      return sessionInvalidResponse;
     }
-
-    Object userId = session.getAttribute("userId");
-    if (userId == null) {
-      return ResponseEntity.status(401).body(new ErrorResponse("Brukeren er ikke logget inn"));
-    }
-
     try {
-      if (brukerService.deactivateStatShare((Integer)userId)){
-        return ResponseEntity.ok().body(new SuccessResponse("Din statistikk er nå skjult"));
-      }
-      return ResponseEntity.status(500).body(new ErrorResponse("Brukeren finst ikkje"));
+      Object userId = session.getAttribute("userId");
+      brukerService.deactivateStatShare((Integer)userId);
+      return ResponseEntity.ok().body(new SuccessResponse("Din statistikk er nå skjult"));
     } catch (Exception e) {
-      
-      return ResponseEntity.status(500).body(new ErrorResponse("En feil oppstod "));
+      return ResponseEntity.status(500).body(new ErrorResponse("En feil oppstod under skjuling av brukerstatistikk"));
     }
   }
 
   @GetMapping("/getAllUsers")
   public ResponseEntity<?> getAllUsers(HttpSession session) {
-    if (session == null) {
-      return ResponseEntity.badRequest().body(new ErrorResponse("Sesjonen er utløpt, vennligst logg inn på nytt."));
+    ResponseEntity<?> sessionInvalidResponse = SessionValidator.validateSession(session);
+    if (sessionInvalidResponse != null) {
+      return sessionInvalidResponse;
     }
-    Object userId = session.getAttribute("userId");
-    if (userId == null) {
-      return ResponseEntity.status(401).body(new ErrorResponse("Brukeren er ikke logget inn"));
-    }
-    if (!brukerService.isAdmin((Integer) userId)) {
-      return ResponseEntity.status(403).body(new ErrorResponse("Uautorisert tilgang: Denne handlingen krever admintilgang."));
+    ResponseEntity<?> notAdminResponse = adminService.validateAdmin(session);
+    if(notAdminResponse != null) {
+      return notAdminResponse;
     }
     try {
       List<Bruker> brukere = brukerService.getAllUsers();
