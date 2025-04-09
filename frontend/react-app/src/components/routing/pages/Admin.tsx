@@ -23,10 +23,15 @@ export const AdminPage = () => {
   const [adminAction, setAdminAction] = useState(adminOptions[0]);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user) {
+      navigate("/");
+      toast.info("Sesjonen utløpt. Vennligst logg inn på nytt.");
+      return;
+    }
     if (!user?.isAdmin) {
       navigate("/");
       toast.error("Bruker har ikke admin-tilgang");
+      return;
     }
   }, [user]);
 
@@ -35,10 +40,6 @@ export const AdminPage = () => {
     if (adminAction === "Brukere") return <UsersContent />;
     return <AvfallPointsContent />;
   };
-
-  //getAllAvfallspunkter
-  //getAllAvfall
-  //getAllUsers
 
   return (
     <CoreContainer styles={AdminContainer}>

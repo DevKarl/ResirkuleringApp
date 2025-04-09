@@ -17,6 +17,7 @@ interface FontSizeProps {
 
 const Title = styled.h3`
   color: ${({ theme }) => theme.colors.greenDark};
+  align-self: center;
   font-size: 25px;
 `;
 
