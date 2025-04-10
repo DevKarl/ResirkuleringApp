@@ -11,9 +11,12 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.Controllers.Interfaces.ApiController;
 import com.example.demo.DTO.ErrorResponse;
@@ -129,7 +132,6 @@ public class BrukerController {
     try {
       Object userId = session.getAttribute("userId");
       Bruker bruker = brukerService.findById((Integer) userId);
-      System.out.println(bruker);
       if (bruker == null) {
           return ResponseEntity.status(404).body(new ErrorResponse("Brukeren finnes ikke lenger i systemet"));
       }
@@ -174,6 +176,63 @@ public class BrukerController {
       return ResponseEntity.ok().body(new SuccessResponse("Din statistikk er nå skjult"));
     } catch (Exception e) {
       return ResponseEntity.status(500).body(new ErrorResponse("En feil oppstod under skjuling av brukerstatistikk"));
+    }
+  }
+
+  @PatchMapping("giveAdminPermissions")
+  public ResponseEntity<?> giveAdminPermissions(HttpSession session, @RequestParam int brukerId) {
+    ResponseEntity<?> sessionInvalidResponse = SessionValidator.validateSession(session);
+    if (sessionInvalidResponse != null) {
+      return sessionInvalidResponse;
+    }
+    ResponseEntity<?> notAdminResponse = adminService.validateAdmin(session);
+    if(notAdminResponse != null) {
+      return notAdminResponse;
+    }
+    try {
+      Bruker bruker = brukerService.findById(brukerId)
+      brukerService.giveAdminPermission(bruker);
+      return ResponseEntity.ok().body(new SuccessResponse(bruker.getFornavn() + " " + "er nå admin!"));
+    } catch(Exception e) {
+      return ResponseEntity.status(500).body(new ErrorResponse("En feil oppstod under givning av admintilgang"));
+    }
+  }
+
+  @PatchMapping("removeAdminPermissions")
+  public ResponseEntity<?> removeAdminPermissions(HttpSession session, @RequestParam int brukerId) {
+    ResponseEntity<?> sessionInvalidResponse = SessionValidator.validateSession(session);
+    if (sessionInvalidResponse != null) {
+      return sessionInvalidResponse;
+    }
+    ResponseEntity<?> notAdminResponse = adminService.validateAdmin(session);
+    if(notAdminResponse != null) {
+      return notAdminResponse;
+    }
+    try {
+      Bruker bruker = brukerService.findById((Integer) brukerId);
+      brukerService.removeAdminPermission(bruker);
+      return ResponseEntity.ok().body(new SuccessResponse(bruker.getFornavn() + " " + "er ikke lenger admin!"));
+    } catch(Exception e) {
+      return ResponseEntity.status(500).body(new ErrorResponse("En feil oppstod under fjerning av admintilgang"));
+    }
+  }
+
+  @DeleteMapping("deleteUser")
+  public ResponseEntity<?> deleteUser(HttpSession session, @RequestParam int brukerId) {
+    ResponseEntity<?> sessionInvalidResponse = SessionValidator.validateSession(session);
+    if (sessionInvalidResponse != null) {
+      return sessionInvalidResponse;
+    }
+    ResponseEntity<?> notAdminResponse = adminService.validateAdmin(session);
+    if(notAdminResponse != null) {
+      return notAdminResponse;
+    }
+    try {
+      Bruker bruker = brukerService.findById((Integer) brukerId);
+      brukerService.deleteUser(bruker.getId());
+      return ResponseEntity.ok().body(new SuccessResponse("Brukeren " + bruker.getFornavn() + " " + "ble slettet"));
+    } catch(Exception e) {
+      return ResponseEntity.status(500).body(new ErrorResponse("En feil oppstod under sletting av bruker"));
     }
   }
 

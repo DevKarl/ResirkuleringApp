@@ -26,10 +26,14 @@ public class BrukerService {
     updateStatShare(brukerId, false);
   }
 
-  private void updateStatShare(int brukerId, boolean statShareValue) {
-    Bruker bruker = brukerRepo.findById(brukerId).orElseThrow(() -> new RuntimeException("Bruker finnes ikke"));
-    bruker.setDelerStat(statShareValue);
-    brukerRepo.save(bruker);
+  @Transactional
+  public void giveAdminPermission(Bruker bruker) {
+    bruker.setAdminrettigheter(true);
+  }
+
+  @Transactional
+  public void removeAdminPermission(Bruker bruker) {
+    bruker.setAdminrettigheter(false);
   }
 
   public Bruker createNewUser(Bruker bruker) {
@@ -50,5 +54,15 @@ public class BrukerService {
 
   public List<Bruker> getAllUsers() {
     return brukerRepo.findAll();
+  }
+
+  public void deleteUser(int brukerId) {
+    brukerRepo.deleteById(brukerId);
+  }
+
+  private void updateStatShare(int brukerId, boolean statShareValue) {
+    Bruker bruker = brukerRepo.findById(brukerId).orElseThrow(() -> new RuntimeException("Bruker finnes ikke"));
+    bruker.setDelerStat(statShareValue);
+    brukerRepo.save(bruker);
   }
 }
