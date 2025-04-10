@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { CoreSelect } from "../../core/CoreSelect";
 import { AvfallContent } from "../../admin/avfall/AvfallContent";
-import { UsersContent } from "../../admin/UsersContent";
+import { UsersContent } from "../../admin/users/UsersContent";
 import { AvfallPointsContent } from "../../admin/AvfallPointsContent";
 import { css } from "styled-components";
 

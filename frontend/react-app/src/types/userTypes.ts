@@ -21,4 +21,4 @@ export type User = {
   brukernavn: string;
   isAdmin: boolean;
   delerStat: boolean;
-} | null;
+};

@@ -72,7 +72,7 @@ export const AvfallContent = () => {
     fetchAvfall();
   }, []);
 
-  const fetchAvfall = () => getAllAvfall();
+  const fetchAvfall = async () => await getAllAvfall();
 
   const handleSearch = (e) => {
     setSearchInput(e.target.value);
@@ -114,7 +114,7 @@ export const AvfallContent = () => {
             + Legg til nytt avfall
           </CoreButton>
           <CoreInput
-            name="users"
+            name="avfall"
             type="text"
             version="secondary"
             value={searchInput}
