@@ -53,7 +53,7 @@ public class AvfallController {
     if(avfall == null) {
       return ResponseEntity.badRequest().body((new ErrorResponse("Fant ikke avfall med kode: " + strekkode)));
     }
-    List<Avfallspunkt> avfallspunkter = avfPunktService.getAvfallspunkterByAvfallstype_id(avfall.getId());
+    List<Avfallspunkt> avfallspunkter = avfPunktService.getAvfallspunkterByAvfallstype_id(avfall.getAvfallsType().getId());
     return ResponseEntity.ok(new ScanAvfallResponse(avfall, avfallspunkter));
   }
 
