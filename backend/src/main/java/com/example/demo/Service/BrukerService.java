@@ -29,11 +29,13 @@ public class BrukerService {
   @Transactional
   public void giveAdminPermission(Bruker bruker) {
     bruker.setAdminrettigheter(true);
+    brukerRepo.save(bruker);
   }
 
   @Transactional
   public void removeAdminPermission(Bruker bruker) {
     bruker.setAdminrettigheter(false);
+    brukerRepo.save(bruker);
   }
 
   public Bruker createNewUser(Bruker bruker) {

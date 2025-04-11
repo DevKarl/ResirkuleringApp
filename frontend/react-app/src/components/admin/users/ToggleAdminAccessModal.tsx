@@ -60,12 +60,12 @@ export const ToggleAdminAccessModal = ({
     <CoreModal onClose={toggleModal}>
       <CoreContainer styles={MainContainer}>
         <CoreSubheading type="secondary" styles={CoreSubheadingStyles}>
-          Er du sikker på at du vil {user?.isAdmin ? "fjerne " : "gi "}
+          Er du sikker på at du vil {user?.adminrettigheter ? "fjerne " : "gi "}
           admintilgang til {user?.fornavn + " " + user.etternavn} ?
         </CoreSubheading>
         {giveAdminLoading || removeAdminLoading ? (
           <CoreLoader secondary />
-        ) : user?.isAdmin ? (
+        ) : user?.adminrettigheter ? (
           <CoreButton
             type={ButtonType.Danger}
             onClick={handleRemoveAdminPermission}
@@ -75,7 +75,7 @@ export const ToggleAdminAccessModal = ({
           </CoreButton>
         ) : (
           <CoreButton
-            type={ButtonType.Green}
+            type={ButtonType.GreenDark}
             onClick={handleGiveAdminPermission}
             styles={ButtonStyles}
           >

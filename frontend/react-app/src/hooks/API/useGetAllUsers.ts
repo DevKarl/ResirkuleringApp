@@ -18,7 +18,7 @@ export const useGetAllUsers = () => {
         toast.error(data.message);
         return;
       }
-      setUsers(data);
+      setUsers(data.brukere);
     } catch (error) {
       toast.error("Kan ikke hente brukerdata akkurat nå. Prøv igjen senere.");
     } finally {

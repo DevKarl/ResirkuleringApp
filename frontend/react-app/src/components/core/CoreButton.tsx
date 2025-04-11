@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 
 export enum ButtonType {
   Green = "green",
+  GreenDark = "greenDark",
   White = "white",
   Danger = "danger",
 }
@@ -30,6 +31,12 @@ const shake = keyframes`
 
 const getButtonStyles = (type: ButtonType, theme: any) => {
   switch (type) {
+    case ButtonType.GreenDark:
+      return {
+        backgroundColor: theme.colors.greenDark,
+        color: theme.colors.white,
+        hoverBackgroundColor: theme.colors.greenDarkHover,
+      };
     case ButtonType.White:
       return {
         backgroundColor: theme.colors.greenWhite,

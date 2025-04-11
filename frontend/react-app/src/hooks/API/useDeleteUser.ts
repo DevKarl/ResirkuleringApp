@@ -3,10 +3,10 @@ import { toast } from "sonner";
 
 export const useDeleteUser = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const deleteUser = async (userId: number) => {
+  const deleteUser = async (brukerId: number) => {
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/deleteUser?userId=${userId}`, {
+      const response = await fetch(`/api/deleteUser?brukerId=${brukerId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -17,7 +17,7 @@ export const useDeleteUser = () => {
         toast.error(data.message);
         return;
       }
-      toast.success("Brukeren ble slettet!");
+      toast.success(data.message);
     } catch (error) {
       toast.error("Kan ikke ikke slette bruker akkurat nå. Prøv igjen senere.");
     } finally {

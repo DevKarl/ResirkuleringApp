@@ -5,9 +5,14 @@ import { CoreContainer } from "../../core/CoreContainer";
 import { CoreLoader } from "../../core/CoreLoader";
 import { CoreInput } from "../../core/CoreInput";
 import { CoreButton } from "../../core/CoreButton";
-import { EditIcon } from "../../iconsAndLogos/EditIcon";
 import { DeleteIcon } from "../../iconsAndLogos/DeleteIcon";
 import { ToggleAdminAccessModal } from "./ToggleAdminAccessModal";
+import styled, { css } from "styled-components";
+import { DeleteUserModal } from "./DeleteUserModal";
+import { RemoveAdminIcon } from "../../iconsAndLogos/RemoveAdminIcon";
+import { AddAdminIcon } from "../../iconsAndLogos/AddAdminIcon";
+import { AdminStarIcon } from "../../iconsAndLogos/AdminStar";
+import { useAppContext } from "../../../context/ContextProvider";
 
 const MainContainer = css`
   gap: 15px;
@@ -50,7 +55,14 @@ const ActionButtonContent = css`
   padding: 5px 0;
 `;
 
+const UserNameWrapper = css`
+  flex: 1;
+  flex-direction: row;
+  margin-left: 15px;
+`;
+
 export const UsersContent = () => {
+  const { user: mainUser } = useAppContext();
   const { isLoading, users, getAllUsers } = useGetAllUsers();
   const [searchInput, setSearchInput] = useState<string>("");
   const [userPickedForAction, setUserPickedForAction] = useState<User | null>(
@@ -81,6 +93,10 @@ export const UsersContent = () => {
     );
   };
 
+  const filterAwayMainUser = (user: User) => {
+    return mainUser?.id !== user?.id;
+  };
+
   const handleToggleAdminAccess = (user: User) => {
     setUserPickedForAction(user);
     setAdminAccessModalOpen(true);
@@ -92,11 +108,13 @@ export const UsersContent = () => {
   };
 
   const getFilteredUsers = () => {
-    return users?.filter((user) => filterByName(user));
+    return users?.filter(
+      (user) => filterByName(user) && filterAwayMainUser(user)
+    );
   };
 
   return (
-    <CoreContainer>
+    <CoreContainer styles={MainContainer}>
       {isLoading ? (
         <CoreLoader />
       ) : (
@@ -110,15 +128,22 @@ export const UsersContent = () => {
             placeholder="Søk etter brukeren"
           />
           {getFilteredUsers()?.map((user) => (
-            <CoreContainer>
-              <Title>{user.fornavn + " " + user.etternavn}</Title>
-              <CoreContainer>
+            <CoreContainer key={user.id} styles={Entry}>
+              <CoreContainer styles={UserNameWrapper}>
+                {user.adminrettigheter && <AdminStarIcon />}
+                <Title>{user.fornavn + " " + user.etternavn}</Title>
+              </CoreContainer>
+              <CoreContainer styles={ActionButtonsWrapper}>
                 <CoreButton
                   styles={ActionButton}
                   onClick={() => handleToggleAdminAccess(user)}
                 >
                   <CoreContainer styles={ActionButtonContent}>
-                    <EditIcon />
+                    {user.adminrettigheter ? (
+                      <RemoveAdminIcon />
+                    ) : (
+                      <AddAdminIcon />
+                    )}
                   </CoreContainer>
                 </CoreButton>
                 <CoreButton
@@ -142,8 +167,8 @@ export const UsersContent = () => {
         />
       )}
       {deleteUserModalOpen && (
-        <ToggleAdminAccessModal
-          toggleModal={() => setAdminAccessModalOpen(false)}
+        <DeleteUserModal
+          toggleModal={() => setDeleteUserModalOpen(false)}
           fetchUsers={fetchAllUsers}
           user={userPickedForAction as User}
         />
