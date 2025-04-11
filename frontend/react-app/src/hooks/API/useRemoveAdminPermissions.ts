@@ -20,7 +20,7 @@ export const useRemoveAdminPermissions = () => {
         toast.error(data.message);
         return;
       }
-      toast.success("Avfall ble slettet!");
+      toast.success(data.message);
     } catch (error) {
       toast.error(
         "Kan ikke fjerne admintillatelse akkurat nå. Prøv igjen senere."

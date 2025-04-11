@@ -17,7 +17,7 @@ export const useDeleteAvfall = () => {
         toast.error(data.message);
         return;
       }
-      toast.success("Avfall ble slettet!");
+      toast.success(data.message);
     } catch (error) {
       toast.error("Kan ikke ikke slette avfall akkurat nå. Prøv igjen senere.");
     } finally {
