@@ -190,7 +190,7 @@ public class BrukerController {
       return notAdminResponse;
     }
     try {
-      Bruker bruker = brukerService.findById(brukerId)
+      Bruker bruker = brukerService.findById(brukerId);
       brukerService.giveAdminPermission(bruker);
       return ResponseEntity.ok().body(new SuccessResponse(bruker.getFornavn() + " " + "er nå admin!"));
     } catch(Exception e) {
