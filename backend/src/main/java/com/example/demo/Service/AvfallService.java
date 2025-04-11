@@ -41,4 +41,9 @@ public class AvfallService {
   public void updateAvfall(Avfall avfall) {
     avfallRepo.save(avfall);
   }
+
+  public void deleteAvfallById(int id) {
+    avfallRepo.deleteById(id);
+  }
+
 }

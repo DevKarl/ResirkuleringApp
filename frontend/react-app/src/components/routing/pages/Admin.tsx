@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { CoreSelect } from "../../core/CoreSelect";
 import { AvfallContent } from "../../admin/avfall/AvfallContent";
-import { UsersContent } from "../../admin/UsersContent";
+import { UsersContent } from "../../admin/users/UsersContent";
 import { AvfallPointsContent } from "../../admin/AvfallPointsContent";
 import { css } from "styled-components";
 
@@ -15,7 +15,7 @@ const AdminContainer = css`
   margin: 0 auto;
 `;
 
-const adminOptions = ["Avfall", "Brukere", "Avfallspunkter"];
+const adminOptions = ["Avfall", "Brukere"];
 
 export const AdminPage = () => {
   const { user } = useAppContext();
@@ -37,8 +37,7 @@ export const AdminPage = () => {
 
   const getAdminActionPage = () => {
     if (adminAction === "Avfall") return <AvfallContent />;
-    if (adminAction === "Brukere") return <UsersContent />;
-    return <AvfallPointsContent />;
+    return <UsersContent />;
   };
 
   return (

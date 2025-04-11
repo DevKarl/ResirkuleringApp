@@ -1,25 +1,23 @@
 import { useState } from "react";
 import { toast } from "sonner";
-import { DeleteAvfallPost } from "../../types";
 
-export const usePostDeleteAvfall = () => {
+export const useDeleteAvfall = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const postDeleteAvfall = async (formData: DeleteAvfallPost) => {
+  const deleteAvfall = async (avfallId: number) => {
     setIsLoading(true);
     try {
-      const response = await fetch("/api/postDeleteAvfall", {
-        method: "POST",
+      const response = await fetch(`/api/deleteAvfall?avfallId=${avfallId}`, {
+        method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
       });
       const data = await response?.json();
       if (!response.ok) {
         toast.error(data.message);
         return;
       }
-      toast.success("Avfall ble slettet!");
+      toast.success(data.message);
     } catch (error) {
       toast.error("Kan ikke ikke slette avfall akkurat nå. Prøv igjen senere.");
     } finally {
@@ -27,5 +25,5 @@ export const usePostDeleteAvfall = () => {
     }
   };
 
-  return { isLoading, postDeleteAvfall };
+  return { isLoading, deleteAvfall };
 };

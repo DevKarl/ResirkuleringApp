@@ -19,6 +19,6 @@ export type User = {
   fornavn: string;
   etternavn: string;
   brukernavn: string;
-  isAdmin: boolean;
+  adminrettigheter: boolean;
   delerStat: boolean;
-} | null;
+};

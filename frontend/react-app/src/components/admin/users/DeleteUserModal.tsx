@@ -1,19 +1,13 @@
 import { css } from "styled-components";
-import { Avfall } from "../../../types";
-import { ButtonType, CoreButton } from "../../core/CoreButton";
+import { User } from "../../../types";
 import { CoreContainer } from "../../core/CoreContainer";
 import { CoreModal } from "../../core/CoreModal";
 import { CoreSubheading } from "../../core/CoreSubheading";
-import { useDeleteAvfall } from "../../../hooks/API/useDeleteAvfall";
 import { CoreLoader } from "../../core/CoreLoader";
+import { ButtonType, CoreButton } from "../../core/CoreButton";
+import { useDeleteUser } from "../../../hooks/API/useDeleteUser";
 
-interface DeleteAvfallModalProps {
-  avfall: Avfall | null;
-  toggleModal: () => void;
-  fetchAvfall: () => void;
-}
-
-const DeleteAvfallContainer = css`
+const MainContainer = css`
   width: 250px;
   align-items: center;
 `;
@@ -30,34 +24,41 @@ const CoreSubheadingStyles = css`
   margin-bottom: 10px;
 `;
 
-export const DeleteAvfallModal = ({
-  avfall,
-  toggleModal,
-  fetchAvfall,
-}: DeleteAvfallModalProps) => {
-  const { isLoading, deleteAvfall } = useDeleteAvfall();
+interface DeleteUserModalProps {
+  user: User;
+  fetchUsers: () => void;
+  toggleModal: () => void;
+}
 
-  const handleDeleteAvfall = async () => {
-    await deleteAvfall(avfall?.id as number);
+export const DeleteUserModal = ({
+  user,
+  fetchUsers,
+  toggleModal,
+}: DeleteUserModalProps) => {
+  const { isLoading, deleteUser } = useDeleteUser();
+
+  const handleDeleteUser = async () => {
+    await deleteUser(user.id);
     toggleModal();
-    fetchAvfall();
+    fetchUsers();
   };
 
   return (
     <CoreModal onClose={toggleModal}>
-      <CoreContainer styles={DeleteAvfallContainer}>
+      <CoreContainer styles={MainContainer}>
         <CoreSubheading type="secondary" styles={CoreSubheadingStyles}>
-          Er du sikker på at du vil slette {avfall?.navn} ?
+          Er du sikker på at du vil slette brukeren{" "}
+          {user.fornavn + " " + user.etternavn} ?
         </CoreSubheading>
         {isLoading ? (
           <CoreLoader secondary />
         ) : (
           <CoreButton
             type={ButtonType.Danger}
-            onClick={handleDeleteAvfall}
+            onClick={handleDeleteUser}
             styles={ButtonStyles}
           >
-            Slett
+            Slett bruker
           </CoreButton>
         )}
         <CoreButton
